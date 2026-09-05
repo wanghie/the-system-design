@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · Hành trình khách hàng (hình ảnh) theo tính năng</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--cv:#eef0f4;--ink:#0e1116;--ink2:#414a58;--muted:#8b93a3;--line:#e4e7ec;--line2:#d0d5dd;--brand:#5b3fb4;--steal:#0f9d58;--warn:#c0392b;
+  --bg:#0a0e15;--panel:#141b26;--aline:rgba(90,150,190,.16);--aink:#eaf2fb;--aink2:#9fb2c6;--amuted:#5f7086;
+  --cy:#35e0d0;--gold:#ffd166;--red:#ff4d5e;--green:#3ddc84;--purp:#9b8cff;--health:#ff6b8a;--career:#4fd1ff;--wealth:#ffd166;--social:#9b8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cv);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:1500px;margin:0 auto;padding:34px 22px 90px}
+.head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dot{width:12px;height:12px;background:var(--brand);border-radius:3px;transform:rotate(45deg)}
+.head .b{font-weight:900;letter-spacing:.15em;font-size:14px}.head .sub{color:var(--muted);font-size:13px;font-weight:600}.head .pg{margin-left:auto;color:var(--muted);font-size:12px;font-weight:700}
+h1{font-size:28px;font-weight:900;letter-spacing:-.02em;margin:12px 0 4px}
+.intro{color:var(--ink2);font-size:14px;max-width:92ch;margin-bottom:18px}
+.nav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px}
+.nav a{font-size:12px;font-weight:700;text-decoration:none;color:var(--brand);background:#efeaff;border:1px solid #ddd3ff;padding:6px 11px;border-radius:8px}
+.fsec{background:#fff;border:1px solid var(--line2);border-radius:16px;padding:18px 18px 8px;margin-bottom:22px;box-shadow:0 6px 24px rgba(20,26,40,.06)}
+.fsec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.fsec-h .no{font-size:12px;font-weight:800;color:var(--muted)}
+.fsec-h h2{font-size:19px;font-weight:800}
+.fsec-h .win{margin-left:auto;font-size:11px;font-weight:700;color:var(--steal);background:#eafaf0;border:1px solid #bfe9cd;padding:4px 10px;border-radius:8px}
+.japp{padding:12px 2px 6px;border-top:1px dashed var(--line);margin-top:8px}
+.japp:first-of-type{border-top:none}
+.japp-h{font-size:13px;font-weight:800;margin-bottom:10px}
+.japp-h .em{font-size:15px}
+.japp-h .note{font-weight:500;color:var(--muted);font-size:11.5px}
+.jflow{display:flex;align-items:flex-start;gap:6px;overflow-x:auto;padding-bottom:10px}
+.jstep{flex:0 0 auto;width:150px}
+.jlab{font-size:11px;font-weight:700;text-align:center;margin-top:7px;color:var(--ink)}
+.jlab .n{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:800;line-height:16px;margin-right:4px}
+.jsub{font-size:10px;color:var(--muted);text-align:center;margin-top:2px;line-height:1.3}
+.arr{flex:0 0 auto;align-self:center;color:var(--muted);font-size:20px;font-weight:800;margin-top:120px}
+/* phone screen */
+.jsc{width:150px;height:300px;border-radius:20px;background:#05070b;padding:6px;box-shadow:0 8px 22px rgba(20,26,40,.2)}
+.scr{width:100%;height:100%;border-radius:15px;overflow:hidden;background:var(--bg);color:var(--aink);position:relative;padding:9px 9px 0;display:flex;flex-direction:column;font-size:9px}
+.scr.warn{background:radial-gradient(200px 150px at 50% 30%,rgba(255,77,94,.2),transparent),#0a0608}
+.mbar{display:flex;justify-content:space-between;font-size:7px;color:var(--amuted);font-weight:700;margin-bottom:6px}
+.mtitle{font-size:11px;font-weight:800;margin-bottom:6px}
+.mcard{background:var(--panel);border:1px solid var(--aline);border-radius:9px;padding:7px;margin-bottom:5px}
+.mrow{display:flex;align-items:center;gap:5px;margin:3px 0}
+.mchk{width:13px;height:13px;border-radius:4px;border:1.5px solid var(--amuted);flex-shrink:0}
+.mchk.on{background:var(--green);border-color:var(--green)}
+.mbtn{border-radius:8px;padding:7px;text-align:center;font-size:9px;font-weight:800;margin-top:auto;margin-bottom:9px}
+.mbtn.cy{background:linear-gradient(160deg,var(--cy),#1f9e93);color:#03211e}
+.mbtn.gold{background:linear-gradient(160deg,var(--gold),#c99a2e);color:#2a1e00}
+.mbtn.red{background:linear-gradient(160deg,#ff5d6c,#c22f3d);color:#fff}
+.mbtn.lock{background:#2a3340;color:var(--amuted)}
+.mbar2{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;position:relative;margin:4px 0}
+.mbar2>i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.mtile{aspect-ratio:1;border-radius:9px;background:var(--panel);border:1px solid var(--aline);display:flex;flex-direction:column;justify-content:space-between;padding:6px;position:relative}
+.mtile .i{font-size:15px}.mtile .t{font-size:8px;font-weight:700}
+.mtile.matte{opacity:.5}.mtile.on{border-color:var(--green)}
+.mring{position:absolute;top:5px;right:5px;width:16px;height:16px;border-radius:50%;border:2.5px solid rgba(255,255,255,.15)}
+.mring.full{border-color:var(--green)}
+.mchips{display:flex;gap:3px;flex-wrap:wrap}
+.mchip{font-size:7.5px;font-weight:700;padding:3px 5px;border-radius:5px;background:#1c2432;border:1px solid var(--aline);color:var(--aink2)}
+.mchip.on{background:rgba(79,209,255,.14);border-color:var(--career);color:var(--career)}
+.mtimer{width:80px;height:80px;border-radius:50%;margin:6px auto;display:grid;place-items:center;background:conic-gradient(var(--cy) 60%,rgba(255,255,255,.08) 0)}
+.mtimer .in{width:64px;height:64px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:13px;font-weight:800}
+.mav{width:34px;height:34px;border-radius:9px;background:#1c2a3a;display:grid;place-items:center;font-size:15px;font-weight:800;margin:4px auto;border:1px solid var(--aline)}
+.msmall{font-size:8px;color:var(--aink2);line-height:1.35}
+.mbig{font-size:20px;text-align:center}
+.mstat{display:flex;justify-content:space-between;font-size:8px;color:var(--amuted);margin:2px 0}
+.pill-alt{display:inline-block;font-size:10px;font-weight:700;color:var(--warn);background:#fdecec;border:1px solid #f3c9c9;border-radius:6px;padding:2px 7px;margin-left:6px}
+.foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:24px}
+</style></head><body><div class="wrap">
+  <div class="head"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· Hành trình khách hàng (hình ảnh) theo từng tính năng</span><span class="pg">6 app · html.to.design</span></div>
+  <h1>Hành trình khách hàng — hình ảnh từng tính năng</h1>
+  <div class="intro">Mỗi tính năng = một dãy màn hình mockup nối bằng mũi tên, thể hiện từng bước người dùng đi qua. Nơi hữu ích, đặt hành trình của 2-3 app cạnh nhau để so sánh cách họ giải cùng một bài toán.</div>
+  <div class="nav"><a href="#f1">1 · Onboarding</a><a href="#f2">2 · Hoàn thành nhiệm vụ</a><a href="#f3">3 · Reward loop</a><a href="#f4">4 · Penalty</a><a href="#f5">5 · Event cược</a><a href="#f6">6 · Focus</a><a href="#f7">7 · Community</a></div>
+
+  <!-- F1 ONBOARDING -->
+  <div class="fsec" id="f1"><div class="fsec-h"><span class="no">01</span><h2>Onboarding</h2><span class="win">Streaks: nhanh nhất · Arise: cảnh báo paywall</span></div>
+
+    <div class="japp"><div class="japp-h"><span class="em">🟩</span> Streaks <span class="note">— &lt;1 phút, không tài khoản</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mbar"><span>9:41</span><span>▮</span></div><div class="mtitle">Chọn task</div><div class="mcard msmall">💧 Uống nước</div><div class="mcard msmall">🏃 Chạy bộ</div><div class="mcard msmall" style="border-color:var(--cy)">📚 Đọc sách</div><div class="mcard msmall">🧘 Thiền</div></div></div><div class="jlab"><span class="n">1</span>Chọn template</div><div class="jsub">thư viện có sẵn</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mbar"><span></span></div><div class="mtitle">Icon + màu</div><div class="mgrid" style="grid-template-columns:repeat(3,1fr);gap:4px">📚 📖 ✏️ 🎓 💡 🧠</div><div class="mchips" style="margin-top:8px"><span class="mchip" style="background:#ff6b8a">•</span><span class="mchip" style="background:#4fd1ff">•</span><span class="mchip" style="background:#ffd166">•</span><span class="mchip" style="background:#9b8cff">•</span></div></div></div><div class="jlab"><span class="n">2</span>Icon + màu</div><div class="jsub">78 màu · 600 icon</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Đặt lịch</div><div class="mcard msmall on">Hằng ngày</div><div class="mcard msmall">3 lần / tuần</div><div class="mcard msmall">T2·T4·T6</div><div class="mbtn cy">Xong</div></div></div><div class="jlab"><span class="n">3</span>Lịch linh hoạt</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Bắt đầu</div><div class="mgrid"><div class="mtile on"><div class="mring full"></div><div class="i">📚</div><div class="t">Đọc</div></div><div class="mtile matte"><div class="mring"></div><div class="i">💧</div><div class="t">Nước</div></div></div><div class="msmall" style="margin-top:6px;text-align:center">nhấn-giữ để xong</div></div></div><div class="jlab"><span class="n">4</span>Vào dùng ngay</div></div>
+    </div></div>
+
+    <div class="japp"><div class="japp-h"><span class="em">🐤</span> Finch <span class="note">— tạo pet + hỏi tâm trạng/mục tiêu</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mbig" style="margin-top:30px">🥚</div><div class="mtitle" style="text-align:center;margin-top:8px">Nở chim</div><div class="mbtn cy">Nở!</div></div></div><div class="jlab"><span class="n">1</span>Nở & đặt tên</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Hôm nay bạn?</div><div class="mchips"><span class="mchip">😀</span><span class="mchip on">🙂</span><span class="mchip">😐</span><span class="mchip">😞</span></div><div class="msmall" style="margin-top:8px">Chọn tâm trạng</div></div></div><div class="jlab"><span class="n">2</span>Check-in mood</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Mục tiêu</div><div class="mcard msmall">😴 Ngủ đủ</div><div class="mcard msmall">💧 Uống nước</div><div class="mcard msmall">🧘 Bớt stress</div></div></div><div class="jlab"><span class="n">3</span>Đặt goal self-care</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mav" style="margin-top:16px">🐤</div><div class="msmall" style="text-align:center">+Energy · chim vui</div><div class="mbar2"><i style="width:40%;background:var(--cy)"></i></div></div></div><div class="jlab"><span class="n">4</span>Thưởng đầu</div></div>
+    </div></div>
+
+    <div class="japp"><div class="japp-h"><span class="em">🏅</span> Arise <span class="note">— survey → plan → </span><span class="pill-alt">⚠ paywall trước quest đầu</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Survey</div><div class="mcard msmall">Mục tiêu?</div><div class="mcard msmall">Thiết bị?</div><div class="mcard msmall">Lịch tập?</div></div></div><div class="jlab"><span class="n">1</span>Khảo sát dài</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Plan của bạn</div><div class="mcard msmall">💪 Push-ups ×30</div><div class="mcard msmall">🔥 Macros: 2200 cal</div><div class="msmall" style="margin-top:4px">Rank khởi đầu: E</div></div></div><div class="jlab"><span class="n">2</span>Preview plan</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr warn"><div class="mbig" style="margin-top:22px">🔒</div><div class="mtitle" style="text-align:center;color:var(--red)">$12/tháng</div><div class="msmall" style="text-align:center">hoặc mời 3 bạn</div><div class="mbtn lock">Khoá hết</div></div></div><div class="jlab"><span class="n">3</span><span style="color:var(--warn)">PAYWALL</span></div><div class="jsub">chưa làm quest nào</div></div>
+    </div></div>
+  </div>
+
+  <!-- F2 COMPLETE -->
+  <div class="fsec" id="f2"><div class="fsec-h"><span class="no">02</span><h2>Hoàn thành nhiệm vụ (core loop)</h2><span class="win">Streaks: nhấn-giữ + haptic</span></div>
+    <div class="japp"><div class="japp-h"><span class="em">🟩</span> Streaks <span class="note">— nhấn-giữ, ring đầy, haptic</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Bảng hôm nay</div><div class="mgrid"><div class="mtile matte"><div class="mring"></div><div class="i">📚</div><div class="t">Đọc</div></div><div class="mtile matte"><div class="mring"></div><div class="i">💧</div><div class="t">Nước</div></div></div></div></div><div class="jlab"><span class="n">1</span>Tile matte (chưa xong)</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Nhấn-GIỮ</div><div class="mgrid"><div class="mtile"><div class="mring" style="border-color:var(--cy);border-right-color:transparent;transform:rotate(120deg)"></div><div class="i">📚</div><div class="t">Đọc</div></div><div class="mtile matte"><div class="mring"></div><div class="i">💧</div></div></div><div class="msmall" style="text-align:center;margin-top:6px">ring đang đầy…</div></div></div><div class="jlab"><span class="n">2</span>Giữ → ring đầy</div><div class="jsub">chống tap nhầm</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Xong!</div><div class="mgrid"><div class="mtile on"><div class="mring full"></div><div class="i">📚</div><div class="t">🔥 6</div></div><div class="mtile matte"><div class="mring"></div><div class="i">💧</div></div></div><div class="msmall" style="text-align:center;margin-top:6px">✨ haptic + sound</div></div></div><div class="jlab"><span class="n">3</span>Glossy + streak +1</div></div>
+    </div></div>
+    <div class="japp"><div class="japp-h"><span class="em">🎴</span> Habitica <span class="note">— tap checkbox → XP/gold bay lên</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Dailies</div><div class="mcard"><div class="mrow"><div class="mchk"></div><span class="msmall">Gym</span></div></div><div class="mcard"><div class="mrow"><div class="mchk"></div><span class="msmall">Đọc</span></div></div></div></div><div class="jlab"><span class="n">1</span>Danh sách daily</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Tap ✓</div><div class="mcard"><div class="mrow"><div class="mchk on"></div><span class="msmall" style="text-decoration:line-through">Gym</span></div></div><div class="msmall" style="color:var(--cy);text-align:center;margin-top:8px">+20 XP · +15🪙 ↑</div></div></div><div class="jlab"><span class="n">2</span>Tick → reward pop</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mstat"><span>EXP</span><span>640/1200</span></div><div class="mbar2"><i style="width:53%;background:var(--cy)"></i></div><div class="msmall" style="text-align:center;margin-top:10px">Tích XP → lên level</div></div></div><div class="jlab"><span class="n">3</span>EXP tăng</div></div>
+    </div></div>
+  </div>
+
+  <!-- F3 REWARD -->
+  <div class="fsec" id="f3"><div class="fsec-h"><span class="no">03</span><h2>Reward loop (thưởng)</h2><span class="win">Finch: adventure timer · Dual: reward shop tự đặt</span></div>
+    <div class="japp"><div class="japp-h"><span class="em">🐤</span> Finch <span class="note">— energy → gửi chim đi phiêu lưu (delayed reward)</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Xong task</div><div class="mcard msmall">✓ Uống nước</div><div class="msmall" style="color:var(--cy);margin-top:6px">+Energy +🌈 Stones</div></div></div><div class="jlab"><span class="n">1</span>Hoàn thành → energy</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mstat"><span>Energy</span><span>25/25</span></div><div class="mbar2"><i style="width:100%;background:var(--cy)"></i></div><div class="mav" style="margin-top:8px">🐤</div><div class="mbtn cy">Gửi đi phiêu lưu</div></div></div><div class="jlab"><span class="n">2</span>Đủ energy</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mbig" style="margin-top:18px">🎒⏳</div><div class="msmall" style="text-align:center;margin-top:8px">Chim đang đi… về sau 2h với quà</div></div></div><div class="jlab"><span class="n">3</span>Timer → quay lại mở app</div></div>
+    </div></div>
+    <div class="japp"><div class="japp-h"><span class="em">📊</span> Dual <span class="note">— coin → reward shop tự đặt (đời thật)</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Coin: 🪙 120</div><div class="msmall" style="margin-top:6px">Kiếm từ quest/focus</div></div></div><div class="jlab"><span class="n">1</span>Tích coin</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Shop tự đặt</div><div class="mcard msmall">🎮 Chơi game 1h · 50</div><div class="mcard msmall">🍕 Pizza · 100</div><div class="mcard msmall">📱 Gadget · 500</div></div></div><div class="jlab"><span class="n">2</span>Phần thưởng đời thật</div><div class="jsub">user tự viết</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mbig" style="margin-top:20px">🍕</div><div class="msmall" style="text-align:center;margin-top:8px">Đổi thành công! −100🪙</div></div></div><div class="jlab"><span class="n">3</span>Đổi → payoff thật</div></div>
+    </div></div>
+  </div>
+
+  <!-- F4 PENALTY -->
+  <div class="fsec" id="f4"><div class="fsec-h"><span class="no">04</span><h2>Penalty (thất bại)</h2><span class="win">Habitica: nặng có phanh · Forfeit: mất tiền thật</span></div>
+    <div class="japp"><div class="japp-h"><span class="em">🎴</span> Habitica <span class="note">— bỏ daily qua đêm → mất HP → van "Rest at Inn"</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Cuối ngày</div><div class="mcard"><div class="mrow"><div class="mchk"></div><span class="msmall">Gym (chưa xong)</span></div></div></div></div><div class="jlab"><span class="n">1</span>Bỏ daily</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr warn"><div class="mtitle">Qua đêm (cron)</div><div class="mstat"><span>HP</span><span>60/110</span></div><div class="mbar2"><i style="width:55%;background:var(--red)"></i></div><div class="msmall" style="color:#ffb3bd;margin-top:6px">−mất HP</div></div></div><div class="jlab"><span class="n">2</span>Mất HP (không tức thì)</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Đi vắng?</div><div class="mbig" style="margin-top:10px">🏨</div><div class="mbtn cy">Rest at Inn</div><div class="msmall" style="text-align:center">tạm dừng phạt</div></div></div><div class="jlab"><span class="n">3</span>Van an toàn (phanh)</div></div>
+    </div></div>
+    <div class="japp"><div class="japp-h"><span class="em">💰</span> Forfeit <span class="note">— quá hạn không có proof → auto-charge, mất tiền thật</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Countdown</div><div class="mstat"><span>🪙 $20 cược</span><span>còn 2h</span></div><div class="mbar2"><i style="width:15%;background:var(--red)"></i></div><div class="mbtn cy">Nộp proof</div></div></div><div class="jlab"><span class="n">1</span>Sắp hết hạn</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr warn"><div class="mbig" style="margin-top:20px">⏰</div><div class="msmall" style="text-align:center;color:var(--red);margin-top:8px">Hết giờ · không có proof</div></div></div><div class="jlab"><span class="n">2</span>Quá hạn</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr warn"><div class="mtitle" style="color:var(--red)">−$20</div><div class="msmall" style="margin-top:6px">Thẻ bị charge tự động.</div><div class="pill-alt" style="margin:8px 0 0">⚠ Forfeit tự giữ tiền</div></div></div><div class="jlab"><span class="n">3</span>Mất tiền thật</div></div>
+    </div></div>
+  </div>
+
+  <!-- F5 EVENT -->
+  <div class="fsec" id="f5"><div class="fsec-h"><span class="no">05</span><h2>Event / Cược tiền</h2><span class="win">Forfeit (cơ chế) — The System sửa: cược về pool/top</span></div>
+    <div class="japp"><div class="japp-h"><span class="em">💰</span> Forfeit <span class="note">— hành trình đầy đủ tạo → cược → proof → thắng/thua</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Tạo forfeit</div><div class="mcard msmall">Việc: Gym</div><div class="mcard msmall">Hạn: 20:00</div><div class="mcard msmall" style="border-color:var(--gold)">Cược: $20</div></div></div><div class="jlab"><span class="n">1</span>Việc + hạn + $</div><div class="jsub">1 funnel</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Kiểu proof</div><div class="mchips"><span class="mchip on">📷 ảnh</span><span class="mchip">📍 GPS</span><span class="mchip">❤️ Health</span></div><div class="msmall" style="margin-top:6px">nối thẻ (Stripe)</div></div></div><div class="jlab"><span class="n">2</span>Chọn proof + thẻ</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Nộp proof</div><div class="mcard" style="height:70px;display:grid;place-items:center">📷</div><div class="mbtn cy">Gửi</div></div></div><div class="jlab"><span class="n">3</span>Chụp bằng chứng</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mbig" style="margin-top:14px">✅</div><div class="msmall" style="text-align:center;margin-top:6px">Đạt · không bị charge</div><div class="msmall" style="text-align:center;color:var(--amuted);margin-top:4px">(trượt → mất cược)</div></div></div><div class="jlab"><span class="n">4</span>AI+người duyệt</div></div>
+    </div></div>
+  </div>
+
+  <!-- F6 FOCUS -->
+  <div class="fsec" id="f6"><div class="fsec-h"><span class="no">06</span><h2>Focus / Deep-work</h2><span class="win">Dual — app duy nhất làm native</span></div>
+    <div class="japp"><div class="japp-h"><span class="em">📊</span> Dual <span class="note">— chọn quest gắn stat → timer → phút thành XP</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Nạp XP vào?</div><div class="mchips"><span class="mchip on">🚀 Sự nghiệp</span><span class="mchip">❤️ Sức khỏe</span></div><div class="msmall" style="margin-top:6px">chọn chỉ số</div></div></div><div class="jlab"><span class="n">1</span>Chọn quest + attribute</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtimer"><div class="in mono">15:24</div></div><div class="mbtn cy">Đang tập trung…</div></div></div><div class="jlab"><span class="n">2</span>Timer chạy</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mstat"><span>🚀 Sự nghiệp</span><span>55 → 56</span></div><div class="mbar2"><i style="width:56%;background:var(--career)"></i></div><div class="msmall" style="color:var(--cy);text-align:center;margin-top:8px">+38 XP vào Sự nghiệp</div></div></div><div class="jlab"><span class="n">3</span>Phút → stat tăng</div></div>
+    </div></div>
+  </div>
+
+  <!-- F7 COMMUNITY -->
+  <div class="fsec" id="f7"><div class="fsec-h"><span class="no">07</span><h2>Community</h2><span class="win">Habitica — party boss quest co-op</span></div>
+    <div class="japp"><div class="japp-h"><span class="em">🎴</span> Habitica <span class="note">— vào party → boss chung → daily của bạn damage boss / bỏ = damage nhóm</span></div>
+    <div class="jflow">
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">Party</div><div class="mcard msmall">👥 4 thành viên</div><div class="mbtn cy">Nhận Boss Quest</div></div></div><div class="jlab"><span class="n">1</span>Vào party</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr"><div class="mtitle">👹 Boss</div><div class="mstat"><span>Boss HP</span><span>62%</span></div><div class="mbar2"><i style="width:62%;background:var(--red)"></i></div><div class="msmall" style="margin-top:6px">tick daily = đánh boss</div></div></div><div class="jlab"><span class="n">2</span>Boss chung</div></div>
+      <div class="arr">→</div>
+      <div class="jstep"><div class="jsc"><div class="scr warn"><div class="mtitle">Bạn bỏ daily</div><div class="msmall" style="color:#ffb3bd;margin-top:6px">→ boss đánh CẢ nhóm</div><div class="mbig" style="margin-top:8px">💥</div></div></div><div class="jlab"><span class="n">3</span>Bỏ = hại đồng đội</div><div class="jsub">accountability xã hội</div></div>
+    </div></div>
+  </div>
+
+  <div class="foot">THE SYSTEM · hành trình khách hàng trực quan theo tính năng · 6 app · 2026-09-05 · mockup mid-fi · import Figma bằng html.to.design</div>
+</div></body></html>
