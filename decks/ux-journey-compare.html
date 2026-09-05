@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · So sánh UX/UI theo nhóm tính năng</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--cv:#eef0f4;--frame:#fff;--ink:#0e1116;--ink2:#414a58;--muted:#8b93a3;--line:#e4e7ec;--line2:#d0d5dd;--brand:#5b3fb4;
+  --steal:#0f9d58;--warn:#c0392b;--amber:#e08a1e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cv);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:1400px;margin:0 auto;padding:36px 22px 90px}
+.head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dot{width:12px;height:12px;background:var(--brand);border-radius:3px;transform:rotate(45deg)}
+.head .b{font-weight:900;letter-spacing:.15em;font-size:14px}
+.head .sub{color:var(--muted);font-size:13px;font-weight:600}
+.head .pg{margin-left:auto;color:var(--muted);font-size:12px;font-weight:700}
+h1{font-size:29px;font-weight:900;letter-spacing:-.02em;margin:12px 0 4px}
+.intro{color:var(--ink2);font-size:14px;max-width:92ch;margin-bottom:8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:10px 0 22px}
+.legend b{color:var(--ink)}
+/* jump nav */
+.nav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:26px}
+.nav a{font-size:12px;font-weight:700;text-decoration:none;color:var(--brand);background:#efeaff;border:1px solid #ddd3ff;padding:6px 11px;border-radius:8px}
+/* section */
+.sec{background:var(--frame);border:1px solid var(--line2);border-radius:16px;padding:8px 8px 6px;margin-bottom:22px;box-shadow:0 6px 24px rgba(20,26,40,.06);overflow:hidden}
+.sec-h{display:flex;align-items:baseline;gap:12px;padding:14px 14px 10px}
+.sec-h .no{font-size:12px;font-weight:800;color:var(--muted)}
+.sec-h h2{font-size:18px;font-weight:800}
+.sec-h .win{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--steal);background:#eafaf0;border:1px solid #bfe9cd;padding:4px 10px;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:#f7f8fa;position:sticky;top:0}
+tbody tr:hover{background:#fafbfc}
+td.app{font-weight:800;white-space:nowrap;color:var(--ink)}
+td.app .em{font-size:15px}
+.flow{color:var(--ink2)}
+.flow .step{color:var(--brand);font-weight:700}
+.pat{color:var(--ink)}
+.fr{color:var(--warn)}
+.st{color:var(--steal);font-weight:600}
+.dash{color:var(--muted)}
+.tag{display:inline-block;font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:4px;margin-right:3px}
+.t-heavy{color:#fff;background:#c0392b}.t-soft{color:#0e5a34;background:#c9f0d8}.t-none{color:#667085;background:#eceef2}.t-mid{color:#7a5210;background:#ffe6b0}
+.foot{color:var(--muted);font-size:11.5px;text-align:center;margin-top:24px}
+@media(max-width:1000px){table{font-size:11px}th,td{padding:7px 8px}}
+</style></head>
+<body><div class="wrap">
+  <div class="head"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· So sánh UX/UI + hành trình khách hàng theo nhóm tính năng</span><span class="pg">6 app · html.to.design</span></div>
+  <h1>Bảng so sánh UX/UI theo nhóm tính năng</h1>
+  <div class="intro">Cùng một nhóm tính năng, đặt cách triển khai của 6 app cạnh nhau để so sánh trực tiếp: hành trình khách hàng đi qua từng bước, UI pattern chính, điểm ma sát, và điều đáng học. Cột cuối mỗi nhóm: app làm tốt nhất (STEAL).</div>
+  <div class="legend"><span>App: 🎴 Habitica · 🏅 Arise · 🐤 Finch · 📊 Dual · 💰 Forfeit · 🟩 Streaks</span> · <span class="fr">đỏ = ma sát</span> · <span class="st">xanh = đáng học</span></div>
+  <div class="nav">
+    <a href="#s1">1 · Onboarding</a><a href="#s2">2 · Home/Dashboard</a><a href="#s3">3 · Tracking/hoàn thành</a>
+    <a href="#s4">4 · Gamification/thưởng</a><a href="#s5">5 · Streak & Penalty</a><a href="#s6">6 · Focus</a>
+    <a href="#s7">7 · Event/cược</a><a href="#s8">8 · Community</a><a href="#s9">9 · Monetization/paywall</a><a href="#s10">10 · Notification/retention</a>
+  </div>
+
+  <!-- 1 ONBOARDING -->
+  <div class="sec" id="s1"><div class="sec-h"><span class="no">01</span><h2>Onboarding / Activation</h2><span class="win">STEAL: Streaks (0 ma sát) + Finch (mood/goal)</span></div>
+  <table><thead><tr><th>App</th><th>Trigger</th><th>Hành trình (bước)</th><th>UI pattern</th><th>Ma sát</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td>Mở app</td><td class="flow"><span class="step">chọn class → tạo avatar → thêm task mẫu → thấy 4 thanh chỉ số</span></td><td class="pat">Tạo avatar trước tiên</td><td class="fr">4 khái niệm (habit/daily/todo/reward) rối người mới</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td>Mở app</td><td class="flow"><span class="step">survey goal/thiết bị/lịch → nhận plan + macros → PAYWALL</span> trước quest đầu</td><td class="pat">Survey → plan preview cá nhân hoá</td><td class="fr">Paywall ngay sau survey · trial = mời 3 bạn</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td>Mở app</td><td class="flow"><span class="step">nở chim → đặt tên/màu → set mood + goal → check-in → thưởng đầu</span></td><td class="pat">Tạo pet + hỏi tâm trạng/mục tiêu</td><td class="fr">Paywall trial sớm</td></tr>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td>Mở app</td><td class="flow"><span class="step">định nghĩa attribute → tạo skill → set Journey + quest → focus lần đầu</span></td><td class="pat">Tự tay dựng hệ stat</td><td class="fr">Rất nặng setup trước "win" đầu tiên</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td>Mở app</td><td class="flow"><span class="step">tài khoản → tạo forfeit (task+hạn+$) → chọn proof → nối thẻ</span></td><td class="pat">Funnel cam kết + tiền</td><td class="fr">Bắt nối thẻ ngân hàng ngay đầu</td></tr>
+    <tr><td class="app"><span class="em">🟩</span> Streaks</td><td>Mở app</td><td class="flow"><span class="step">KHÔNG login → chọn task từ template → icon+màu → lịch → nhấn-giữ xong</span></td><td class="pat">Không tài khoản · template</td><td class="st">&lt;1 phút tới giá trị đầu · không đăng ký</td></tr>
+  </tbody></table></div>
+
+  <!-- 2 HOME -->
+  <div class="sec" id="s2"><div class="sec-h"><span class="no">02</span><h2>Home / Dashboard — "đặt cái gì làm trung tâm"</h2><span class="win">STEAL: Streaks (glanceable) + Habitica (stat ghim)</span></div>
+  <table><thead><tr><th>App</th><th>Màn chủ</th><th>Trung tâm</th><th>UI pattern</th><th>Điểm mạnh/yếu</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td>Danh sách task</td><td>Dailies list</td><td class="pat">List dày + avatar & 4 thanh trên đầu</td><td class="fr">Mật độ chật, pixel cũ</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td>Quest Log</td><td>Daily quest (workout)</td><td class="pat">Card quest "system-window"</td><td class="st">Quest hôm nay rõ ràng 1 việc</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td>Chim + phòng</td><td>Sức khoẻ pet (= bạn)</td><td class="pat">Nhân vật + energy bar chi phối</td><td class="st">Ấm, gắn kết cảm xúc</td></tr>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td>Character sheet</td><td>Trang stat</td><td class="pat">Attribute/skill leo thấy được</td><td class="fr">Đẹp nhưng buggy</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td>Forfeit đang chạy</td><td>Task có $ + countdown</td><td class="pat">Số tiền + timer là hero</td><td class="st">Áp lực mất tiền trực quan</td></tr>
+    <tr><td class="app"><span class="em">🟩</span> Streaks</td><td>Grid tile</td><td>Bảng habit hôm nay</td><td class="pat">1 màn = cả ngày, glanceable</td><td class="st">Cực sạch, 0 scroll</td></tr>
+  </tbody></table></div>
+
+  <!-- 3 TRACKING -->
+  <div class="sec" id="s3"><div class="sec-h"><span class="no">03</span><h2>Tracking / Hoàn thành nhiệm vụ (core loop)</h2><span class="win">STEAL: Streaks (nhấn-giữ + haptic)</span></div>
+  <table><thead><tr><th>App</th><th>Thao tác hoàn thành</th><th>Phản hồi</th><th>UI pattern</th><th>Ghi chú</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td>Tap checkbox</td><td>XP/gold bay lên</td><td class="pat">Checklist + reward pop</td><td>Auto từ nhiều loại task</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td>Track set trong workout</td><td>+XP, progress quest</td><td class="pat">Workout tracker</td><td>Gắn với bài tập</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td>Tap goal</td><td>+Energy +Rainbow Stones</td><td class="pat">Soft check + reward kép</td><td class="st">Thưởng gắn mọi task</td></tr>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td>Chạy focus timer</td><td>phút → XP cho stat</td><td class="pat">Timer-based (không tap)</td><td>Đo effort thật</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td>Nộp proof (ảnh/GPS/Health)</td><td>AI+người duyệt</td><td class="pat">Capture bằng chứng</td><td class="fr">Ma sát cao (proof thủ công)</td></tr>
+    <tr><td class="app"><span class="em">🟩</span> Streaks</td><td><b>Nhấn-GIỮ</b> → ring đầy</td><td>animation + haptic + sound</td><td class="pat">Hold-to-complete</td><td class="st">Chống nhầm, cảm giác "xứng đáng"</td></tr>
+  </tbody></table></div>
+
+  <!-- 4 GAMIFICATION -->
+  <div class="sec" id="s4"><div class="sec-h"><span class="no">04</span><h2>Gamification / Phần thưởng</h2><span class="win">STEAL: Habitica (sâu) + Arise (rank identity) + Dual (focus→attribute)</span></div>
+  <table><thead><tr><th>App</th><th>Đơn vị tiến bộ</th><th>Tiền tệ / shop</th><th>Danh tính</th><th>Độ sâu</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td>XP · Level · HP</td><td>Gold + Gems + pets/mounts</td><td>Class (4)</td><td class="st">Sâu nhất</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td>XP · Level 99</td><td>Badge, share overlay</td><td class="st">Rank E→SSS</td><td>Trung bình, mạnh về flex</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td>Pet lớn dần · Energy</td><td>Rainbow Stones (cosmetic)</td><td>Chú chim</td><td class="tag t-soft">SOFT</td></tr>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td>XP từ focus · skill 0–100</td><td>Coin/gem · reward shop tự đặt</td><td class="st">Attribute 4 mảng</td><td>Trung bình</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td>Streak</td><td class="dash">— (tiền THẬT là động lực)</td><td class="dash">—</td><td class="tag t-none">GẦN 0</td></tr>
+    <tr><td class="app"><span class="em">🟩</span> Streaks</td><td>Số streak</td><td class="dash">—</td><td class="dash">—</td><td class="tag t-none">TỐI GIẢN</td></tr>
+  </tbody></table></div>
+
+  <!-- 5 PENALTY -->
+  <div class="sec" id="s5"><div class="sec-h"><span class="no">05</span><h2>Streak & Penalty — xử lý thất bại (trục chia đôi thị trường)</h2><span class="win">STEAL: kết hợp — nặng như Forfeit + phanh như Finch</span></div>
+  <table><thead><tr><th>App</th><th>Mức phạt</th><th>Khi bỏ nhiệm vụ</th><th>Cơ chế "phanh"</th><th>Neo tâm lý</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td><span class="tag t-heavy">NẶNG</span></td><td>Mất HP → HP=0 mất level/gear (cron qua đêm)</td><td class="st">"Rest at Inn" tạm dừng phạt</td><td>Loss aversion</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td><span class="tag t-heavy">NẶNG</span></td><td>Mất XP/streak</td><td class="fr">Không có freeze/nghỉ ốm</td><td>Loss aversion (không phanh)</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td><span class="tag t-soft">KHÔNG</span></td><td>Hỏi "vì sao hôm nay bỏ?" (reflect)</td><td class="st">Self-compassion, chim không "chết"</td><td>Giảm lo âu tái phạm</td></tr>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td><span class="tag t-none">KHÔNG</span></td><td>Không mất gì</td><td class="dash">— (toàn carrot)</td><td>Không áp lực</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td><span class="tag t-heavy">NẶNG NHẤT</span></td><td><b>Mất tiền thật</b> (auto-charge)</td><td class="st">Slider leniency (tới honor $0)</td><td>Loss aversion tiền thật</td></tr>
+    <tr><td class="app"><span class="em">🟩</span> Streaks</td><td><span class="tag t-mid">NHẸ</span></td><td>Số streak lặng lẽ về 0</td><td class="st">Lịch linh hoạt X lần/tuần</td><td>Mất con số = hook</td></tr>
+  </tbody></table></div>
+
+  <!-- 6 FOCUS -->
+  <div class="sec" id="s6"><div class="sec-h"><span class="no">06</span><h2>Focus / Deep-work</h2><span class="win">STEAL: Dual (chỉ app duy nhất làm)</span></div>
+  <table><thead><tr><th>App</th><th>Có?</th><th>Cách làm</th><th>Ghi chú</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td class="st">✓ lõi</td><td class="flow"><span class="step">chọn quest gắn attribute → timer → phút = XP cho stat đó</span></td><td class="st">Biến thời gian tập trung thành stat tăng</td></tr>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td class="dash">~ (qua tích hợp ngoài)</td><td>Pomodoro bên thứ ba</td><td>Không native</td></tr>
+    <tr><td class="app">🏅 Arise · 🐤 Finch · 💰 Forfeit · 🟩 Streaks</td><td class="dash">✗</td><td class="dash">Không có focus timer</td><td class="st">→ kẽ hở: The System đưa Focus vào làm lõi</td></tr>
+  </tbody></table></div>
+
+  <!-- 7 EVENT -->
+  <div class="sec" id="s7"><div class="sec-h"><span class="no">07</span><h2>Event / Cược tiền</h2><span class="win">STEAL: Forfeit (cơ chế) — nhưng SỬA chỗ tiền đi đâu</span></div>
+  <table><thead><tr><th>App</th><th>Cơ chế</th><th>Hành trình</th><th>Tiền/thưởng đi đâu</th><th>Vấn đề</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td class="st">Cược tiền thật/task</td><td class="flow"><span class="step">đặt $ + hạn → làm → nộp proof → đạt: không charge / trượt: mất</span></td><td class="fr">Forfeit TỰ GIỮ</td><td class="fr">Xung đột lợi ích (chê #1)</td></tr>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td>Challenges (không tiền)</td><td class="flow">join challenge → hoàn thành</td><td>Gem từ người tạo</td><td>Không có cược tiền</td></tr>
+    <tr><td class="app">🏅 · 🐤 · 📊 · 🟩</td><td class="dash">✗ không có</td><td class="dash">—</td><td class="dash">—</td><td class="st">→ kẽ hở lớn: The System làm event cược → POOL/TOP (fair)</td></tr>
+  </tbody></table></div>
+
+  <!-- 8 COMMUNITY -->
+  <div class="sec" id="s8"><div class="sec-h"><span class="no">08</span><h2>Community / Social</h2><span class="win">STEAL: Habitica (party boss co-op)</span></div>
+  <table><thead><tr><th>App</th><th>Mức</th><th>Cơ chế</th><th>Ghi chú</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td class="st">MẠNH</td><td>Party · guild · <b>co-op boss quest</b> (bỏ daily = damage nhóm) · challenges</td><td class="st">Moat retention · (guild chat bỏ 2023)</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td class="tag t-mid">MỎNG</td><td>Accountability contact (auto text khi trượt)</td><td class="fr">Shame trigger, không cộng tác</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td class="tag t-mid">NHẸ</td><td>Tương tác pet bạn bè (không cạnh tranh)</td><td>Chủ yếu solo</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td class="tag t-none">NGOÀI APP</td><td>Chỉ Discord</td><td class="fr">User đòi leaderboard in-app</td></tr>
+    <tr><td class="app">📊 Dual · 🟩 Streaks</td><td class="tag t-none">KHÔNG</td><td class="dash">Solo hoàn toàn</td><td class="st">→ kẽ hở: cộng đồng wibu</td></tr>
+  </tbody></table></div>
+
+  <!-- 9 MONETIZATION -->
+  <div class="sec" id="s9"><div class="sec-h"><span class="no">09</span><h2>Monetization / Paywall</h2><span class="win">STEAL: Habitica (không paywall chức năng) · tránh: Arise (paywall cứng)</span></div>
+  <table><thead><tr><th>App</th><th>Mô hình</th><th>Vị trí paywall</th><th>Ma sát/chê</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td>Free + $5/mo (cosmetic)</td><td>Không khoá chức năng</td><td class="st">Thiện cảm cao</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td>~$12/mo · năm $14.99</td><td class="fr">Cứng, ngay sau survey</td><td class="fr">"không xem được gì ngoài kết quả survey nếu không trả" · trial=mời 3 bạn</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td>$9.99/mo · $69.99/yr (cosmetic)</td><td>Trial sớm</td><td class="fr">Billing trial→charge mập mờ (Trustpilot 2.4★)</td></tr>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td>$6.99/mo · $24.99/yr</td><td>Sau onboarding</td><td class="fr">Core buggy → không đáng $25</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td>Giữ tiền cược + sub $7.99</td><td>Per-task stake</td><td class="fr">"cashing in on procrastinators" · safety 33/100</td></tr>
+    <tr><td class="app"><span class="em">🟩</span> Streaks</td><td class="st">$5.99 mua đứt (no sub/IAP)</td><td>Không có</td><td class="st">Được yêu · (trần 24 task)</td></tr>
+  </tbody></table></div>
+
+  <!-- 10 NOTIFICATION -->
+  <div class="sec" id="s10"><div class="sec-h"><span class="no">10</span><h2>Notification / Retention</h2><span class="win">STEAL: Streaks (widget ring ambient) + Habitica (party pressure)</span></div>
+  <table><thead><tr><th>App</th><th>Loại nhắc</th><th>Cơ chế giữ chân</th><th>Ghi chú</th></tr></thead><tbody>
+    <tr><td class="app"><span class="em">🎴</span> Habitica</td><td>Daily reminder</td><td>Áp lực party + lo âu cron qua đêm</td><td class="st">Social = retention</td></tr>
+    <tr><td class="app"><span class="em">🏅</span> Arise</td><td>Streak reminder</td><td>Rank/level + share</td><td>—</td></tr>
+    <tr><td class="app"><span class="em">🐤</span> Finch</td><td>Check-in nudge dịu</td><td class="st">Adventure timer (delayed reward) kéo mở lại</td><td>Không gây tội lỗi</td></tr>
+    <tr><td class="app"><span class="em">📊</span> Dual</td><td>Tối thiểu</td><td>Journey dài hạn</td><td class="fr">Retention yếu</td></tr>
+    <tr><td class="app"><span class="em">💰</span> Forfeit</td><td>Deadline countdown alert</td><td>Áp lực mất tiền</td><td>Mạnh nhưng căng thẳng</td></tr>
+    <tr><td class="app"><span class="em">🟩</span> Streaks</td><td>Reminder + <b>widget ring</b></td><td class="st">Icon ring đầy dần → home screen là máy đo, re-engage không cần notif</td><td class="st">Ambient</td></tr>
+  </tbody></table></div>
+
+  <div class="foot">THE SYSTEM · so sánh UX/UI theo nhóm tính năng · 6 app · 2026-09-05 · nguồn từng deck app riêng · import Figma bằng html.to.design</div>
+</div></body></html>
