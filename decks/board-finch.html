@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Board · Finch · Teardown</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0f0f;--canvas:#141414;--frame:#181818;--ink:#f1f1f1;--ink2:#c9c9c9;--muted:#8a8a8a;
+    --line:#2a2a2a;--line2:#3a3a3a;--steal:#17b26a;--improve:#f0b04a;--note:#f0d68a;--accent:#5b9bd5}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5}
+  .canvas{max-width:1180px;margin:0 auto;padding:40px 24px 90px}
+  .board-title{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  h1{font-size:30px;font-weight:800;margin:8px 0 24px}
+  .frame{background:var(--frame);border:1px solid var(--line2);border-radius:16px;padding:22px;margin-bottom:20px;position:relative}
+  .frame::before{content:attr(data-f);position:absolute;top:-10px;left:16px;font-size:11px;font-weight:700;letter-spacing:.06em;
+    background:var(--canvas);border:1px solid var(--line2);color:var(--muted);padding:2px 10px;border-radius:6px}
+  .frame h2{font-size:17px;font-weight:700;margin:2px 0 14px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:12px;padding:5px 10px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);background:var(--bg)}
+  .chip b{color:var(--ink)}
+  .lb{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;text-transform:uppercase}
+  .lb.est{color:#ffd89a;background:rgba(240,176,74,.13);border:1px solid rgba(240,176,74,.4)}
+  .lb.real{color:#8ff0c2;background:rgba(23,178,106,.14);border:1px solid rgba(23,178,106,.4)}
+  .ia{display:flex;gap:10px;flex-wrap:wrap}
+  .tab{background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;text-align:center}
+  .tree{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px;white-space:pre;overflow:auto;margin-top:12px}
+  .strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
+  .screen{flex:0 0 200px}
+  .shot{width:200px;height:auto;border-radius:18px;border:1px solid var(--line2);display:block;background:#eee}
+  .screen .cap{font-size:12px;font-weight:600;margin-top:8px}
+  .callout{font-size:11px;color:#2a2410;background:var(--note);border-radius:8px;padding:7px 9px;margin-top:6px}
+  .flow{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:var(--bg)}
+  .flow h3{font-size:14px;font-weight:700;margin-bottom:8px}
+  .steps{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px}
+  .grid5{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12.5px}
+  .cell{background:var(--frame);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .cell.full{grid-column:1/-1}
+  .cell .l{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:3px}
+  .cell .c{color:var(--ink2)}
+  .verdict{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .v{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px}
+  .v.steal{color:#8ff0c2;background:rgba(23,178,106,.14);border:1px solid rgba(23,178,106,.4)}
+  .v.skip{color:#c9c9c9;background:rgba(138,138,138,.14);border:1px solid var(--line2)}
+  .v.improve{color:#ffd89a;background:rgba(240,176,74,.13);border:1px solid rgba(240,176,74,.4)}
+  .tok{display:flex;gap:26px;flex-wrap:wrap}
+  .swatches{display:flex;gap:14px;flex-wrap:wrap}
+  .sw{width:52px;height:52px;border-radius:10px;border:1px solid var(--line2);position:relative}
+  .sw span{position:absolute;bottom:-16px;left:0;font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .gcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .gcard{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .gcard h4{font-size:13px;font-weight:700;margin-bottom:6px}
+  .gcard .row{font-size:11.5px;color:var(--ink2);margin:3px 0}
+  .gcard .row b{color:var(--ink)}
+  .note{background:#1c1c1c;border-left:3px solid var(--improve);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--ink2);margin-top:12px}
+  .note b{color:var(--ink)}
+  .foot{margin-top:30px;font-size:11px;color:var(--muted);text-align:center}
+  @media(max-width:720px){.grid5,.gcards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="board-title">app-ux-teardown · board · life-rpg / self-care</div>
+  <h1>Finch — UX/UI Teardown <span class="lb real">màn thật · Mobbin</span></h1>
+
+  <div class="frame" data-f="FRAME 1 · HEADER">
+    <h2>Finch: Self-Care Widget Pet</h2>
+    <p style="color:var(--ink2);font-size:14px;margin-top:0">Nuôi một chú chim con ("Lee") bằng cách tự chăm sóc bản thân. Cực đối lập với Habitica: <b style="color:var(--ink)">KHÔNG phạt</b> — thiết kế quanh sự cảm thông, giữ chân cả người dễ nản.</p>
+    <div class="meta">
+      <span class="chip">Nền tảng: <b>iOS · Android</b></span>
+      <span class="chip">Giá: <b>Free · Finch Plus ~$9.99/mo</b></span>
+      <span class="chip">Traction: <b>10M+ downloads</b> <span class="lb est">est</span></span>
+      <span class="chip">Ra mắt: <b>2021</b></span>
+      <span class="chip">Bóc: <b>2026-09-05</b></span>
+      <span class="chip">Nguồn: <b>Mobbin</b> <span class="lb real">thật</span></span>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 2 · IA MAP">
+    <h2>Information Architecture</h2>
+    <div class="ia">
+      <div class="tab">Home</div><div class="tab">Quests</div><div class="tab">Shop</div>
+      <div class="tab">Friends</div><div class="tab">Bag</div><div class="tab">Lee (pet)</div>
+    </div>
+    <div class="tree">Bottom-nav 6 tab
+├─ Home    · phòng của pet + thanh ⚡Adventure + "goals left today" (checklist)
+├─ Quests  · gói mục tiêu theo chủ đề (stress, routine, biết ơn…)
+├─ Shop    · tiêu Rainbow Stones mua đồ trang trí / trang phục pet
+├─ Friends · kết bạn, gửi động viên (social nhẹ, không so kè)
+├─ Bag     · vật phẩm, rainbow stones, micropets sưu tầm
+└─ Lee     · hồ sơ pet: chỉ số (Logic…), nhật ký, sức khỏe cảm xúc</div>
+    <div class="note">Đặt cái gì làm trung tâm: <b>chú pet + việc chăm sóc bản thân</b>. Việc của bạn không phải "task" khô khan mà là "cho Lee năng lượng đi phiêu lưu" — đóng khung lại toàn bộ động lực.</div>
+  </div>
+
+  <div class="frame" data-f="FRAME 3 · SCREENS">
+    <h2>Màn hình thật <span style="font-size:11px;color:var(--muted)">— chụp từ Mobbin (iOS)</span></h2>
+    <div class="strip">
+      <div class="screen"><img class="shot" src="./assets/finch-splash.webp" alt="Finch splash"><div class="cap">Splash</div><div class="callout">Nhận diện: chú chim tròn, warm pastel — báo hiệu "app dịu dàng" ngay từ đầu</div></div>
+      <div class="screen"><img class="shot" src="./assets/finch-ob09.webp" alt="What is self-care"><div class="cap">Onboarding · dạy self-care</div><div class="callout">Hội thoại: pet HỎI "self-care là gì?" → cho chọn 2 câu trả lời ấm áp. Dạy khái niệm qua đối thoại, không phải form</div></div>
+      <div class="screen"><img class="shot" src="./assets/finch-ob10.webp" alt="Lee gained Logic"><div class="cap">Pet nhận chỉ số</div><div class="callout">"Lee gained +5.3 Logic" — việc bạn làm nuôi lớn pet: có gamification NHẸ, không phải zero</div></div>
+      <div class="screen"><img class="shot" src="./assets/finch-home1.webp" alt="Home 1st adventure"><div class="cap">Home (core)</div><div class="callout">Thanh "1st Adventure 0/15" (⚡energy) + "7 goals left" checklist, mỗi goal =5⚡. Nav 6 tab dưới cùng</div></div>
+      <div class="screen"><img class="shot" src="./assets/finch-home4.webp" alt="Skip snooze"><div class="cap">Swipe task → Skip/Snooze</div><div class="callout">★ Vuốt task = <b>Skip / Snooze</b> — KHÔNG "Fail". Đây là "phanh cảm thông" lõi</div></div>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 4 · FLOWS">
+    <h2>Bóc flow</h2>
+
+    <div class="flow">
+      <h3>Onboarding / activation <span class="lb real">thật</span></h3>
+      <div class="steps">Hatch trứng ("You hatched a birb!") → bật thông báo (Lee nhắc uống nước) → dạy self-care qua hội thoại → "What areas would you like support with?" → "Sam Lee's starter plan" (7 goal dễ) → Home</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Aha = "bạn vừa nở ra một sinh vật cần bạn". Emotional hook trước cả khi nói tính năng. Starter plan toàn goal 2 giây (Get out of bed) → thắng nhanh.</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Onboarding dài (21 màn) & nhiều chữ; người muốn vào nhanh có thể sốt ruột</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Hỏi "cần hỗ trợ mảng nào" (stress/routine/biết ơn…) → cá nhân hoá gói quest sau đó</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · emotional hook "sinh vật cần bạn" + starter plan thắng-nhanh</span>
+          <span class="v improve">IMPROVE · rút gọn số màn, cho "skip to app"</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>Core loop — Energy → Adventure (thay cho penalty)</h3>
+      <div class="steps">Mở app → thấy goals hôm nay → tick → +⚡ → đầy thanh Adventure → pet ĐI PHIÊU LƯU → mang về rainbow stones + món kỷ niệm → lặp lại hôm sau</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Phần thưởng là <b>tiến trình của PET</b>, không phải điểm của bạn → giảm áp lực thành tích, tăng nuôi dưỡng</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Thiếu sức ép → người cần "gậy" (loss aversion) thấy nhẹ đô, dễ trôi</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">"Adventuring · back in 7:59:48" — pet vắng mặt tạo lý do quay lại app (variable reward + curiosity gap)</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · thưởng-cho-pet thay điểm-cho-mình · adventure timer kéo quay lại</span>
+          <span class="v improve">IMPROVE · cho bật "chế độ thử thách" tuỳ chọn để thêm sức ép</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>★ Compassion / No-penalty (đối trọng Habitica)</h3>
+      <div class="steps">Bỏ task → vuốt = <b>Skip</b> hoặc <b>Snooze</b> (KHÔNG "Fail") ‖ vắng nhiều ngày → không mất gì, pet vẫn chờ ‖ có bài thở / "Pause"</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Tách "không làm được" khỏi "thất bại" — bảo toàn lòng tự trọng, giữ người dễ nản (nhóm churn cao nhất)</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Không có hậu quả → với người cần kỷ luật, cảm giác "vô thưởng vô phạt"</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Định vị "sức khỏe tinh thần" chứ không "năng suất" → biện minh cho việc bỏ penalty</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · Skip/Snooze thay Fail — chính là "phanh cảm thông" của The System</span>
+          <span class="v skip">SKIP · bỏ hoàn toàn hậu quả (The System vẫn cần một mức sức ép)</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>Monetization + Retention (mùa vụ)</h3>
+      <div class="steps">Free rộng → Finch Plus (sub) mở nội dung · Seasonal ("September Season · Beaks and Brushes") thả micropet hiếm mỗi tháng → sưu tầm</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Seasonal + micropet hiếm = lý do mở app hằng ngày cả tháng (FOMO nhẹ, dễ thương)</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Một số nội dung hay khoá sau Finch Plus; billing đôi khi bị chê</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Sưu tầm (collection) là động cơ retention dài hạn thay cho streak-sợ-mất</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · event mùa vụ + vật phẩm hiếm sưu tầm (retention không-sợ-hãi)</span>
+          <span class="v improve">IMPROVE · gắn seasonal vào 4 domain đời thật của The System</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 5 · DESIGN TOKENS">
+    <h2>Design system <span style="font-size:11px;color:var(--muted)">(hex <span class="lb est">ƯỚC TÍNH</span> từ screenshot)</span></h2>
+    <div class="tok">
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:20px">Màu</div>
+        <div class="swatches">
+          <div class="sw" style="background:#7c74d6"><span>#7c74d6</span></div>
+          <div class="sw" style="background:#8fd0c4"><span>#8fd0c4</span></div>
+          <div class="sw" style="background:#f4b64a"><span>#f4b64a</span></div>
+          <div class="sw" style="background:#6fbf73"><span>#6fbf73</span></div>
+          <div class="sw" style="background:#e86aa0"><span>#e86aa0</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted)">Typography</div>
+        <div style="font-size:22px;font-weight:800">Rounded sans, đậm</div>
+        <div style="font-size:14px">Body ấm, dãn dòng thoáng</div>
+        <div style="font-size:11px;color:var(--muted)">Bo góc LỚN · nhiều khoảng trắng</div>
+      </div>
+    </div>
+    <div class="note">Đặc trưng: <b>warm pastel + illustration mềm</b> · bo góc rất lớn · mật độ THOÁNG · icon 3D dễ thương · nút to. Trái ngược Habitica (chật, pixel). Đây là "ngôn ngữ dịu dàng" — nếu The System muốn khắc nghiệt hơn thì học <b>bố cục thoáng</b> chứ không copy bảng màu ngọt này.</div>
+  </div>
+
+  <div class="frame" data-f="FRAME 6 · GAMIFICATION">
+    <h2>Cơ chế gamification</h2>
+    <div class="gcards">
+      <div class="gcard"><h4>⚡ Energy → Adventure</h4>
+        <div class="row"><b>Vào bằng:</b> hoàn thành goal self-care (mỗi goal ~5⚡)</div>
+        <div class="row"><b>Công thức:</b> đủ ⚡ (vd 15) → pet đi Adventure → về sau X giờ kèm thưởng</div>
+        <div class="row"><b>Neo tâm lý:</b> nuôi dưỡng + variable reward + curiosity gap (pet vắng)</div>
+        <div class="row"><b>UI:</b> thanh ⚡ trên Home, timer "back in H:MM"</div>
+      </div>
+      <div class="gcard"><h4>💗 Pet growth / chỉ số</h4>
+        <div class="row"><b>Vào bằng:</b> tương tác + hoàn thành việc</div>
+        <div class="row"><b>Công thức:</b> pet lên chỉ số (vd "+5.3 Logic"), lớn dần từ baby</div>
+        <div class="row"><b>Neo tâm lý:</b> tiến trình gắn vào SINH VẬT, không vào điểm số bản thân</div>
+        <div class="row"><b>UI:</b> toast "Lee gained +X …", màn hồ sơ Lee</div>
+      </div>
+      <div class="gcard"><h4>🌈 Rainbow Stones · Shop</h4>
+        <div class="row"><b>Vào bằng:</b> adventure & hoàn thành việc</div>
+        <div class="row"><b>Công thức:</b> stones → mua trang phục/đồ trang trí phòng pet</div>
+        <div class="row"><b>Neo tâm lý:</b> tự-biểu-đạt + chăm sóc (cosmetic, không pay-to-win)</div>
+        <div class="row"><b>UI:</b> tab Shop, giá bằng stones</div>
+      </div>
+      <div class="gcard"><h4>🎟️ Seasonal · Micropet hiếm</h4>
+        <div class="row"><b>Vào bằng:</b> nạp đầy năng lượng mỗi ngày trong mùa</div>
+        <div class="row"><b>Công thức:</b> giữ đều cả tháng → mở micropet hiếm (vd "Sketch")</div>
+        <div class="row"><b>Neo tâm lý:</b> collection + FOMO nhẹ (không trừng phạt)</div>
+        <div class="row"><b>UI:</b> banner mùa, đồng hồ đếm ngược ngày</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 7 · PHÁN QUYẾT">
+    <h2>Tổng hợp — lấy gì / bỏ gì cho "The System"</h2>
+    <div class="verdict" style="gap:8px;margin-bottom:10px">
+      <span class="v steal">STEAL · Skip/Snooze thay Fail (phanh cảm thông) · thưởng-cho-pet + adventure timer · emotional hook onboarding · seasonal collection retention</span>
+    </div>
+    <div class="verdict" style="gap:8px;margin-bottom:10px">
+      <span class="v improve">IMPROVE · thêm mức sức ép TUỲ CHỌN · gắn pet-growth vào 4 domain đời thật · seasonal theo domain</span>
+    </div>
+    <div class="verdict" style="gap:8px">
+      <span class="v skip">SKIP · bỏ HOÀN TOÀN hậu quả · bảng màu quá ngọt (lệch tệp wibu thích HUD ngầu) · onboarding 21 màn</span>
+    </div>
+    <div class="note"><b>Bài học lớn nhất:</b> Finch chứng minh <b>"phanh cảm thông" giữ chân được 10M+ người</b> — nhưng nó thiếu sức ép. The System đứng GIỮA: giữ Skip/Snooze của Finch + loss-aversion của Habitica, chỉnh thành "phạt CÓ phanh".</div>
+  </div>
+
+  <div class="foot">app-ux-teardown · board Finch · 2026-09-05 · nguồn: Mobbin (iOS) · App Store · import Figma bằng html.to.design</div>
+</div>
+</body></html>

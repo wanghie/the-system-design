@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · Báo cáo thị trường + Teardown tính năng</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0f0f;--canvas:#141414;--frame:#181818;--frame2:#1c1c1c;--ink:#f1f1f1;--ink2:#c9c9c9;
+    --muted:#8a8a8a;--line:#2a2a2a;--line2:#3a3a3a;
+    --cy:#35e0d0;--brand:#5b8cff;
+    --steal:#17b26a;--skip:#8a8a8a;--improve:#f0b04a;--danger:#f74e52;--note:#f0d68a;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .canvas{max-width:1200px;margin:0 auto;padding:44px 24px 100px}
+
+  /* header */
+  .b{font-weight:900;letter-spacing:.18em;font-size:13px;display:flex;align-items:center;gap:10px;color:var(--ink)}
+  .dot{width:11px;height:11px;background:var(--cy);border-radius:3px;transform:rotate(45deg)}
+  h1{font-size:34px;font-weight:900;margin:16px 0 8px;letter-spacing:-.02em;line-height:1.1}
+  .lede{color:var(--ink2);font-size:16px;max-width:80ch}
+  .meta-top{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+
+  /* section frame — kiểu artboard Figma */
+  .frame{background:var(--frame);border:1px solid var(--line2);border-radius:16px;padding:26px 26px 24px;margin-bottom:22px;position:relative;scroll-margin-top:20px}
+  .frame::before{content:attr(data-f);position:absolute;top:-11px;left:18px;font-size:11px;font-weight:700;letter-spacing:.06em;
+    background:var(--canvas);border:1px solid var(--line2);color:var(--muted);padding:3px 11px;border-radius:6px}
+  .frame h2{font-size:20px;font-weight:800;margin:2px 0 4px;letter-spacing:-.01em}
+  .frame .sec-sub{color:var(--muted);font-size:13.5px;margin:0 0 18px}
+
+  /* nav */
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 30px}
+  .toc a{font-size:12px;font-weight:600;text-decoration:none;color:var(--ink2);background:var(--frame);border:1px solid var(--line2);padding:7px 12px;border-radius:999px;transition:.15s}
+  .toc a:hover{border-color:var(--cy);color:var(--cy)}
+
+  /* chips */
+  .chip{font-size:12px;padding:5px 11px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);background:var(--bg);white-space:nowrap}
+  .chip b{color:var(--ink)}
+  .lb{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em}
+  .lb.est{color:#ffd89a;background:rgba(240,176,74,.13);border:1px solid rgba(240,176,74,.4)}
+  .lb.real{color:#8ff0c2;background:rgba(23,178,106,.14);border:1px solid rgba(23,178,106,.4)}
+  .lb.mkt{color:#bcd2ff;background:rgba(91,140,255,.13);border:1px solid rgba(91,140,255,.4)}
+
+  /* roster cards */
+  .roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  .app{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 17px;display:flex;flex-direction:column;gap:9px}
+  .app .top{display:flex;align-items:center;gap:12px}
+  .app .ic{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:21px;background:var(--frame2);border:1px solid var(--line2);flex-shrink:0}
+  .app .nm{font-size:16px;font-weight:800}
+  .app .pos{font-size:11.5px;color:var(--muted)}
+  .app .desc{font-size:12.5px;color:var(--ink2)}
+  .app .facts{display:flex;flex-wrap:wrap;gap:6px}
+  .app .fact{font-size:10.5px;color:var(--ink2);background:var(--frame2);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
+  .app .fact b{color:var(--ink)}
+  .app .src{font-size:10.5px;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:2px}
+
+  /* matrix table */
+  .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+  table.matrix{border-collapse:collapse;width:100%;font-size:12.5px;min-width:760px}
+  table.matrix th,table.matrix td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+  table.matrix thead th{background:var(--frame2);color:var(--ink);font-weight:800;font-size:12px;position:sticky;top:0}
+  table.matrix tbody td:first-child{font-weight:700;color:var(--ink);background:var(--frame2)}
+  table.matrix td.y{color:#8ff0c2}
+  table.matrix td.p{color:#ffd89a}
+  table.matrix td.n{color:#f2a0a2}
+
+  /* readings */
+  .cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .panel{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 17px}
+  .panel h4{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;margin:0 0 12px}
+  .note{background:var(--frame2);border-left:3px solid var(--improve);border-radius:8px;padding:11px 13px;font-size:13px;color:var(--ink2)}
+  .note+.note{margin-top:9px}
+  .note.blue{border-left-color:var(--brand)}
+  .note.red{border-left-color:var(--danger)}
+  .note.green{border-left-color:var(--steal)}
+  .note b{color:var(--ink)}
+
+  /* flow teardown */
+  .flow{border:1px solid var(--line);border-radius:12px;padding:16px 17px;margin-bottom:14px;background:var(--bg)}
+  .flow h3{font-size:15px;font-weight:800;margin:0 0 4px}
+  .flow .who{font-size:11.5px;color:var(--muted);margin-bottom:12px}
+  .grid5{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .cell{background:var(--frame);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12.5px}
+  .cell .l{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:4px}
+  .cell .c{color:var(--ink2)}
+  .cell.full{grid-column:1/-1}
+  .verdict{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .v{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;line-height:1.35}
+  .v.steal{color:#8ff0c2;background:rgba(23,178,106,.14);border:1px solid rgba(23,178,106,.4)}
+  .v.skip{color:#c9c9c9;background:rgba(138,138,138,.14);border:1px solid var(--line2)}
+  .v.improve{color:#ffd89a;background:rgba(240,176,74,.13);border:1px solid rgba(240,176,74,.4)}
+
+  /* gamification cards */
+  .gcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .gcard{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:15px}
+  .gcard h4{font-size:14px;font-weight:800;margin:0 0 8px}
+  .gcard .row{font-size:12px;color:var(--ink2);margin:4px 0}
+  .gcard .row b{color:var(--ink)}
+
+  /* tokens */
+  .swatches{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+  .sw{width:56px;height:56px;border-radius:10px;border:1px solid var(--line2);position:relative}
+  .sw span{position:absolute;bottom:-17px;left:0;font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+  /* blueprint */
+  .gchips{display:flex;flex-wrap:wrap;gap:9px}
+  .gchip{font-size:12.5px;font-weight:600;background:var(--bg);border:1px solid var(--line2);border-radius:9px;padding:9px 12px;color:var(--ink2)}
+  .gchip b{color:var(--cy)}
+  .bigq{font-size:16px;font-weight:700;color:var(--ink);margin-top:18px;text-align:center;line-height:1.55;background:var(--bg);border:1px dashed var(--line2);border-radius:12px;padding:18px 22px}
+  .bigq b{color:var(--cy)}
+
+  /* steps */
+  .steps ol{margin:0;padding-left:20px;font-size:13.5px;color:var(--ink2)}
+  .steps li{margin:7px 0}
+  .steps b{color:var(--ink)}
+  .steps code{font-family:'JetBrains Mono',monospace;background:#0b0b0b;border:1px solid var(--line2);border-radius:6px;padding:1px 6px;font-size:12px;color:var(--cy)}
+
+  .foot{margin-top:36px;color:var(--muted);font-size:12px;text-align:center;line-height:1.7}
+  h1 .mk{font-size:12px;vertical-align:middle}
+  @media(max-width:720px){.grid5,.gcards,.cols2,.cols3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- ============ HEADER ============ -->
+  <div class="b"><span class="dot"></span>THE SYSTEM · MARKET INTELLIGENCE</div>
+  <h1>Báo cáo thị trường &amp; Teardown tính năng<br>— life-RPG / habit gamification</h1>
+  <div class="lede">
+    Tổng hợp nghiên cứu UX/UI của <b>7 app đối thủ</b> (nguồn Mobbin · App Store · Google Play · tài liệu chính chủ · RCT học thuật),
+    đi từ <b>bản đồ thị trường → ma trận tính năng → teardown từng flow → cơ chế gamification → design tokens → bản thiết kế cho The System</b>.
+    Mọi nhận định gắn nhãn <span class="lb real">STEAL</span> <span class="v skip" style="padding:2px 7px">SKIP</span> <span class="lb est">IMPROVE</span>.
+    Trang này là 1 file — import thẳng vào Figma bằng plugin <b>html.to.design</b>.
+  </div>
+  <div class="meta-top">
+    <span class="chip">Ngách: <b>life-RPG · habit gamified · commitment device</b></span>
+    <span class="chip">Số app bóc: <b>7</b></span>
+    <span class="chip">Deep-dive: <b>Habitica</b></span>
+    <span class="chip">Cập nhật: <b>2026-09-05</b></span>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <a href="#s1">01 · Bối cảnh thị trường</a>
+    <a href="#s2">02 · Danh sách app đã bóc</a>
+    <a href="#s3">03 · Ma trận tính năng</a>
+    <a href="#s4">04 · Teardown theo flow</a>
+    <a href="#s5">05 · Cơ chế gamification</a>
+    <a href="#s6">06 · Design tokens</a>
+    <a href="#s7">07 · Bản thiết kế The System</a>
+    <a href="#s8">08 · Đưa vào Figma</a>
+  </div>
+
+  <!-- ============ 01 · THỊ TRƯỜNG ============ -->
+  <div class="frame" data-f="SECTION 01 · MARKET LANDSCAPE" id="s1">
+    <h2>Bối cảnh thị trường</h2>
+    <p class="sec-sub">Ngách chia làm 3 trường phái, khác nhau ở chỗ họ ĐÁNH VÀO tâm lý nào.</p>
+    <div class="cols3">
+      <div class="panel">
+        <h4>① Trường phái RPG sâu</h4>
+        <div style="font-size:13px;color:var(--ink2)">Biến đời thành game có stat/level/loot. <b style="color:var(--ink)">Habitica, Arise, Dual, Solo Leveling System</b>. Mạnh: danh tính &amp; tiến trình. Yếu: onboarding nặng, dễ quá tải.</div>
+      </div>
+      <div class="panel">
+        <h4>② Trường phái cảm thông</h4>
+        <div style="font-size:13px;color:var(--ink2)">Nuôi pet / chăm bản thân, KHÔNG phạt. <b style="color:var(--ink)">Finch</b>. Mạnh: giữ chân người dễ nản, 10M+ tải. Yếu: thiếu sức ép nên hiệu quả kỷ luật thấp.</div>
+      </div>
+      <div class="panel">
+        <h4>③ Trường phái tiền cược</h4>
+        <div style="font-size:13px;color:var(--ink2)">Đặt tiền thật, thua thì mất. <b style="color:var(--ink)">stickK / Forfeit</b>. Mạnh: loss aversion cực mạnh, có bằng chứng RCT. Yếu: mang tiếng "app tự giữ tiền".</div>
+      </div>
+    </div>
+    <div class="note green" style="margin-top:16px"><b>Kết luận thị trường:</b> mỗi app mạnh 1–2 mảng, KHÔNG app nào ghép đủ <b>gamification sâu + 4 domain đời thật + penalty có phanh + event cược công bằng + cộng đồng</b>. Đó là kẽ hở The System nhắm vào (xem Section 07).</div>
+  </div>
+
+  <!-- ============ 02 · ROSTER ============ -->
+  <div class="frame" data-f="SECTION 02 · APP ROSTER" id="s2">
+    <h2>Danh sách app đã nghiên cứu <span style="font-size:12px;color:var(--muted);font-weight:600">— 7 app · nguồn có ghi</span></h2>
+    <p class="sec-sub">Mỗi app đã bóc ≥8 màn qua Mobbin / App Store / video walkthrough. <span class="lb real">thật</span> = màn từ app/Mobbin · <span class="lb mkt">marketing</span> = screenshot App Store.</p>
+    <div class="roster">
+
+      <div class="app">
+        <div class="top"><div class="ic">🎴</div><div><div class="nm">Habitica</div><div class="pos">life-RPG habit · lâu đời &amp; sâu nhất</div></div></div>
+        <div class="desc">"Gamify your life". Loss aversion (mất HP khi bỏ Daily) + party boss co-op là lõi.</div>
+        <div class="facts"><span class="fact">iOS·Android·Web</span><span class="fact"><b>15M+</b> tải <span class="lb est">est</span></span><span class="fact"><b>$5</b>/mo</span><span class="fact">2013</span></div>
+        <div class="src">Nguồn: Mobbin <span class="lb real">thật</span> · App Store · Habitica Wiki</div>
+      </div>
+
+      <div class="app">
+        <div class="top"><div class="ic">🔥</div><div><div class="nm">Arise</div><div class="pos">fitness RPG kiểu Solo Leveling</div></div></div>
+        <div class="desc">Gym RPG — tập luyện lên rank như manhwa. Paywall CỨNG ngay sau survey onboarding.</div>
+        <div class="facts"><span class="fact">iOS·Android</span><span class="fact"><b>1M+</b> tải</span><span class="fact">~<b>$12</b>/mo</span></div>
+        <div class="src">Nguồn: App Store <span class="lb mkt">marketing</span> · Discord · video</div>
+      </div>
+
+      <div class="app">
+        <div class="top"><div class="ic">🐣</div><div><div class="nm">Finch</div><div class="pos">self-care pet · KHÔNG phạt</div></div></div>
+        <div class="desc">Nuôi chim con bằng self-care. Có <b>Pause Mode</b> (cảm thông, không mất gì khi vắng).</div>
+        <div class="facts"><span class="fact">iOS·Android</span><span class="fact"><b>10M+</b> tải</span><span class="fact"><b>$9.99</b>/mo</span></div>
+        <div class="src">Nguồn: Mobbin <span class="lb real">thật</span> · App Store</div>
+      </div>
+
+      <div class="app">
+        <div class="top"><div class="ic">🎯</div><div><div class="nm">Dual</div><div class="pos">solo life-RPG · focus→attribute</div></div></div>
+        <div class="desc">Việc thật quy ra <b>attribute</b> (kiểu skill 10.000 giờ). Reward shop người dùng tự định giá.</div>
+        <div class="facts"><span class="fact">iOS·Android</span><span class="fact"><b>$6.99</b>/mo</span><span class="fact">buggy <span class="lb est">est</span></span></div>
+        <div class="src">Nguồn: App Store <span class="lb mkt">marketing</span> · video</div>
+      </div>
+
+      <div class="app">
+        <div class="top"><div class="ic">⚔️</div><div><div class="nm">Solo Leveling System</div><div class="pos">fan-app · Status Window đẹp</div></div></div>
+        <div class="desc">Fan app theo manhwa. UI "Status Window" (dark + glow) rất đẹp nhưng backend hỏng, giữ chân kém.</div>
+        <div class="facts"><span class="fact">iOS·Android</span><span class="fact"><b>500K+</b> tải</span><span class="fact">freemium</span></div>
+        <div class="src">Nguồn: App Store <span class="lb mkt">marketing</span> · review</div>
+      </div>
+
+      <div class="app">
+        <div class="top"><div class="ic">💰</div><div><div class="nm">stickK · Forfeit</div><div class="pos">cược tiền thật · commitment</div></div></div>
+        <div class="desc">Đặt cược tiền + có <b>referee</b> xác nhận. Thua → mất tiền (cho charity/anti-charity). Có bằng chứng RCT.</div>
+        <div class="facts"><span class="fact">Web·iOS</span><span class="fact">giữ cược + sub</span></div>
+        <div class="src">Nguồn: web app · App Store · nghiên cứu RCT</div>
+      </div>
+
+      <div class="app">
+        <div class="top"><div class="ic">📊</div><div><div class="nm">Streaks · Habitify</div><div class="pos">habit tracker sạch · chuẩn mực</div></div></div>
+        <div class="desc">Tracker tối giản. Trạng thái <b>Done / Skipped / Failed</b> + heatmap. UI sạch nhất nhóm.</div>
+        <div class="facts"><span class="fact">iOS·Android</span><span class="fact"><b>$5.99</b> mua đứt</span></div>
+        <div class="src">Nguồn: Mobbin <span class="lb real">thật</span> · App Store</div>
+      </div>
+
+      <div class="app" style="border-color:rgba(53,224,208,.35)">
+        <div class="top"><div class="ic">🗡️</div><div><div class="nm">Life Reset <span class="lb real">mới bóc</span></div><div class="pos">Solo-Leveling life-RPG · dark theme</div></div></div>
+        <div class="desc">Phát hiện trên Mobbin — GẦN The System nhất: dark theme, <b>5 attribute</b> (Wisdom·Confidence·Strength·Discipline·Focus), Level+XP, gear trang bị, đồng hồ <b>"NEXT MONSTER"</b> đếm ngược đánh boss.</div>
+        <div class="facts"><span class="fact">iOS</span><span class="fact">pixel-art HUD</span><span class="fact">Day X/66</span></div>
+        <div class="src">Nguồn: <a href="https://mobbin.com/flows/4a0f9c2f-db67-4535-a10b-c7acf9f20134" style="color:var(--cy)">Mobbin</a> <span class="lb real">thật</span></div>
+      </div>
+
+    </div>
+
+    <h2 style="font-size:15px;margin-top:26px">Màn hình thật đã kéo về <span style="font-size:12px;color:var(--muted);font-weight:600">— chụp từ Mobbin (iOS), lưu ở <code style="font-family:'JetBrains Mono';color:var(--cy);font-size:11px">/decks/assets/</code></span></h2>
+    <div class="scroll" style="border:none">
+      <div style="display:flex;gap:14px;padding-bottom:8px">
+        <figure style="margin:0;flex:0 0 150px"><img src="./decks/assets/lifereset-home.webp" style="width:150px;border-radius:14px;border:1px solid var(--line2)" alt="Life Reset home"><figcaption style="font-size:11px;color:var(--ink2);margin-top:6px"><b style="color:var(--cy)">Life Reset</b> · Home: "NEXT MONSTER 29h47m" + task list (Read 5 pages…) <span class="lb real">thật</span></figcaption></figure>
+        <figure style="margin:0;flex:0 0 150px"><img src="./decks/assets/lifereset-profile.webp" style="width:150px;border-radius:14px;border:1px solid var(--line2)" alt="Life Reset profile"><figcaption style="font-size:11px;color:var(--ink2);margin-top:6px"><b style="color:var(--cy)">Life Reset</b> · Character: 5 attribute + Level 5 + gear <span class="lb real">thật</span></figcaption></figure>
+        <figure style="margin:0;flex:0 0 150px"><img src="./decks/assets/finch-home1.webp" style="width:150px;border-radius:14px;border:1px solid var(--line2)" alt="Finch home"><figcaption style="font-size:11px;color:var(--ink2);margin-top:6px"><b style="color:#e86aa0">Finch</b> · Home: ⚡Adventure 0/15 + goals + 6-tab nav <span class="lb real">thật</span></figcaption></figure>
+        <figure style="margin:0;flex:0 0 150px"><img src="./decks/assets/finch-home4.webp" style="width:150px;border-radius:14px;border:1px solid var(--line2)" alt="Finch skip snooze"><figcaption style="font-size:11px;color:var(--ink2);margin-top:6px"><b style="color:#e86aa0">Finch</b> · Vuốt task = Skip/Snooze (phanh cảm thông) <span class="lb real">thật</span></figcaption></figure>
+        <figure style="margin:0;flex:0 0 150px"><img src="./decks/assets/finch-ob10.webp" style="width:150px;border-radius:14px;border:1px solid var(--line2)" alt="Finch stat gain"><figcaption style="font-size:11px;color:var(--ink2);margin-top:6px"><b style="color:#e86aa0">Finch</b> · Pet nhận "+5.3 Logic" (gamification nhẹ) <span class="lb real">thật</span></figcaption></figure>
+      </div>
+    </div>
+    <div class="note green" style="margin-top:14px"><b>Deep-dive Finch đã xong</b> — xem board đầy đủ 7 frame với màn thật: <a href="./decks/board-finch.html" style="color:var(--cy)">decks/board-finch.html</a>. <b>Life Reset</b> là ứng viên reference thẩm mỹ số 1 cho hướng "Status Window" dark của The System.</div>
+  </div>
+
+  <!-- ============ 03 · MA TRẬN ============ -->
+  <div class="frame" data-f="SECTION 03 · FEATURE MATRIX" id="s3">
+    <h2>Ma trận tính năng — 6 đối thủ chính</h2>
+    <p class="sec-sub">Hàng = tính năng · Cột = app · Ô = có/không + cách làm. (Solo Leveling System bóc riêng vì là fan-app, không đưa vào ma trận cạnh tranh trực tiếp.)</p>
+    <div class="scroll">
+      <table class="matrix">
+        <thead><tr><th>Tính năng</th><th>Habitica</th><th>Arise</th><th>Finch</th><th>Dual</th><th>Forfeit</th><th>Streaks</th></tr></thead>
+        <tbody>
+          <tr><td>Định vị</td><td>RPG habit</td><td>Fitness RPG</td><td>Self-care pet</td><td>Focus RPG</td><td>Cược tiền</td><td>Habit tracker</td></tr>
+          <tr><td>Gamification sâu (stat/rank)</td><td class="y">✓ sâu</td><td class="y">✓ rank</td><td class="p">~ pet</td><td class="y">✓ attribute</td><td class="n">✗</td><td class="p">~ streak</td></tr>
+          <tr><td>4 domain đời thật</td><td class="p">~ tự đặt</td><td class="n">✗ fitness</td><td class="n">✗ wellness</td><td class="p">~ attribute</td><td class="p">~ mọi task</td><td class="p">~ tự đặt</td></tr>
+          <tr><td>Streak</td><td class="y">✓</td><td class="y">✓</td><td class="p">~ nhẹ</td><td class="n">✗</td><td class="y">✓</td><td class="y">✓ lõi</td></tr>
+          <tr><td>Penalty khi bỏ</td><td class="y">✓ mất HP</td><td class="y">✓ mất XP</td><td class="n">✗ cảm thông</td><td class="n">✗</td><td class="y">✓✓ mất tiền</td><td class="p">~ reset streak</td></tr>
+          <tr><td>Event cược tiền</td><td class="n">✗</td><td class="n">✗</td><td class="n">✗</td><td class="n">✗</td><td class="y">✓ lõi</td><td class="n">✗</td></tr>
+          <tr><td>Cộng đồng / social</td><td class="y">✓ party</td><td class="p">~ Discord</td><td class="n">✗</td><td class="n">✗</td><td class="p">~ shame text</td><td class="n">✗</td></tr>
+          <tr><td>Onboarding đặt mục tiêu</td><td class="p">~</td><td class="y">✓ survey</td><td class="y">✓ mood/goal</td><td class="y">✓ nặng</td><td class="y">✓ per task</td><td class="p">~ nhanh</td></tr>
+          <tr><td>Mô hình giá</td><td>$5/mo</td><td>~$12/mo</td><td>$9.99/mo</td><td>$6.99/mo</td><td>giữ cược+sub</td><td>$5.99 đứt</td></tr>
+          <tr><td>Ma sát paywall</td><td class="y">thấp</td><td class="n">cao (sau survey)</td><td class="p">TB (billing)</td><td class="p">TB</td><td class="p">TB</td><td class="y">không (mua đứt)</td></tr>
+          <tr><td>UI sạch</td><td class="n">pixel cũ</td><td class="p">TB</td><td class="y">ấm, đẹp</td><td class="p">TB (buggy)</td><td class="p">TB</td><td class="y">✓✓ chuẩn mực</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cols3" style="margin-top:16px">
+      <div class="note"><b>1 · Ai cũng có streak; không ai phối đủ.</b> Không app nào có ĐỦ gamification sâu + 4 domain + penalty + event cược + cộng đồng. Mỗi app mạnh 1–2 mảng.</div>
+      <div class="note blue"><b>2 · Penalty chia đôi thị trường.</b> Arise/Forfeit phạt nặng (mất XP/tiền); Finch không phạt. Chưa ai làm "phạt CÓ phanh".</div>
+      <div class="note red"><b>3 · Event cược tiền gần như trống</b> trong nhóm life-RPG. Chỉ Forfeit làm, nhưng tự giữ tiền (mang tiếng). Kẽ hở rõ nhất.</div>
+    </div>
+  </div>
+
+  <!-- ============ 04 · FLOW TEARDOWN ============ -->
+  <div class="frame" data-f="SECTION 04 · FLOW TEARDOWN" id="s4">
+    <h2>Teardown theo flow</h2>
+    <p class="sec-sub">Mỗi flow: các bước → điểm khéo → điểm ma sát → cơ chế ẩn → phán quyết. Deep-dive Habitica; đối chiếu ngang các app khi liên quan.</p>
+
+    <div class="flow">
+      <h3>① Onboarding / activation</h3>
+      <div class="who">Habitica · đối chiếu: Arise (survey→paywall), Finch (mood/goal), Dual (nặng)</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Các bước</div><div class="c">Chọn class → tạo avatar → thêm vài task mẫu → thấy avatar + 4 thanh chỉ số</div></div>
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Cho nhập task thật ngay; "aha" = thấy XP nhảy khi tick lần đầu (không bắt tạo tài khoản trước)</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Nhồi nhiều khái niệm cùng lúc (Habit vs Daily vs To-Do vs Reward) → quá tải người mới. Arise tệ hơn: chặn paywall ngay sau survey.</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Class khoá tới LV10; gem/pet mở dần → nhỏ giọt phần thưởng giữ tò mò</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · nhập task thật ngay, aha = XP nhảy</span>
+          <span class="v improve">IMPROVE · gộp Habit/Daily/To-Do thành 1 "Quest"</span>
+          <span class="v skip">SKIP · paywall ngay sau survey (Arise)</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>② Core loop + Penalty (loss aversion)</h3>
+      <div class="who">Habitica · đối chiếu: Finch (không phạt), Forfeit (mất tiền)</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Các bước</div><div class="c">Mở app → thấy Dailies → tick → +XP +Gold (số bay lên) ‖ qua đêm bỏ daily → mất HP → HP=0 → mất level/gold/gear</div></div>
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Phạt KHÔNG tức thì mà "qua đêm" (cron) — tạo lo âu nhẹ, kéo mở app sáng hôm sau</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Phạt HP có thể gây nản/bỏ hẳn nếu vắng vài ngày (chết nhân vật)</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">"Rest in the Inn" tạm dừng phạt khi đi vắng — van an toàn chống bỏ app. Finch đẩy xa hơn = Pause Mode.</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · phạt-qua-đêm + van "Inn"</span>
+          <span class="v improve">IMPROVE · phạt nhẹ dần, tránh chết-nản ("phanh cảm thông")</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>③ Social / Party boss quest</h3>
+      <div class="who">Habitica (mạnh nhất nhóm) · đối chiếu: Forfeit (shame text)</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Các bước</div><div class="c">Vào Party → nhận Quest boss → mỗi daily tick = damage boss ‖ mỗi daily BỎ = boss damage cả nhóm</div></div>
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Biến kỷ luật cá nhân thành trách nhiệm nhóm — bỏ daily hại đồng đội (accountability)</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Cần rủ được bạn vào party; solo thì mất phần hay nhất</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Retention lõi nằm ở đây; Habitica bỏ guild chat 2023 → social teo bớt</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · boss-quest co-op (moat retention)</span>
+          <span class="v improve">IMPROVE · matchmaking party tự động (đỡ phải rủ bạn)</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>④ Event / challenge cược tiền</h3>
+      <div class="who">Forfeit / stickK (duy nhất có) · kẽ hở lớn nhất của thị trường</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Các bước</div><div class="c">Đặt mục tiêu → cược tiền → chọn referee → thua thì tiền đi (charity/anti-charity). stickK có bằng chứng RCT tăng tỉ lệ thành công.</div></div>
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Loss aversion tiền thật &gt;&gt; mất HP ảo. Referee = chống gian lận.</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Mang tiếng "app tự giữ tiền" → mất niềm tin. Không có yếu tố vui/game.</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Tiền thua thường về bên thứ ba, không chia lại người thắng → thiếu động lực "ăn được".</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · cược tiền + referee (loss aversion thật)</span>
+          <span class="v improve">IMPROVE · pool chia cho người thắng/top, escrow minh bạch — KHÔNG tự giữ</span>
+          <span class="v skip">SKIP · mô hình app-tự-giữ-tiền</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>⑤ Monetization / paywall</h3>
+      <div class="who">Habitica (mềm) · đối chiếu: Arise (cứng), Streaks (mua đứt)</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Các bước</div><div class="c">Free rộng → Gems (mua tiền hoặc đổi Gold) → Sub mở cosmetic/pet + mystic hourglass</div></div>
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">KHÔNG paywall chức năng; chỉ bán cosmetic + tiện lợi → thiện cảm cao</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Hệ 2 tiền tệ Gem/Gold gây rối. Arise ngược lại: chặn cứng sau survey → tỉ lệ bỏ cao.</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Sub cho đổi Gold→Gems → giữ chân dài hạn</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · không paywall chức năng</span>
+          <span class="v skip">SKIP · hệ 2 tiền tệ rối · paywall cứng sau survey</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>⑥ Tracking / core UI</h3>
+      <div class="who">Streaks / Habitify (chuẩn mực) · đối chiếu: mọi app</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Các bước</div><div class="c">Grid habit → nhấn-giữ để tick → trạng thái Done/Skipped/Failed → heatmap lịch sử</div></div>
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Nhấn-giữ (haptic) thay vì checkbox nhỏ; "Skipped" tách khỏi "Failed" → không phá streak khi có lý do</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Quá tối giản → thiếu chiều sâu động lực (không có stat/story)</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Heatmap kiểu GitHub → cảm giác "chuỗi đẹp không muốn phá"</div></div>
+        <div class="cell full"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL · grid + nhấn-giữ · Done/Skipped/Failed · heatmap</span></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ 05 · GAMIFICATION ============ -->
+  <div class="frame" data-f="SECTION 05 · GAMIFICATION MECHANICS" id="s5">
+    <h2>Cơ chế gamification <span style="font-size:12px;color:var(--muted);font-weight:600">— công thức + neo tâm lý</span></h2>
+    <p class="sec-sub">Mỗi cơ chế: vào bằng gì → công thức → phản hồi UI → neo tâm lý. (Nguồn chính: Habitica; ghi chú app khác làm tốt hơn ở đâu.)</p>
+    <div class="gcards">
+      <div class="gcard"><h4>❤️ HP · Penalty (loss aversion)</h4>
+        <div class="row"><b>Vào bằng:</b> bỏ Daily / + Habit xấu qua đêm (cron)</div>
+        <div class="row"><b>Công thức:</b> damage ~ độ khó × số ngày bỏ; HP=0 → mất level/gold/gear</div>
+        <div class="row"><b>Neo tâm lý:</b> loss aversion — sợ mất mạnh hơn ham được</div>
+        <div class="row"><b>UI:</b> thanh HP đỏ ghim đầu, rung khi mất</div>
+        <div class="verdict"><span class="v improve">IMPROVE · phanh cảm thông (Finch Pause Mode)</span></div>
+      </div>
+      <div class="gcard"><h4>⚔️ XP · Level · Class</h4>
+        <div class="row"><b>Vào bằng:</b> tick Daily/To-Do/+Habit</div>
+        <div class="row"><b>Công thức:</b> XP theo độ khó; đủ ngưỡng → level; class mở ở LV10 (Warrior/Mage/Healer/Rogue)</div>
+        <div class="row"><b>Neo tâm lý:</b> progression + bản sắc (chọn class)</div>
+        <div class="row"><b>UI:</b> thanh XP vàng, level-up có hiệu ứng</div>
+        <div class="verdict"><span class="v steal">STEAL · rank/level làm danh tính (Arise mạnh nhất)</span></div>
+      </div>
+      <div class="gcard"><h4>🪙 Gold · Rewards shop</h4>
+        <div class="row"><b>Vào bằng:</b> hoàn thành task</div>
+        <div class="row"><b>Công thức:</b> Gold → mua gear in-game HOẶC phần thưởng ĐỜI THẬT tự đặt</div>
+        <div class="row"><b>Neo tâm lý:</b> tự-thưởng có kiểm soát, nối game↔đời thật</div>
+        <div class="row"><b>UI:</b> tab Rewards riêng, giá Gold</div>
+        <div class="verdict"><span class="v steal">STEAL · reward tự định giá (Dual)</span></div>
+      </div>
+      <div class="gcard"><h4>👹 Party Boss Quest</h4>
+        <div class="row"><b>Vào bằng:</b> tick Daily khi đang trong quest nhóm</div>
+        <div class="row"><b>Công thức:</b> tick = damage boss; bỏ = boss damage cả party</div>
+        <div class="row"><b>Neo tâm lý:</b> accountability xã hội + tội lỗi tập thể</div>
+        <div class="row"><b>UI:</b> thanh HP boss chung, thông báo damage</div>
+        <div class="verdict"><span class="v steal">STEAL · moat retention</span></div>
+      </div>
+      <div class="gcard"><h4>💰 Event cược → pool</h4>
+        <div class="row"><b>Vào bằng:</b> chọn tham gia event có thời hạn, đóng phí</div>
+        <div class="row"><b>Công thức:</b> hoàn thành → hoàn phí + tuyên dương; bỏ → mất phí vào pool; top về sớm nhất chia pool</div>
+        <div class="row"><b>Neo tâm lý:</b> loss aversion tiền thật + variable reward + social proof</div>
+        <div class="row"><b>UI:</b> bảng xếp hạng, đồng hồ đếm ngược, pool tăng dần</div>
+        <div class="verdict"><span class="v improve">IMPROVE · escrow minh bạch, chia người thắng (sửa Forfeit)</span></div>
+      </div>
+      <div class="gcard"><h4>🔥 Streak · Heatmap</h4>
+        <div class="row"><b>Vào bằng:</b> tick liên tục nhiều ngày</div>
+        <div class="row"><b>Công thức:</b> streak +1/ngày; reset khi Failed (không reset khi Skipped có lý do)</div>
+        <div class="row"><b>Neo tâm lý:</b> sunk cost / endowment — "chuỗi đẹp không muốn phá"</div>
+        <div class="row"><b>UI:</b> số streak + heatmap kiểu GitHub</div>
+        <div class="verdict"><span class="v steal">STEAL · Done/Skipped/Failed (Streaks)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 06 · TOKENS ============ -->
+  <div class="frame" data-f="SECTION 06 · DESIGN TOKENS" id="s6">
+    <h2>Design tokens <span style="font-size:12px;color:var(--muted);font-weight:600">(hex <span class="lb est">ƯỚC TÍNH</span> từ screenshot — không phải token brand chính thức)</span></h2>
+    <p class="sec-sub">Đủ để dựng lại gần đúng ở Figma. Deep-dive Habitica; ghi chú hướng thẩm mỹ cho The System.</p>
+    <div class="cols2">
+      <div class="panel">
+        <h4>Habitica — palette [ƯỚC TÍNH]</h4>
+        <div class="swatches">
+          <div class="sw" style="background:#4f2a93"><span>#4f2a93</span></div>
+          <div class="sw" style="background:#6133b4"><span>#6133b4</span></div>
+          <div class="sw" style="background:#ffb445"><span>#ffb445</span></div>
+          <div class="sw" style="background:#24cc8f"><span>#24cc8f</span></div>
+          <div class="sw" style="background:#f74e52"><span>#f74e52</span></div>
+        </div>
+        <div style="font-size:13px;color:var(--ink2);margin-top:6px"><b style="color:var(--ink)">Type:</b> heading sans đậm + pixel font điểm nhấn RPG · <b style="color:var(--ink)">Mật độ:</b> CHẬT (list dài), radius nhỏ · <b style="color:var(--ink)">Icon:</b> pixel-art 8-bit.</div>
+        <div class="note" style="margin-top:12px">Retro 8-bit là dao 2 lưỡi — thân thuộc fan RPG cũ, lỗi thời với Gen Z <span class="lb est">nhận định</span>.</div>
+      </div>
+      <div class="panel">
+        <h4>The System — hướng thẩm mỹ đề xuất</h4>
+        <div class="swatches">
+          <div class="sw" style="background:#0f0f0f"><span>#0f0f0f</span></div>
+          <div class="sw" style="background:#181818"><span>#181818</span></div>
+          <div class="sw" style="background:#35e0d0"><span>#35e0d0</span></div>
+          <div class="sw" style="background:#5b8cff"><span>#5b8cff</span></div>
+          <div class="sw" style="background:#17b26a"><span>#17b26a</span></div>
+        </div>
+        <div style="font-size:13px;color:var(--ink2);margin-top:6px">Hướng <b style="color:var(--ink)">"Status Window"</b> (mượn Solo Leveling System): dark + cyan glow, HUD game nhưng KHÔNG quá anime. Type: Inter + mono cho số (tabular-nums). Radius vừa, mật độ thoáng hơn Habitica.</div>
+        <div class="note green" style="margin-top:12px">Lấy độ ĐẸP của Solo Leveling System, tránh sự lỗi thời của Habitica và sự "phẳng" của Streaks.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 07 · BLUEPRINT ============ -->
+  <div class="frame" data-f="SECTION 07 · THE SYSTEM BLUEPRINT" id="s7">
+    <h2>Bản thiết kế The System — ghép cái tốt nhất</h2>
+    <p class="sec-sub">Không phát minh cơ chế mới — lấy phần mạnh nhất mỗi app, lấp đúng kẽ hở "cả gói".</p>
+    <div class="gchips">
+      <div class="gchip">🟩 Tracking: <b>grid + nhấn-giữ</b> (Streaks)</div>
+      <div class="gchip">🏅 Danh tính: <b>Rank/Level</b> (Arise)</div>
+      <div class="gchip">📊 <b>Focus→attribute</b> 4 domain (Dual)</div>
+      <div class="gchip">❤️ Phạt <b>CÓ phanh cảm thông</b> (Finch)</div>
+      <div class="gchip">💰 Event <b>cược → pool/top</b>, không tự giữ (Forfeit sửa)</div>
+      <div class="gchip">👹 <b>Party/guild</b> chống churn (Habitica)</div>
+      <div class="gchip">🖥️ <b>Status Window</b> dark+glow (Solo Leveling)</div>
+    </div>
+
+    <div class="cols3" style="margin-top:18px">
+      <div class="panel" style="border-color:rgba(23,178,106,.4)">
+        <h4 style="color:#8ff0c2">✓ STEAL</h4>
+        <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink2)">
+          <li>4 thanh chỉ số ghim đầu — "nhân vật là bạn"</li>
+          <li>Phạt qua-đêm + van "Inn" — loss aversion có phanh</li>
+          <li>Party boss quest — moat retention xã hội</li>
+          <li>Rewards đời thật tự đặt/định giá</li>
+          <li>Grid + nhấn-giữ · Done/Skipped/Failed · heatmap</li>
+          <li>Không paywall chức năng</li>
+        </ul>
+      </div>
+      <div class="panel" style="border-color:rgba(240,176,74,.4)">
+        <h4 style="color:#ffd89a">◆ IMPROVE</h4>
+        <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink2)">
+          <li>Gộp Habit/Daily/To-Do → một "Quest"</li>
+          <li>Phạt nhẹ dần, "phanh cảm thông" tránh chết-nản</li>
+          <li>Matchmaking party tự động</li>
+          <li>Event cược: escrow minh bạch, chia người thắng/top</li>
+          <li>4 domain đời thật gắn sẵn (Sức khỏe·Tiền·Sự nghiệp·Quan hệ)</li>
+          <li>UI Status Window hiện đại thay pixel 8-bit</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h4 style="color:#c9c9c9">✕ SKIP</h4>
+        <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--ink2)">
+          <li>Hệ 2 tiền tệ Gem/Gold rối</li>
+          <li>Aesthetic retro 8-bit (lệch Gen Z)</li>
+          <li>Onboarding quá tải khái niệm</li>
+          <li>Paywall cứng ngay sau survey (Arise)</li>
+          <li>Mô hình app-tự-giữ-tiền (Forfeit)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bigq">Định vị trống: The System là app đầu tiên ghép <b>life-RPG 4 domain + event cược công bằng + cộng đồng wibu</b> trong một giao diện <b>Status Window</b> — thứ chưa app nào có đủ. Chiến lược: không phát minh cơ chế mới, thắng bằng <b>ghép cả gói + phân phối kênh + cộng đồng</b>.</div>
+  </div>
+
+  <!-- ============ 08 · FIGMA ============ -->
+  <div class="frame" data-f="SECTION 08 · ĐƯA VÀO FIGMA" id="s8">
+    <h2>Đưa báo cáo này vào Figma</h2>
+    <p class="sec-sub">File không tạo <code>.fig</code> trực tiếp — đi qua plugin html.to.design.</p>
+    <div class="steps">
+      <ol>
+        <li>Host file này công khai (repo <b>the-system-design</b> → GitHub Pages: <code>https://wanghie.github.io/the-system-design/</code>) hoặc mở trực tiếp trên trình duyệt.</li>
+        <li>Trong Figma → chạy plugin <b>html.to.design</b> → chọn <b>Import from URL</b> (hoặc paste HTML).</li>
+        <li>Plugin dựng thành <b>frame Figma sửa được</b>. Mỗi <code>SECTION</code> ở đây thành 1 nhóm frame.</li>
+        <li>Kéo <b>screenshot thật</b> (App Store / Mobbin) vào các ô — hiện tại là placeholder text.</li>
+        <li>File design The System — UI: <code>figma.com/design/aku7YnW6Oe5knYw83T61TH</code></li>
+      </ol>
+    </div>
+    <div class="note green" style="margin-top:14px"><b>Đã đối chiếu ảnh gốc:</b> Habitica · Finch · Life Reset · Streaks có nguồn Mobbin <span class="lb real">thật</span> (đã kéo màn về <code style="font-family:'JetBrains Mono';color:var(--cy);font-size:11px">/decks/assets/</code>). Còn lại Arise/Dual/Solo Leveling System mới có screenshot <span class="lb mkt">marketing</span> — bước tiếp: kéo ≥8 màn <span class="lb real">thật</span>/app. Lưu ý: "Arise" (fitness RPG) KHÔNG có trên Mobbin (Mobbin chỉ có "Rise" — app giấc ngủ, khác hẳn).</div>
+  </div>
+
+  <div class="foot">
+    THE SYSTEM · Báo cáo thị trường + Teardown tính năng · gộp từ 4 file nguồn (index · So sánh 6 app · Board Habitica · UX Study Habitica)<br>
+    7 app · 6 flow · 6 cơ chế gamification · 2026-09-05 · Nguồn: Mobbin · App Store · Google Play · tài liệu chính chủ · RCT học thuật<br>
+    app-ux-teardown · import Figma bằng plugin html.to.design
+  </div>
+
+</div>
+</body>
+</html>
