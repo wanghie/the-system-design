@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Board · Habitica · Teardown</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0f0f;--canvas:#141414;--frame:#181818;--ink:#f1f1f1;--ink2:#c9c9c9;--muted:#8a8a8a;
+    --line:#2a2a2a;--line2:#3a3a3a;--steal:#17b26a;--improve:#f0b04a;--note:#f0d68a;--accent:#5b9bd5}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .canvas{max-width:1180px;margin:0 auto;padding:40px 24px 90px}
+  .board-title{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  h1{font-size:30px;font-weight:800;margin:8px 0 24px}
+  .frame{background:var(--frame);border:1px solid var(--line2);border-radius:16px;padding:22px;margin-bottom:20px;position:relative}
+  .frame::before{content:attr(data-f);position:absolute;top:-10px;left:16px;font-size:11px;font-weight:700;letter-spacing:.06em;
+    background:var(--canvas);border:1px solid var(--line2);color:var(--muted);padding:2px 10px;border-radius:6px}
+  .frame h2{font-size:17px;font-weight:700;margin:2px 0 14px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:12px;padding:5px 10px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);background:var(--bg)}
+  .chip b{color:var(--ink)}
+  .lb{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;text-transform:uppercase}
+  .lb.est{color:#ffd89a;background:rgba(240,176,74,.13);border:1px solid rgba(240,176,74,.4)}
+  .lb.real{color:#8ff0c2;background:rgba(23,178,106,.14);border:1px solid rgba(23,178,106,.4)}
+  .ia{display:flex;gap:10px;flex-wrap:wrap}
+  .tab{background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;text-align:center}
+  .tree{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px;white-space:pre;overflow:auto;margin-top:12px}
+  .strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
+  .screen{flex:0 0 190px}
+  .shot{width:190px;height:390px;border-radius:20px;border:1px solid var(--line2);background:repeating-linear-gradient(45deg,#1c1c1c,#1c1c1c 10px,#181818 10px,#181818 20px);display:grid;place-items:center;color:var(--muted);font-size:11px;text-align:center;padding:12px}
+  .screen .cap{font-size:12px;font-weight:600;margin-top:8px}
+  .callout{font-size:11px;color:#2a2410;background:var(--note);border-radius:8px;padding:7px 9px;margin-top:6px}
+  .flow{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:var(--bg)}
+  .flow h3{font-size:14px;font-weight:700;margin-bottom:8px}
+  .steps{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:10px}
+  .grid5{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12.5px}
+  .cell{background:var(--frame);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .cell .l{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:3px}
+  .cell .c{color:var(--ink2)}
+  .verdict{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .v{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px}
+  .v.steal{color:#8ff0c2;background:rgba(23,178,106,.14);border:1px solid rgba(23,178,106,.4)}
+  .v.skip{color:#c9c9c9;background:rgba(138,138,138,.14);border:1px solid var(--line2)}
+  .v.improve{color:#ffd89a;background:rgba(240,176,74,.13);border:1px solid rgba(240,176,74,.4)}
+  .tok{display:flex;gap:26px;flex-wrap:wrap}
+  .swatches{display:flex;gap:14px;flex-wrap:wrap}
+  .sw{width:52px;height:52px;border-radius:10px;border:1px solid var(--line2);position:relative}
+  .sw span{position:absolute;bottom:-16px;left:0;font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .gcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .gcard{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .gcard h4{font-size:13px;font-weight:700;margin-bottom:6px}
+  .gcard .row{font-size:11.5px;color:var(--ink2);margin:3px 0}
+  .gcard .row b{color:var(--ink)}
+  .note{background:#1c1c1c;border-left:3px solid var(--improve);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--ink2);margin-top:12px}
+  .foot{margin-top:30px;font-size:11px;color:var(--muted);text-align:center}
+  @media(max-width:720px){.grid5,.gcards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="board-title">app-ux-teardown · board · life-rpg</div>
+  <h1>Habitica — UX/UI Teardown</h1>
+
+  <div class="frame" data-f="FRAME 1 · HEADER">
+    <h2>Habitica</h2>
+    <p style="color:var(--ink2);font-size:14px;margin-top:0">"Gamify your life" — trình quản lý thói quen/công việc dạng RPG retro 8-bit. App gamification lâu đời & sâu nhất.</p>
+    <div class="meta">
+      <span class="chip">Nền tảng: <b>iOS · Android · Web</b></span>
+      <span class="chip">Giá: <b>Free · $5/mo · $47.99/yr · Gems mua thêm</b></span>
+      <span class="chip">Traction: <b>15M+ downloads</b> <span class="lb est">est</span></span>
+      <span class="chip">Ra mắt: <b>2013 (HabitRPG)</b></span>
+      <span class="chip">Bóc: <b>2026-09-05</b></span>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 2 · IA MAP">
+    <h2>Information Architecture</h2>
+    <div class="ia">
+      <div class="tab">Habits</div><div class="tab">Dailies</div><div class="tab">To Do's</div>
+      <div class="tab">Rewards</div><div class="tab">Menu (Avatar/Party/Shops)</div>
+    </div>
+    <div class="tree">Bottom-nav 4 tab việc + Menu
+├─ Habits      · thói quen +/− (không có hạn ngày)
+├─ Dailies     · nhiệm vụ theo lịch → BỎ = mất HP (lõi loss-aversion)
+├─ To Do's     · task một lần, có hạn
+├─ Rewards     · tiêu Gold mua thưởng (in-game + tự định nghĩa)
+└─ Menu
+   ├─ Avatar/Character · Level, HP, XP, Mana, class
+   ├─ Inventory · pets, mounts, eggs, gear
+   ├─ Shops · Market (gems/gold), Quests, Seasonal
+   ├─ Party · co-op boss quest (missed daily = damage cả nhóm)
+   ├─ Guilds/Tavern · chat cộng đồng (giảm tải từ 2023)
+   └─ Challenges · thử thách công khai</div>
+    <div class="note">Đặt cái gì làm trung tâm: <b>danh sách Dailies</b> — mọi cơ chế (HP, streak, party damage) đều xoay quanh việc bạn có tick daily hay không.</div>
+  </div>
+
+  <div class="frame" data-f="FRAME 3 · SCREENS">
+    <h2>Màn hình chính <span style="font-size:11px;color:var(--muted)">— kéo screenshot thật (App Store / Mobbin) vào ô</span></h2>
+    <div class="strip">
+      <div class="screen"><div class="shot">[ Character/Avatar ]<br>Level · HP · XP · Mana bar</div><div class="cap">Avatar header</div><div class="callout">4 thanh chỉ số luôn ghim trên đầu — nhắc "nhân vật là bạn"</div></div>
+      <div class="screen"><div class="shot">[ Dailies list ]<br>checkbox + streak</div><div class="cap">Dailies</div><div class="callout">Tick → số XP/Gold bay lên; bỏ qua đêm → HP đỏ</div></div>
+      <div class="screen"><div class="shot">[ Rewards shop ]<br>Gold prices</div><div class="cap">Rewards</div><div class="callout">Cho tự tạo phần thưởng đời thật — nối game với thật</div></div>
+      <div class="screen"><div class="shot">[ Party boss quest ]<br>boss HP bar</div><div class="cap">Party quest</div><div class="callout">Bỏ daily = damage cả party → áp lực xã hội</div></div>
+      <div class="screen"><div class="shot">[ Market / Gems ]<br>currency</div><div class="cap">Market</div><div class="callout">Gems (real money) vs Gold (earned) tách rõ</div></div>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 4 · FLOWS">
+    <h2>Bóc flow</h2>
+
+    <div class="flow">
+      <h3>Onboarding / activation</h3>
+      <div class="steps">Chọn class → tạo avatar → thêm vài task mẫu → thấy avatar + 4 thanh chỉ số</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Cho nhập task thật ngay, "aha" = thấy XP nhảy khi tick lần đầu</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Nhiều khái niệm cùng lúc (Habit vs Daily vs To-Do vs Reward) → quá tải người mới</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Class khoá tới level 10; gem/pet mở dần → nhỏ giọt phần thưởng</div></div>
+        <div class="cell"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL 4-thanh-chỉ-số ghim đầu</span><span class="v improve">IMPROVE gộp Habit/Daily/To-Do</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>Core loop + Penalty (loss aversion)</h3>
+      <div class="steps">Mở app → thấy Dailies → tick → +XP +Gold (số bay lên) ‖ qua đêm bỏ daily → mất HP → HP=0 → mất level/gold/gear</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Phạt KHÔNG tức thì mà "qua đêm" (cron) — tạo lo âu nhẹ, kéo mở app sáng hôm sau</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Phạt HP có thể gây nản/bỏ hẳn nếu vắng vài ngày (chết nhân vật)</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">"Rest in the Inn" cho tạm dừng phạt khi đi vắng — van an toàn chống bỏ app</div></div>
+        <div class="cell"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL phạt-qua-đêm + van "Inn"</span><span class="v improve">IMPROVE phạt nhẹ dần, tránh chết nản</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>Social / Party boss quest</h3>
+      <div class="steps">Vào Party → nhận Quest boss → mỗi daily tick = damage boss ‖ mỗi daily BỎ = boss damage cả nhóm</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">Biến kỷ luật cá nhân thành trách nhiệm nhóm — bỏ daily hại đồng đội</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Cần rủ được bạn vào party; solo thì mất phần hay nhất</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Retention lõi nằm ở đây; Habitica bỏ guild chat 2023 → social teo bớt</div></div>
+        <div class="cell"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL boss-quest co-op (moat retention)</span><span class="v improve">IMPROVE matchmaking party tự động</span></div></div>
+      </div>
+    </div>
+
+    <div class="flow">
+      <h3>Monetization (mềm)</h3>
+      <div class="steps">Free rộng rãi → Gems (mua bằng tiền hoặc đổi từ Gold) → Subscription mở cosmetic/pet + mystic hourglass</div>
+      <div class="grid5">
+        <div class="cell"><div class="l">Điểm khéo</div><div class="c">KHÔNG paywall chức năng; chỉ bán cosmetic + tiện lợi → thiện cảm cao</div></div>
+        <div class="cell"><div class="l">Điểm ma sát</div><div class="c">Chê "gems tốn tiền thật" — một số user khó chịu cơ chế 2 tiền tệ</div></div>
+        <div class="cell"><div class="l">Cơ chế ẩn</div><div class="c">Sub cho đổi Gold→Gems (mystic hourglass) → giữ chân dài hạn</div></div>
+        <div class="cell"><div class="l">Phán quyết</div><div class="verdict">
+          <span class="v steal">STEAL không-paywall-chức-năng</span><span class="v skip">SKIP hệ 2 tiền tệ rối</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 5 · DESIGN TOKENS">
+    <h2>Design system <span style="font-size:11px;color:var(--muted)">(hex <span class="lb est">ƯỚC TÍNH</span> từ screenshot)</span></h2>
+    <div class="tok">
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:20px">Màu</div>
+        <div class="swatches">
+          <div class="sw" style="background:#4f2a93"><span>#4f2a93</span></div>
+          <div class="sw" style="background:#6133b4"><span>#6133b4</span></div>
+          <div class="sw" style="background:#ffb445"><span>#ffb445</span></div>
+          <div class="sw" style="background:#24cc8f"><span>#24cc8f</span></div>
+          <div class="sw" style="background:#f74e52"><span>#f74e52</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted)">Typography</div>
+        <div style="font-size:22px;font-weight:800">Heading (sans)</div>
+        <div style="font-size:14px">Body · nội dung dày</div>
+        <div style="font-size:11px;color:var(--muted)">+ pixel font cho điểm nhấn RPG</div>
+      </div>
+    </div>
+    <div class="note">Đặc trưng: <b>pixel-art avatar/gear</b> · icon 8-bit · mật độ CHẬT (list dài) · radius nhỏ · palette tím RPG. Aesthetic retro là con dao 2 lưỡi — thân thuộc fan RPG cũ, lỗi thời với Gen Z <span class="lb est">nhận định</span>.</div>
+  </div>
+
+  <div class="frame" data-f="FRAME 6 · GAMIFICATION">
+    <h2>Cơ chế gamification</h2>
+    <div class="gcards">
+      <div class="gcard"><h4>❤️ HP · Penalty (loss aversion)</h4>
+        <div class="row"><b>Vào bằng:</b> bỏ Daily hoặc + Habit xấu qua đêm (cron)</div>
+        <div class="row"><b>Công thức:</b> damage ~ độ khó × số ngày bỏ; HP=0 → mất level/gold/gear</div>
+        <div class="row"><b>Neo tâm lý:</b> loss aversion — sợ mất mạnh hơn ham được</div>
+        <div class="row"><b>UI:</b> thanh HP đỏ ghim đầu, rung khi mất</div>
+      </div>
+      <div class="gcard"><h4>⚔️ XP · Level · Class</h4>
+        <div class="row"><b>Vào bằng:</b> tick Daily/To-Do/+Habit</div>
+        <div class="row"><b>Công thức:</b> XP theo độ khó; đủ ngưỡng → level; class mở ở LV10 (Warrior/Mage/Healer/Rogue)</div>
+        <div class="row"><b>Neo tâm lý:</b> progression + bản sắc (chọn class)</div>
+        <div class="row"><b>UI:</b> thanh XP vàng, level-up có hiệu ứng</div>
+      </div>
+      <div class="gcard"><h4>🪙 Gold · Rewards shop</h4>
+        <div class="row"><b>Vào bằng:</b> hoàn thành task</div>
+        <div class="row"><b>Công thức:</b> Gold → mua gear in-game HOẶC phần thưởng ĐỜI THẬT tự đặt</div>
+        <div class="row"><b>Neo tâm lý:</b> tự-thưởng có kiểm soát, nối game↔đời thật</div>
+        <div class="row"><b>UI:</b> tab Rewards riêng, giá Gold</div>
+      </div>
+      <div class="gcard"><h4>👹 Party Boss Quest</h4>
+        <div class="row"><b>Vào bằng:</b> tick Daily khi đang trong quest nhóm</div>
+        <div class="row"><b>Công thức:</b> tick = damage boss; bỏ = boss damage cả party</div>
+        <div class="row"><b>Neo tâm lý:</b> accountability xã hội + tội lỗi tập thể</div>
+        <div class="row"><b>UI:</b> thanh HP boss chung, thông báo damage</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame" data-f="FRAME 7 · PHÁN QUYẾT">
+    <h2>Tổng hợp — lấy gì / bỏ gì cho "The System"</h2>
+    <div class="verdict" style="gap:8px;margin-bottom:10px">
+      <span class="v steal">STEAL · 4-thanh-chỉ-số ghim đầu · phạt-qua-đêm + van "Inn" · party boss quest · rewards đời thật · không paywall chức năng</span>
+    </div>
+    <div class="verdict" style="gap:8px;margin-bottom:10px">
+      <span class="v improve">IMPROVE · gộp Habit/Daily/To-Do thành một "Quest" · phạt nhẹ dần tránh chết-nản · matchmaking party tự động · UI hiện đại thay pixel</span>
+    </div>
+    <div class="verdict" style="gap:8px">
+      <span class="v skip">SKIP · hệ 2 tiền tệ Gem/Gold rối · aesthetic retro 8-bit · onboarding quá tải khái niệm</span>
+    </div>
+  </div>
+
+  <div class="foot">app-ux-teardown · board Habitica · 2026-09-05 · nguồn: App Store · Habitica Wiki · Mobbin · import Figma bằng html.to.design</div>
+</div>
+</body>
+</html>

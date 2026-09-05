@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · Design files</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--ink:#eaf2fb;--ink2:#9fb2c6;--muted:#6b7688;--line:#242c38;--brand:#5b8cff;--cy:#35e0d0}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:820px;margin:0 auto;padding:56px 24px 90px}
+  .b{font-weight:900;letter-spacing:.16em;font-size:14px;display:flex;align-items:center;gap:10px}
+  .dot{width:11px;height:11px;background:var(--cy);border-radius:3px;transform:rotate(45deg)}
+  h1{font-size:30px;font-weight:900;margin:14px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--ink2);font-size:15px;max-width:66ch}
+  .steps{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin:26px 0}
+  .steps h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+  .steps ol{margin:0;padding-left:20px;font-size:14px;color:var(--ink2)}
+  .steps li{margin:7px 0}
+  .steps b{color:var(--ink)}
+  .steps code{font-family:'JetBrains Mono',monospace;background:#0b0e13;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12.5px;color:var(--cy)}
+  .grid{display:grid;gap:14px;margin-top:20px}
+  a.card{display:flex;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;text-decoration:none;color:inherit;transition:.15s}
+  a.card:hover{border-color:var(--brand);transform:translateY(-1px)}
+  .ic{width:46px;height:46px;border-radius:11px;display:grid;place-items:center;font-size:22px;background:#0b0e13;border:1px solid var(--line);flex-shrink:0}
+  .t{font-size:16px;font-weight:800}
+  .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .tag{margin-left:auto;font-size:11px;font-weight:700;color:var(--cy);background:rgba(53,224,208,.1);border:1px solid rgba(53,224,208,.3);padding:4px 10px;border-radius:7px}
+  .foot{margin-top:36px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="b"><span class="dot"></span>THE SYSTEM</div>
+  <h1>Design files — cho Figma</h1>
+  <div class="sub">Deck nghiên cứu UX/UI đối thủ + prototype app. Import vào Figma bằng plugin <b>html.to.design</b> (nhập URL bên dưới).</div>
+
+  <div class="steps">
+    <h3>Đưa vào Figma (3 bước)</h3>
+    <ol>
+      <li>Mở Figma → chạy plugin <b>html.to.design</b> → chọn <b>Import from URL</b></li>
+      <li>Dán URL của deck (bấm mở deck bên dưới rồi copy link trên thanh địa chỉ)</li>
+      <li>Plugin dựng thành <b>frame Figma sửa được</b> → kéo screenshot thật vào ô mockup</li>
+    </ol>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="./decks/deck-habitica.html">
+      <div class="ic">🎴</div>
+      <div><div class="t">Habitica — UX Deck (slide)</div><div class="d">3 slide: tổng quan + mockup · IA/core loop · STEAL/SKIP/IMPROVE</div></div>
+      <span class="tag">deck</span>
+    </a>
+    <a class="card" href="./decks/board-habitica.html">
+      <div class="ic">🧩</div>
+      <div><div class="t">Habitica — Board teardown (chi tiết)</div><div class="d">7 frame: IA · screens · flows · tokens · gamification · verdict</div></div>
+      <span class="tag">board</span>
+    </a>
+    <a class="card" href="./app/index.html">
+      <div class="ic">⚡</div>
+      <div><div class="t">The System — App prototype</div><div class="d">Prototype chạy được: quest · shop · boss · event cược · penalty</div></div>
+      <span class="tag">app</span>
+    </a>
+  </div>
+
+  <div class="foot">Sẽ bổ sung deck cho: Arise · Finch · Dual · Solo Leveling System · StickK/Forfeit · Streaks/Habitify.</div>
+</div>
+</body>
+</html>

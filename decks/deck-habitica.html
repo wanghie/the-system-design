@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · UX Study · Habitica</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#e7e9ee; --frame:#ffffff; --ink:#0e1116; --ink2:#4a5160; --muted:#8b93a3;
+    --line:#e2e5ea; --line2:#d0d5dd; --brand:#5b3fb4;
+    --steal:#0f9d58; --skip:#98a2b3; --improve:#e08a1e;
+    --pin:#5b3fb4; --note:#fff6da; --noteline:#e6c34d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--canvas);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .deck{padding:34px 0 60px}
+  .deck-h{max-width:1280px;margin:0 auto 18px;padding:0 28px;display:flex;align-items:center;gap:12px}
+  .deck-h .b{font-weight:900;letter-spacing:.14em;font-size:14px}
+  .deck-h .dot{width:11px;height:11px;background:var(--brand);border-radius:3px;transform:rotate(45deg)}
+  .deck-h .sub{color:var(--muted);font-size:13px;font-weight:600}
+  .deck-h .pg{margin-left:auto;color:var(--muted);font-size:12px;font-weight:700}
+
+  /* SLIDE = 1280x720 figma frame */
+  .slide{width:1280px;max-width:calc(100vw - 24px);aspect-ratio:16/9;margin:0 auto 26px;background:var(--frame);
+    border:1px solid var(--line2);border-radius:16px;box-shadow:0 12px 40px rgba(20,26,40,.10);
+    position:relative;overflow:hidden;padding:44px 48px}
+  .slide::before{content:attr(data-frame);position:absolute;top:14px;left:20px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em}
+  .stag{position:absolute;top:12px;right:20px;font-size:11px;font-weight:700;color:var(--brand);background:#efeaff;border:1px solid #ddd3ff;padding:3px 9px;border-radius:6px}
+
+  .s-title{font-size:30px;font-weight:900;letter-spacing:-.02em;margin:14px 0 2px}
+  .s-sub{color:var(--ink2);font-size:15px;max-width:70ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip{font-size:12px;font-weight:600;padding:5px 11px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);background:#f7f8fa}
+  .chip b{color:var(--ink)}
+
+  /* phone mockups row */
+  .phones{display:flex;gap:34px;margin-top:26px;justify-content:center}
+  .phone{width:212px}
+  .device{width:212px;height:430px;border-radius:30px;background:#0e1116;padding:9px;box-shadow:0 14px 30px rgba(20,26,40,.22);position:relative}
+  .screen{width:100%;height:100%;border-radius:22px;overflow:hidden;position:relative;
+    background:linear-gradient(180deg,#f2f3f6,#e9ebf0)}
+  .notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:70px;height:16px;background:#0e1116;border-radius:10px;z-index:3}
+  .ph-drop{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#aeb4c2;font-size:12px;font-weight:600;
+    background:repeating-linear-gradient(45deg,#f4f5f8,#f4f5f8 12px,#eef0f4 12px,#eef0f4 24px)}
+  .pin{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--pin);color:#fff;font-size:12px;font-weight:800;
+    display:grid;place-items:center;box-shadow:0 3px 8px rgba(91,63,180,.5);z-index:4;border:2px solid #fff}
+  .ph-cap{text-align:center;font-size:13px;font-weight:700;margin-top:12px}
+  .ph-notes{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+  .nrow{display:flex;gap:7px;font-size:11.5px;color:var(--ink2);line-height:1.35}
+  .nnum{flex:0 0 17px;height:17px;border-radius:50%;background:var(--pin);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+
+  /* IA + flow slide */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:22px}
+  .panel h4{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;margin:0 0 12px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tab{font-size:13px;font-weight:700;padding:9px 13px;border-radius:10px;background:#f2f0fb;border:1px solid #e0daf7;color:var(--brand)}
+  .tab.mid{background:#f7f8fa;border-color:var(--line2);color:var(--ink2)}
+  .flowline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .node{font-size:12.5px;font-weight:700;background:#f7f8fa;border:1px solid var(--line2);border-radius:9px;padding:8px 11px}
+  .node.hot{background:#fdeeee;border-color:#f3c9c9;color:#b4322f}
+  .arrow{color:var(--muted);font-weight:800}
+  .note{background:var(--note);border:1px solid var(--noteline);border-radius:10px;padding:11px 13px;font-size:13px;color:#5c4a11;margin-top:14px}
+  .gchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .gchip{font-size:12px;font-weight:700;background:#f7f8fa;border:1px solid var(--line2);border-radius:9px;padding:8px 11px}
+  .gchip b{color:var(--brand)}
+
+  /* takeaway slide */
+  .takes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+  .take{border-radius:16px;padding:22px;border:1px solid var(--line2)}
+  .take.steal{background:#eafaf0;border-color:#bfe9cd}
+  .take.skip{background:#f4f6f8;border-color:var(--line2)}
+  .take.improve{background:#fff6e8;border-color:#f2dbb0}
+  .take h3{font-size:15px;font-weight:900;letter-spacing:.02em;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .take.steal h3{color:var(--steal)} .take.skip h3{color:#667085} .take.improve h3{color:var(--improve)}
+  .take ul{margin:0;padding-left:18px}
+  .take li{font-size:13.5px;color:var(--ink2);margin:8px 0;line-height:1.45}
+  .take li b{color:var(--ink)}
+  .bigq{font-size:17px;font-weight:700;color:var(--ink);margin-top:24px;text-align:center;line-height:1.5}
+  .bigq b{color:var(--brand)}
+
+  .foot{max-width:1280px;margin:0 auto;padding:0 28px;color:var(--muted);font-size:11.5px;text-align:center}
+  @media(max-width:1330px){.phones{gap:18px}.phone{width:186px}.device{width:186px;height:378px}}
+</style>
+</head>
+<body>
+<div class="deck">
+  <div class="deck-h">
+    <span class="dot"></span><span class="b">THE SYSTEM</span>
+    <span class="sub">· Nghiên cứu UX/UI đối thủ · Habitica</span>
+    <span class="pg">Deck 1/1 · nhập Figma bằng html.to.design</span>
+  </div>
+
+  <!-- SLIDE 1 -->
+  <div class="slide" data-frame="SLIDE 1 · TỔNG QUAN + MÀN HÌNH">
+    <span class="stag">life-RPG</span>
+    <div class="s-title">Habitica</div>
+    <div class="s-sub">"Gamify your life" — quản lý thói quen/công việc dạng RPG. App gamification lâu đời & sâu nhất, cơ chế loss-aversion (mất HP khi bỏ nhiệm vụ) là lõi.</div>
+    <div class="meta">
+      <span class="chip">Nền tảng: <b>iOS · Android · Web</b></span>
+      <span class="chip">Giá: <b>Free · $5/mo · $47.99/yr</b></span>
+      <span class="chip">Downloads: <b>15M+</b></span>
+      <span class="chip">Từ: <b>2013</b></span>
+    </div>
+    <div class="phones">
+      <div class="phone">
+        <div class="device"><div class="notch"></div><div class="screen">
+          <div class="ph-drop">kéo screenshot<br>“Character” vào đây</div>
+          <div class="pin" style="top:52px;left:24px">1</div>
+        </div></div>
+        <div class="ph-cap">Character / Avatar</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">1</span>4 thanh chỉ số (HP·XP·Mana·Level) ghim đầu — luôn nhắc “nhân vật là bạn”.</div></div>
+      </div>
+      <div class="phone">
+        <div class="device"><div class="notch"></div><div class="screen">
+          <div class="ph-drop">kéo screenshot<br>“Dailies” vào đây</div>
+          <div class="pin" style="top:120px;right:22px">2</div>
+          <div class="pin" style="bottom:70px;left:24px">3</div>
+        </div></div>
+        <div class="ph-cap">Dailies (lõi)</div>
+        <div class="ph-notes">
+          <div class="nrow"><span class="nnum">2</span>Tick → số XP/Gold bay lên (phản hồi tức thì).</div>
+          <div class="nrow"><span class="nnum">3</span>Streak đếm ngày; bỏ qua đêm → mất HP.</div>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="device"><div class="notch"></div><div class="screen">
+          <div class="ph-drop">kéo screenshot<br>“Party quest” vào đây</div>
+          <div class="pin" style="top:64px;left:50%;transform:translateX(-50%)">4</div>
+        </div></div>
+        <div class="ph-cap">Party Boss Quest</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">4</span>Bỏ daily = damage cả nhóm → áp lực xã hội giữ chân.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide" data-frame="SLIDE 2 · IA + CORE LOOP + GAMIFICATION">
+    <div class="s-title" style="font-size:24px">Cấu trúc & vòng lặp</div>
+    <div class="cols">
+      <div class="panel">
+        <h4>Information Architecture</h4>
+        <div class="tabs">
+          <div class="tab">Habits</div><div class="tab">Dailies</div><div class="tab">To Do's</div>
+          <div class="tab mid">Rewards</div><div class="tab mid">Menu</div>
+        </div>
+        <div class="note" style="margin-top:6px">Trung tâm = <b>danh sách Dailies</b>. Mọi cơ chế (HP, streak, party) đều xoay quanh việc có tick daily hay không.</div>
+        <h4 style="margin-top:20px">Gamification</h4>
+        <div class="gchips">
+          <div class="gchip">❤️ <b>HP</b> · bỏ daily = mất máu</div>
+          <div class="gchip">⚔️ <b>XP/Level</b> · class ở LV10</div>
+          <div class="gchip">🪙 <b>Gold</b> · mua thưởng đời thật</div>
+          <div class="gchip">👹 <b>Party boss</b> · co-op</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h4>Core loop + Penalty</h4>
+        <div class="flowline"><span class="node">Mở app</span><span class="arrow">→</span><span class="node">Thấy Dailies</span><span class="arrow">→</span><span class="node">Tick</span><span class="arrow">→</span><span class="node">+XP +Gold</span></div>
+        <div class="flowline"><span class="node hot">Bỏ qua đêm</span><span class="arrow">→</span><span class="node hot">Mất HP</span><span class="arrow">→</span><span class="node hot">HP=0: mất level/gear</span></div>
+        <div class="note">Phán quyết khéo: phạt <b>không tức thì mà “qua đêm”</b> (cron) → lo âu nhẹ kéo mở app sáng hôm sau. Có van <b>“Rest at Inn”</b> tạm dừng phạt khi đi vắng (chống bỏ app).</div>
+        <h4 style="margin-top:20px">Monetization</h4>
+        <div class="note" style="background:#eef4ff;border-color:#c9dbff;color:#274690">Không paywall chức năng — chỉ bán cosmetic + tiện lợi → thiện cảm cao. (Nhược: hệ 2 tiền tệ Gem/Gold gây rối.)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide" data-frame="SLIDE 3 · LẤY GÌ CHO 'THE SYSTEM'">
+    <div class="s-title" style="font-size:24px">Phán quyết — lấy gì / bỏ gì</div>
+    <div class="takes">
+      <div class="take steal"><h3>✓ STEAL</h3><ul>
+        <li><b>4 thanh chỉ số ghim đầu</b> — “nhân vật là bạn”</li>
+        <li><b>Phạt qua-đêm + van “Inn”</b> — loss aversion có phanh</li>
+        <li><b>Party boss quest</b> — moat retention xã hội</li>
+        <li><b>Rewards đời thật</b> tự đặt — nối game↔đời</li>
+      </ul></div>
+      <div class="take improve"><h3>◆ IMPROVE</h3><ul>
+        <li>Gộp <b>Habit/Daily/To-Do</b> thành một “Quest”</li>
+        <li>Phạt <b>nhẹ dần</b>, tránh “chết nhân vật” gây nản</li>
+        <li><b>Matchmaking</b> party tự động (đỡ phải rủ bạn)</li>
+        <li>UI hiện đại thay <b>pixel 8-bit</b> cũ</li>
+      </ul></div>
+      <div class="take skip"><h3>✕ SKIP</h3><ul>
+        <li>Hệ <b>2 tiền tệ</b> Gem/Gold rối</li>
+        <li>Aesthetic <b>retro 8-bit</b> (lệch Gen Z)</li>
+        <li>Onboarding <b>quá tải khái niệm</b></li>
+      </ul></div>
+    </div>
+    <div class="bigq">Với “The System”: giữ <b>loss-aversion + party quest</b>, nhưng làm <b>đơn giản hơn, hiện đại hơn, 4 domain đời thật</b>.</div>
+  </div>
+
+  <div class="foot">app-ux-teardown · deck Habitica · 2026-09-05 · nguồn: App Store · Habitica Wiki · Mobbin · import Figma bằng plugin html.to.design</div>
+</div>
+</body>
+</html>

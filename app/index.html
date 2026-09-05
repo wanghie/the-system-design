@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>THE SYSTEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070a0f; --bg2:#0b0f16; --panel:rgba(18,26,38,.72); --panel-solid:#121a26;
+  --line:rgba(90,150,190,.18); --line-2:rgba(90,150,190,.32);
+  --ink:#eaf2fb; --ink-2:#9fb2c6; --muted:#5f7086;
+  --cy:#35e0d0; --cy2:#4fd1ff; --gold:#ffd166; --danger:#ff4d5e; --green:#3ddc84; --purp:#9b8cff;
+  --glow:0 0 18px rgba(53,224,208,.22);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  background:
+    radial-gradient(1000px 600px at 80% -10%,rgba(79,209,255,.10),transparent 60%),
+    radial-gradient(800px 500px at -10% 110%,rgba(155,140,255,.10),transparent 60%),
+    var(--bg);
+  color:var(--ink); font-family:'Inter',system-ui,sans-serif; line-height:1.5;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+.mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+h1,h2,h3,h4{margin:0;letter-spacing:-.01em}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:8px}
+
+.app{max-width:520px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:78px}
+
+/* ===== TOP BAR ===== */
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:linear-gradient(180deg,rgba(7,10,15,.96),rgba(7,10,15,.72));backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{font-weight:800;font-size:15px;letter-spacing:.14em;display:flex;align-items:center;gap:8px}
+.brand .dot{width:9px;height:9px;border-radius:2px;background:var(--cy);box-shadow:var(--glow);transform:rotate(45deg)}
+.tb-spacer{flex:1}
+.pill-stat{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:5px 10px;border:1px solid var(--line-2);border-radius:9px;background:var(--panel)}
+.pill-stat.gold{color:var(--gold)} .pill-stat .ic{font-size:13px}
+.bell{position:relative;width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:var(--panel);font-size:16px;display:grid;place-items:center}
+.bell .badge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--danger);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center}
+
+/* ===== HERO / CHARACTER ===== */
+.hero{margin:16px;border:1px solid var(--line-2);border-radius:18px;overflow:hidden;position:relative;
+  background:linear-gradient(160deg,rgba(28,40,56,.9),rgba(11,15,22,.9))}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(400px 200px at 90% 0%,rgba(53,224,208,.14),transparent 60%);pointer-events:none}
+.hero-top{display:flex;gap:14px;padding:18px 18px 12px}
+.avatar{width:66px;height:66px;border-radius:16px;flex-shrink:0;display:grid;place-items:center;font-size:30px;font-weight:800;
+  background:linear-gradient(160deg,#1c2a3a,#0d141e);border:1px solid var(--line-2);position:relative;box-shadow:var(--glow)}
+.rank-badge{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;
+  padding:2px 9px;border-radius:7px;background:var(--panel-solid);border:1px solid var(--line-2)}
+.hero-id{flex:1;min-width:0}
+.hero-id .name{font-size:19px;font-weight:800}
+.hero-id .title{font-size:12.5px;color:var(--cy);font-weight:600;margin-top:1px}
+.hero-id .lvl{font-size:12px;color:var(--ink-2);margin-top:4px}
+.hp-wrap{margin-top:9px}
+.bar{height:9px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.bar > i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.bar.hp > i{background:linear-gradient(90deg,#ff5d6c,#ff8a5c)}
+.bar.xp > i{background:linear-gradient(90deg,var(--cy),var(--cy2))}
+.bar-label{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin:6px 2px 2px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+
+/* stats 4 domain */
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:6px 14px 16px}
+.stat{background:rgba(10,15,22,.6);border:1px solid var(--line);border-radius:12px;padding:9px 8px;text-align:center}
+.stat .ic{font-size:16px}
+.stat .v{font-size:16px;font-weight:800;margin-top:2px}
+.stat .k{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
+.stat.health{--c:#ff6b8a}.stat.wealth{--c:var(--gold)}.stat.career{--c:var(--cy2)}.stat.social{--c:var(--purp)}
+.stat .v{color:var(--c)}
+
+/* ===== SECTIONS ===== */
+.view{padding:0 16px;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-head{display:flex;align-items:center;gap:8px;margin:20px 2px 10px}
+.sec-head h3{font-size:15px;font-weight:800}
+.sec-head .cnt{font-size:11px;color:var(--muted);font-weight:700}
+.sec-head .act{margin-left:auto;font-size:12px;color:var(--cy);font-weight:700}
+
+/* quest card */
+.quest{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:9px;transition:.2s}
+.quest:active{transform:scale(.99)}
+.quest.done{opacity:.5}
+.q-check{width:26px;height:26px;border-radius:8px;border:2px solid var(--line-2);flex-shrink:0;display:grid;place-items:center;font-size:14px;color:transparent;transition:.2s}
+.quest.done .q-check{background:var(--green);border-color:var(--green);color:#052; }
+.q-body{flex:1;min-width:0}
+.q-name{font-size:14px;font-weight:600}
+.quest.done .q-name{text-decoration:line-through}
+.q-meta{font-size:11px;color:var(--muted);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
+.q-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;border:1px solid var(--line-2);color:var(--ink-2)}
+.q-tag.hunt{color:#ff9db0;border-color:rgba(255,107,138,.4)}
+.q-tag.train{color:var(--cy2);border-color:rgba(79,209,255,.4)}
+.q-tag.gold{color:var(--gold);border-color:rgba(255,209,102,.4)}
+.q-rew{font-size:11px;font-weight:700;color:var(--cy);white-space:nowrap;text-align:right}
+.q-rew .g{color:var(--gold)}
+
+/* add */
+.add-row{display:flex;gap:8px;margin:4px 0 8px}
+.add-row input,.add-row select{flex:1;background:var(--panel-solid);border:1px solid var(--line-2);border-radius:10px;padding:11px 12px;color:var(--ink);font-size:13px;outline:none}
+.add-row select{flex:0 0 108px}
+.btn{background:linear-gradient(160deg,var(--cy),#1f9e93);color:#03211e;font-weight:800;border-radius:10px;padding:11px 15px;font-size:13px;box-shadow:var(--glow)}
+.btn.ghost{background:transparent;border:1px solid var(--line-2);color:var(--ink);box-shadow:none}
+.btn.gold{background:linear-gradient(160deg,var(--gold),#c99a2e);color:#2a1e00}
+.btn.danger{background:linear-gradient(160deg,#ff5d6c,#c22f3d);color:#fff}
+.btn.block{width:100%;justify-content:center;display:flex}
+.btn:disabled{opacity:.4;pointer-events:none}
+
+/* boss */
+.boss{background:linear-gradient(160deg,rgba(60,30,45,.6),rgba(15,10,16,.8));border:1px solid rgba(255,90,120,.3);border-radius:16px;padding:15px;margin-bottom:11px}
+.boss .b-top{display:flex;justify-content:space-between;align-items:center}
+.boss .b-name{font-size:15px;font-weight:800}
+.boss .b-hp{font-size:11px;color:#ff9db0;font-weight:700}
+.boss .sub{margin-top:10px}
+.subq{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:6px 0;color:var(--ink-2)}
+.subq .sc{width:19px;height:19px;border-radius:6px;border:1.5px solid var(--line-2);display:grid;place-items:center;font-size:11px;color:transparent}
+.subq.done .sc{background:var(--green);border-color:var(--green);color:#052}
+.subq.done{text-decoration:line-through;opacity:.55}
+
+/* shop */
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.item .ic{font-size:30px}
+.item .nm{font-size:13px;font-weight:700;margin-top:6px}
+.item .ds{font-size:10.5px;color:var(--muted);margin:3px 0 9px;min-height:26px}
+.item .buy{width:100%;font-size:12px;padding:8px;border-radius:9px;background:var(--panel-solid);border:1px solid var(--line-2);color:var(--gold);font-weight:800}
+.item.owned .buy{color:var(--green);border-color:rgba(61,220,132,.4)}
+
+/* event */
+.event{border:1px solid var(--line-2);border-radius:18px;overflow:hidden;margin-bottom:14px;background:linear-gradient(160deg,rgba(30,44,62,.7),rgba(11,15,22,.85))}
+.ev-head{padding:15px 16px 12px;position:relative}
+.ev-head::after{content:"";position:absolute;inset:0;background:radial-gradient(300px 120px at 100% 0,rgba(155,140,255,.16),transparent);pointer-events:none}
+.ev-tag{font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--purp);text-transform:uppercase}
+.ev-name{font-size:17px;font-weight:800;margin:3px 0}
+.ev-desc{font-size:12px;color:var(--ink-2)}
+.ev-meta{display:flex;gap:14px;margin-top:11px}
+.ev-meta .m{font-size:11px;color:var(--muted)}
+.ev-meta .m b{display:block;font-size:15px;color:var(--ink);font-weight:800}
+.ev-meta .m .gold{color:var(--gold)}
+.ev-body{padding:0 16px 15px}
+.ev-prog{margin:6px 0 12px}
+.lead{background:rgba(8,12,18,.55);border-top:1px solid var(--line)}
+.lead-row{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:12.5px;border-bottom:1px solid rgba(90,150,190,.08)}
+.lead-row:last-child{border-bottom:none}
+.lead-row .pos{width:22px;font-weight:800;color:var(--muted);text-align:center}
+.lead-row.me{background:rgba(53,224,208,.08)}
+.lead-row.me .nm{color:var(--cy);font-weight:700}
+.lead-row .nm{flex:1}
+.lead-row .pts{font-weight:700;color:var(--ink-2)}
+.lead-row.win .pos{color:var(--gold)}
+
+/* goals / ikigai */
+.ikigai{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.ikigai .lb{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.ikigai .val{font-size:14px;font-weight:600;margin:3px 0 12px}
+.ikigai .val:last-child{margin-bottom:0}
+.ikigai .val.cy{color:var(--cy)}
+
+/* ===== BOTTOM NAV ===== */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;z-index:40;
+  display:grid;grid-template-columns:repeat(5,1fr);background:linear-gradient(0deg,rgba(7,10,15,.98),rgba(7,10,15,.86));
+  backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;color:var(--muted);font-size:10px;font-weight:600;border-radius:10px}
+.nav button .ic{font-size:19px;line-height:1}
+.nav button.on{color:var(--cy)}
+.nav button.on .ic{filter:drop-shadow(0 0 8px rgba(53,224,208,.6))}
+
+/* ===== TOAST ===== */
+.toasts{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;gap:8px;width:calc(100% - 32px);max-width:488px;pointer-events:none}
+.toast{background:var(--panel-solid);border:1px solid var(--line-2);border-radius:12px;padding:11px 14px;font-size:13px;font-weight:600;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);animation:tin .3s ease;display:flex;align-items:center;gap:9px}
+.toast.good{border-color:rgba(61,220,132,.5)} .toast.gold{border-color:rgba(255,209,102,.5)} .toast.bad{border-color:rgba(255,77,94,.5)}
+@keyframes tin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+
+/* ===== MODAL / OVERLAY ===== */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(4,6,10,.86);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px;animation:fade .2s}
+.sheet{width:100%;max-width:440px;background:var(--panel-solid);border:1px solid var(--line-2);border-radius:20px;padding:22px;max-height:88vh;overflow:auto}
+.sheet h2{font-size:20px;font-weight:800}
+.sheet .sub{font-size:13px;color:var(--ink-2);margin:6px 0 16px}
+.field{margin-bottom:14px}
+.field label{font-size:12px;color:var(--cy);font-weight:700;display:block;margin-bottom:5px}
+.field input,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--line-2);border-radius:11px;padding:12px;color:var(--ink);font-size:14px;outline:none;font-family:inherit}
+.field textarea{resize:none;min-height:52px}
+.penalty-ic{font-size:46px;text-align:center}
+.pen-title{text-align:center;font-size:22px;font-weight:800;color:var(--danger);margin:6px 0}
+.pen-list{background:var(--bg2);border:1px solid rgba(255,77,94,.3);border-radius:12px;padding:12px 14px;margin:14px 0;font-size:13px}
+.pen-list .pl{display:flex;justify-content:space-between;padding:4px 0;color:#ffb3bd}
+.notif-item{display:flex;gap:10px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:13px}
+.notif-item .ni{font-size:16px}
+.notif-item .nt{flex:1}
+.notif-item .nm2{color:var(--muted);font-size:11px;margin-top:2px}
+.empty{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
+
+.devbar{margin:22px 16px 8px;display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted)}
+.devbar button{border:1px dashed var(--line-2);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--ink-2)}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>THE SYSTEM</div>
+    <div class="tb-spacer"></div>
+    <div class="pill-stat gold mono"><span class="ic">🪙</span><span id="tb-gold">0</span></div>
+    <button class="bell" onclick="openNotif()">🔔<span class="badge" id="notif-badge" style="display:none">0</span></button>
+  </div>
+
+  <div id="views"></div>
+
+  <div class="devbar">
+    <span>DEMO:</span>
+    <button onclick="simulateNextDay()">⏭ Ngày kế tiếp</button>
+    <button onclick="advanceEvent()">▲ +tiến độ event</button>
+    <button onclick="hardReset()">↺ reset</button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="nav" id="nav">
+    <button data-t="home" class="on" onclick="go('home')"><span class="ic">🎯</span>Trang chủ</button>
+    <button data-t="quests" onclick="go('quests')"><span class="ic">⚔️</span>Quest</button>
+    <button data-t="shop" onclick="go('shop')"><span class="ic">🛒</span>Shop</button>
+    <button data-t="events" onclick="go('events')"><span class="ic">🏆</span>Event</button>
+    <button data-t="goals" onclick="go('goals')"><span class="ic">🧭</span>Mục tiêu</button>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<div id="modal-root"></div>
+
+<script>
+/* ============ STATE ============ */
+const KEY='thesystem_v1';
+const RANKS=[{m:0,r:'F'},{m:3,r:'E'},{m:6,r:'D'},{m:10,r:'C'},{m:15,r:'B'},{m:22,r:'A'},{m:30,r:'S'}];
+const DEFAULT_QUESTS=[
+  {name:'Săn quái: 30 phút vận động',type:'hunt',stat:'health',xp:20,gold:15},
+  {name:'Rèn luyện: học/đọc 1 giờ',type:'train',stat:'career',xp:25,gold:15},
+  {name:'Ngủ trước 12h đêm',type:'train',stat:'health',xp:15,gold:10},
+  {name:'Tiết kiệm / không tiêu hoang',type:'gold',stat:'wealth',xp:15,gold:20},
+  {name:'Nhắn tin cho 1 người thật',type:'train',stat:'social',xp:15,gold:10},
+];
+const SHOP=[
+  {id:'potion',ic:'🧪',nm:'Bình hồi HP',ds:'Hồi 30 HP tức thì',cost:60,use:'hp'},
+  {id:'shield',ic:'🛡️',nm:'Khiên miễn phạt',ds:'Miễn 1 lần phạt bỏ daily',cost:150,use:'shield'},
+  {id:'xpboost',ic:'⚡',nm:'Bùa x2 XP',ds:'Nhân đôi XP quest kế tiếp',cost:120,use:'xp2'},
+  {id:'skin',ic:'👑',nm:'Vương miện',ds:'Vật phẩm khoe (cosmetic)',cost:300,use:'cos'},
+];
+const MOCK_LEAD=[
+  {nm:'ShadowMonarch',pts:0},{nm:'S-Rank_Kai',pts:0},{nm:'GrindGod',pts:0},
+  {nm:'IronWill',pts:0},{nm:'NoDaysOff',pts:0}
+];
+
+let S=load();
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(KEY)); if(d&&d.player) return d;}catch(e){}
+  return null;
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+function today(){return S.simDay || 1}
+
+/* ============ ONBOARDING (IKIGAI) ============ */
+function newState(name,become,desire,strength){
+  const title = deriveTitle(strength,become);
+  return {
+    player:{name:name||'Hunter',title, level:1,xp:0,gold:50,hp:100,maxHp:100,streak:0},
+    ikigai:{become,desire,strength, mission:`Trở thành ${become||'phiên bản mạnh nhất của mình'}`},
+    stats:{health:10,wealth:10,career:10,social:10},
+    quests:DEFAULT_QUESTS.map((q,i)=>({id:'q'+i,...q,done:false})),
+    boss:[{id:'b1',name:(desire||'Mục tiêu lớn của tôi'),hp:5,maxHp:5,sub:[
+      {n:'Xác định bước đầu tiên',done:false},
+      {n:'Làm bước 1 trong tuần này',done:false},
+      {n:'Duy trì 7 ngày liên tục',done:false},
+      {n:'Vượt mốc giữa chặng',done:false},
+      {n:'Hoàn tất mục tiêu',done:false},
+    ]}],
+    shopOwned:{}, buffs:{xp2:false,shield:0},
+    event:makeEvent(),
+    notif:[{ic:'✨',t:'Chào mừng tới THE SYSTEM. Nhiệm vụ đầu tiên đang chờ.',day:1}],
+    log:{}, simDay:1, lastDailyReset:1
+  };
+}
+function deriveTitle(str,become){
+  const s=(str||'').toLowerCase();
+  if(/gym|khỏe|thể|body|đẹp/.test(s))return 'The Iron Awakener';
+  if(/code|dev|học|study|trí/.test(s))return 'The Knowledge Seeker';
+  if(/tiền|money|kinh doanh|business/.test(s))return 'The Fortune Hunter';
+  if(/nói|social|bạn|quan hệ/.test(s))return 'The Bonded One';
+  return 'The Awakened';
+}
+function makeEvent(){
+  return {
+    id:'ev'+(Math.floor((Date.now?0:0))), name:'Thử Thách 7 Ngày · Ngục Kỷ Luật',
+    desc:'Hoàn tất 20 điểm tiến độ trước hạn. Ai không xong mất cược — tiền về top bảng.',
+    stake:100, pool:100+80*5, deadlineDay:(load()?.simDay||1)+7, target:20, progress:0, joined:false, done:false, failed:false
+  };
+}
+
+/* ============ RENDER ============ */
+let TAB='home';
+function go(t){TAB=t;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));render()}
+function render(){
+  if(!S){renderOnboarding();return}
+  syncTopbar();
+  const V=document.getElementById('views');
+  V.innerHTML = TAB==='home'?viewHome():TAB==='quests'?viewQuests():TAB==='shop'?viewShop():TAB==='events'?viewEvents():viewGoals();
+}
+function syncTopbar(){
+  document.getElementById('tb-gold').textContent=S.player.gold;
+  const unseen=S.notif.filter(n=>!n.seen).length;
+  const b=document.getElementById('notif-badge');
+  b.style.display=unseen?'grid':'none'; b.textContent=unseen;
+}
+function rankOf(lv){let r='F';for(const x of RANKS)if(lv>=x.m)r=x.r;return r}
+
+function heroHTML(){
+  const p=S.player, r=rankOf(p.level), need=p.level*100, av=(p.name[0]||'H').toUpperCase();
+  const st=S.stats;
+  return `<div class="hero">
+    <div class="hero-top">
+      <div class="avatar">${av}<span class="rank-badge">${r}-RANK</span></div>
+      <div class="hero-id">
+        <div class="name">${esc(p.name)}</div>
+        <div class="title">${esc(p.title)}</div>
+        <div class="lvl mono">LV.${p.level} · 🔥 chuỗi ${p.streak} ngày</div>
+        <div class="hp-wrap">
+          <div class="bar hp"><i style="width:${p.hp/p.maxHp*100}%"></i></div>
+          <div class="bar-label"><span>HP</span><span class="mono">${p.hp}/${p.maxHp}</span></div>
+          <div class="bar xp"><i style="width:${p.xp/need*100}%"></i></div>
+          <div class="bar-label"><span>EXP</span><span class="mono">${p.xp}/${need}</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stats4">
+      <div class="stat health"><div class="ic">❤️</div><div class="v mono">${st.health}</div><div class="k">Sức khỏe</div></div>
+      <div class="stat wealth"><div class="ic">💰</div><div class="v mono">${st.wealth}</div><div class="k">Tiền bạc</div></div>
+      <div class="stat career"><div class="ic">🚀</div><div class="v mono">${st.career}</div><div class="k">Sự nghiệp</div></div>
+      <div class="stat social"><div class="ic">🤝</div><div class="v mono">${st.social}</div><div class="k">Quan hệ</div></div>
+    </div>
+  </div>`;
+}
+
+function viewHome(){
+  const done=S.quests.filter(q=>q.done).length, tot=S.quests.length;
+  const ev=S.event;
+  return `<div class="view">
+    ${heroHTML()}
+    <div class="sec-head"><h3>Nhiệm vụ hôm nay</h3><span class="cnt mono">${done}/${tot}</span>
+      <span class="act" onclick="go('quests')">Tất cả →</span></div>
+    ${S.quests.slice(0,3).map(questHTML).join('')}
+    ${done<tot?`<div style="font-size:12px;color:var(--muted);text-align:center;margin:6px 0 4px">⚠ Bỏ lỡ hôm nay = hình phạt nặng khi sang ngày mới</div>`:
+      `<div style="font-size:12.5px;color:var(--green);text-align:center;font-weight:700;margin:6px 0">✓ Đã dọn sạch nhiệm vụ hôm nay. Ngày an toàn.</div>`}
+    ${ev&&!ev.failed?`<div class="sec-head"><h3>Event đang diễn ra</h3><span class="act" onclick="go('events')">Vào →</span></div>
+      <div class="event"><div class="ev-head"><div class="ev-tag">◆ Event</div><div class="ev-name">${esc(ev.name)}</div>
+      <div class="ev-meta"><div class="m">Tiến độ<b class="mono">${ev.progress}/${ev.target}</b></div>
+      <div class="m">Còn lại<b class="mono">${Math.max(0,ev.deadlineDay-today())} ngày</b></div>
+      <div class="m">Pool<b class="mono gold">🪙${ev.pool}</b></div></div></div></div>`:''}
+  </div>`;
+}
+
+function questHTML(q){
+  const tagcls=q.type==='hunt'?'hunt':q.type==='gold'?'gold':'train';
+  const tagtxt=q.type==='hunt'?'Săn quái':q.type==='gold'?'Kiếm coin':'Rèn luyện';
+  return `<div class="quest ${q.done?'done':''}" onclick="toggleQuest('${q.id}')">
+    <div class="q-check">✓</div>
+    <div class="q-body"><div class="q-name">${esc(q.name)}</div>
+      <div class="q-meta"><span class="q-tag ${tagcls}">${tagtxt}</span><span>+${statLabel(q.stat)}</span></div></div>
+    <div class="q-rew mono">+${q.xp} XP<br><span class="g">+${q.gold}🪙</span></div>
+  </div>`;
+}
+function viewQuests(){
+  const done=S.quests.filter(q=>q.done).length;
+  return `<div class="view">
+    <div class="sec-head" style="margin-top:16px"><h3>Nhiệm vụ hàng ngày</h3><span class="cnt mono">${done}/${S.quests.length}</span></div>
+    <div class="add-row">
+      <input id="nq" placeholder="Thêm nhiệm vụ của bạn…" onkeydown="if(event.key==='Enter')addQuest()">
+      <select id="nqtype"><option value="hunt">Săn quái</option><option value="train">Rèn luyện</option><option value="gold">Kiếm coin</option></select>
+      <button class="btn" onclick="addQuest()">+</button>
+    </div>
+    ${S.quests.map(questHTML).join('')}
+    <div class="sec-head"><h3>⚔️ Boss — mục tiêu lớn</h3></div>
+    ${S.boss.map(bossHTML).join('')}
+  </div>`;
+}
+function bossHTML(b){
+  const done=b.sub.filter(s=>s.done).length;
+  return `<div class="boss"><div class="b-top"><div class="b-name">👹 ${esc(b.name)}</div>
+    <div class="b-hp mono">HP ${b.maxHp-done}/${b.maxHp}</div></div>
+    <div class="bar hp" style="margin-top:8px"><i style="width:${(b.maxHp-done)/b.maxHp*100}%;background:linear-gradient(90deg,#ff5d6c,#ff8a5c)"></i></div>
+    <div class="sub">${b.sub.map((s,i)=>`<div class="subq ${s.done?'done':''}" onclick="hitBoss('${b.id}',${i})">
+      <div class="sc">✓</div>${esc(s.n)}</div>`).join('')}</div></div>`;
+}
+function viewShop(){
+  return `<div class="view">
+    <div class="sec-head" style="margin-top:16px"><h3>Cửa hàng</h3><span class="cnt mono">🪙 ${S.player.gold}</span></div>
+    <div style="font-size:12px;color:var(--muted);margin:0 2px 12px">Dùng coin kiếm từ quest để mua vật phẩm.</div>
+    <div class="shop-grid">${SHOP.map(it=>{const owned=S.shopOwned[it.id];
+      return `<div class="item ${owned?'owned':''}"><div class="ic">${it.ic}</div><div class="nm">${it.nm}</div>
+      <div class="ds">${it.ds}</div>
+      <button class="buy" onclick="buy('${it.id}')">${owned&&it.use==='cos'?'✓ Đã sở hữu':'🪙 '+it.cost}</button></div>`}).join('')}</div>
+  </div>`;
+}
+function viewEvents(){
+  const ev=S.event;
+  if(!ev)return `<div class="view"><div class="empty">Chưa có event. Quay lại sau nhé.</div></div>`;
+  const lead=eventLeaderboard();
+  const daysLeft=Math.max(0,ev.deadlineDay-today());
+  return `<div class="view"><div class="event" style="margin-top:16px">
+    <div class="ev-head"><div class="ev-tag">◆ Event có cược</div><div class="ev-name">${esc(ev.name)}</div>
+      <div class="ev-desc">${esc(ev.desc)}</div>
+      <div class="ev-meta">
+        <div class="m">Cược<b class="mono gold">🪙${ev.stake}</b></div>
+        <div class="m">Pool thưởng<b class="mono gold">🪙${ev.pool}</b></div>
+        <div class="m">Hạn<b class="mono">${daysLeft} ngày</b></div>
+      </div></div>
+    <div class="ev-body">
+      <div class="ev-prog"><div class="bar xp"><i style="width:${ev.progress/ev.target*100}%"></i></div>
+        <div class="bar-label"><span>Tiến độ của bạn</span><span class="mono">${ev.progress}/${ev.target}</span></div></div>
+      ${!ev.joined?`<button class="btn gold block" onclick="joinEvent()">Cược 🪙${ev.stake} & tham gia</button>`:
+        ev.done?`<div style="text-align:center;color:var(--green);font-weight:800;font-size:14px;padding:6px">✓ ĐÃ HOÀN THÀNH — bạn giữ cược + chia pool</div>`:
+        `<button class="btn block" onclick="advanceEvent()">▲ Ghi nhận tiến độ (+2)</button>
+         <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">Hoàn thành sau hạn: không mất cược · Không hoàn thành: mất 🪙${ev.stake} về top</div>`}
+    </div>
+    <div class="lead">${lead.map((l,i)=>`<div class="lead-row ${l.me?'me':''} ${i===0?'win':''}">
+      <div class="pos">${i===0?'👑':i+1}</div><div class="nm">${esc(l.nm)}</div><div class="pts mono">${l.pts} pts</div></div>`).join('')}</div>
+  </div>
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin:4px 8px">Bản thật: cược bằng tiền thật cần escrow + kiểm tra pháp lý (mô hình StickK/Forfeit).</div>
+  </div>`;
+}
+function eventLeaderboard(){
+  const ev=S.event;
+  const others=MOCK_LEAD.map((m,i)=>({nm:m.nm,pts:[18,15,12,9,6][i]+(today()-1)*2}));
+  const me={nm:S.player.name+' (bạn)',pts:ev.progress,me:true};
+  return [...others,me].sort((a,b)=>b.pts-a.pts).slice(0,6);
+}
+function viewGoals(){
+  const ik=S.ikigai;
+  return `<div class="view">
+    <div class="sec-head" style="margin-top:16px"><h3>🧭 IKIGAI — la bàn của bạn</h3><span class="act" onclick="editIkigai()">Sửa</span></div>
+    <div class="ikigai">
+      <div class="lb">Tôi muốn trở thành</div><div class="val cy">${esc(ik.become||'—')}</div>
+      <div class="lb">Điều tôi khao khát</div><div class="val">${esc(ik.desire||'—')}</div>
+      <div class="lb">Điểm mạnh của tôi</div><div class="val">${esc(ik.strength||'—')}</div>
+    </div>
+    <div class="sec-head"><h3>⚔️ Boss — mục tiêu lớn</h3><span class="act" onclick="go('quests')">Đánh →</span></div>
+    ${S.boss.map(bossHTML).join('')}
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0">Mỗi nhiệm vụ hằng ngày là một bước tiến tới con người bạn muốn trở thành.</div>
+  </div>`;
+}
+
+/* ============ ACTIONS ============ */
+function toggleQuest(id){
+  const q=S.quests.find(x=>x.id===id); if(!q)return;
+  if(q.done){q.done=false; addXP(-q.xp,true); S.player.gold=Math.max(0,S.player.gold-q.gold); if(S.stats[q.stat])S.stats[q.stat]--;}
+  else{
+    q.done=true;
+    let xp=q.xp; if(S.buffs.xp2){xp*=2;S.buffs.xp2=false;toast('⚡ Bùa x2 XP kích hoạt!','gold');}
+    addXP(xp); S.player.gold+=q.gold; S.stats[q.stat]=(S.stats[q.stat]||0)+1;
+    toast(`+${xp} XP · +${q.gold}🪙 · ${statLabel(q.stat)} tăng`,'good');
+    if(S.quests.every(x=>x.done)){S.player.streak++; pushNotif('🏆','Dọn sạch nhiệm vụ! Chuỗi +1 = '+S.player.streak+' ngày');}
+  }
+  save();render();
+}
+function addXP(n,silent){
+  const p=S.player; p.xp+=n;
+  while(p.xp>=p.level*100){p.xp-=p.level*100;p.level++;p.maxHp+=10;p.hp=p.maxHp;
+    if(!silent){toast('⬆ LÊN CẤP! Bây giờ LV.'+p.level+' · '+rankOf(p.level)+'-Rank','gold');pushNotif('⬆','Lên cấp '+p.level+' — '+rankOf(p.level)+'-Rank');}}
+  if(p.xp<0)p.xp=0;
+}
+function addQuest(){
+  const i=document.getElementById('nq'),t=document.getElementById('nqtype');
+  const v=i.value.trim(); if(!v)return;
+  const map={hunt:'health',train:'career',gold:'wealth'};
+  S.quests.push({id:'q'+Date.now(),name:v,type:t.value,stat:map[t.value],xp:20,gold:12,done:false});
+  save();render();
+}
+function hitBoss(bid,i){
+  const b=S.boss.find(x=>x.id===bid); const s=b.sub[i];
+  s.done=!s.done;
+  if(s.done){addXP(40);S.player.gold+=30;toast('💥 Trúng boss! +40 XP +30🪙','good');
+    if(b.sub.every(x=>x.done)){toast('👹 HẠ GỤC BOSS: '+b.name+'!','gold');pushNotif('👹','Bạn đã hạ boss "'+b.name+'"');}}
+  save();render();
+}
+function buy(id){
+  const it=SHOP.find(x=>x.id===id); if(!it)return;
+  if(it.use==='cos'&&S.shopOwned[id]){toast('Đã sở hữu','good');return}
+  if(S.player.gold<it.cost){toast('Không đủ coin','bad');return}
+  S.player.gold-=it.cost;
+  if(it.use==='hp'){S.player.hp=Math.min(S.player.maxHp,S.player.hp+30);toast('🧪 Hồi 30 HP','good');}
+  else if(it.use==='shield'){S.buffs.shield++;toast('🛡️ +1 Khiên miễn phạt','good');}
+  else if(it.use==='xp2'){S.buffs.xp2=true;toast('⚡ Bùa x2 XP sẵn sàng','gold');}
+  else{S.shopOwned[id]=true;toast('👑 Đã mua '+it.nm,'gold');}
+  save();render();
+}
+function joinEvent(){
+  const ev=S.event; if(S.player.gold<ev.stake){toast('Không đủ coin để cược','bad');return}
+  S.player.gold-=ev.stake; ev.joined=true; pushNotif('🏆','Bạn đã cược 🪙'+ev.stake+' vào "'+ev.name+'"');
+  toast('Đã tham gia event! Hoàn thành để thắng pool.','gold'); save();render();
+}
+function advanceEvent(){
+  const ev=S.event; if(!ev)return;
+  if(!ev.joined){toast('Hãy tham gia event trước','bad');go('events');return}
+  if(ev.done)return;
+  ev.progress=Math.min(ev.target,ev.progress+2);
+  if(ev.progress>=ev.target){ev.done=true; const winnings=Math.round(ev.pool*0.4);
+    S.player.gold+=ev.stake+winnings; addXP(120);
+    toast('🏆 THẮNG EVENT! +🪙'+(ev.stake+winnings)+' (cược + chia pool)','gold');
+    pushNotif('🏆','Thắng event "'+ev.name+'" — nhận 🪙'+(ev.stake+winnings));}
+  else toast('▲ Tiến độ event +2 ('+ev.progress+'/'+ev.target+')','good');
+  save();render();
+}
+
+/* ============ PENALTY ENGINE ============ */
+function simulateNextDay(){
+  const incomplete=S.quests.filter(q=>!q.done).length;
+  const total=S.quests.length;
+  // event deadline check
+  let evFail=false;
+  if(S.event&&S.event.joined&&!S.event.done&&today()+1>S.event.deadlineDay){
+    evFail=true; S.event.failed=true;
+  }
+  if(incomplete>0){
+    if(S.buffs.shield>0){S.buffs.shield--; pushNotif('🛡️','Khiên đã chặn hình phạt hôm nay');
+      S.simDay++; resetDailies(); toast('🛡️ Khiên chặn phạt!','gold'); save();render(); return;}
+    applyPenalty(incomplete,total,evFail);
+  } else {
+    S.simDay++; resetDailies();
+    toast('☀ Ngày mới. Nhiệm vụ đã làm mới.','good'); save();render();
+  }
+}
+function applyPenalty(incomplete,total,evFail){
+  const p=S.player;
+  const hpLoss=20+incomplete*10;
+  const goldLoss=Math.min(p.gold,20+incomplete*15);
+  const evLoss=evFail?S.event.stake:0;
+  p.hp=Math.max(0,p.hp-hpLoss);
+  p.gold=Math.max(0,p.gold-goldLoss-0);
+  const brokeStreak=p.streak; p.streak=0;
+  // rank/level down risk
+  let lvDown=false;
+  if(incomplete>=Math.ceil(total*0.6)&&p.level>1){p.level--;p.xp=0;lvDown=true;}
+  S.simDay++; resetDailies();
+  pushNotif('☠️','HÌNH PHẠT: bỏ '+incomplete+' nhiệm vụ — mất '+hpLoss+' HP, '+goldLoss+'🪙'+(evFail?', mất cược event':''));
+  save();
+  showPenaltyModal({hpLoss,goldLoss,brokeStreak,lvDown,evLoss,incomplete});
+}
+function resetDailies(){S.quests.forEach(q=>q.done=false);S.lastDailyReset=S.simDay;}
+
+function showPenaltyModal(d){
+  const m=document.getElementById('modal-root');
+  m.innerHTML=`<div class="overlay"><div class="sheet" style="border-color:rgba(255,77,94,.5);box-shadow:0 0 50px rgba(255,77,94,.25)">
+    <div class="penalty-ic">☠️</div><div class="pen-title">HÌNH PHẠT</div>
+    <div style="text-align:center;font-size:13px;color:var(--ink-2)">Bạn bỏ <b style="color:var(--danger)">${d.incomplete}</b> nhiệm vụ hôm qua. The System không tha thứ.</div>
+    <div class="pen-list">
+      <div class="pl"><span>❤️ Mất HP</span><b class="mono">−${d.hpLoss}</b></div>
+      <div class="pl"><span>🪙 Mất Coin</span><b class="mono">−${d.goldLoss}</b></div>
+      <div class="pl"><span>🔥 Chuỗi bị phá</span><b class="mono">${d.brokeStreak} → 0</b></div>
+      ${d.lvDown?`<div class="pl"><span>⬇ Tụt cấp</span><b class="mono">LV −1</b></div>`:''}
+      ${d.evLoss?`<div class="pl"><span>🏆 Mất cược event</span><b class="mono">−${d.evLoss}</b></div>`:''}
+    </div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:14px">Bản thật: hình phạt có thể là mất tiền cược thật, gửi tin "thất bại" tới người giám sát bạn chọn, hoặc quyên tiền cho tổ chức bạn ghét.</div>
+    <button class="btn danger block" onclick="closeModal()">Tôi chấp nhận. Đứng dậy.</button>
+  </div></div>`;
+  render();
+}
+
+/* ============ NOTIF ============ */
+function pushNotif(ic,t){S.notif.unshift({ic,t,day:today(),seen:false});save();syncTopbar&&syncTopbar()}
+function openNotif(){
+  S.notif.forEach(n=>n.seen=true);save();syncTopbar();
+  const m=document.getElementById('modal-root');
+  m.innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="sheet">
+    <h2>🔔 Thông báo</h2><div class="sub">Mọi diễn biến gom về một chỗ.</div>
+    ${S.notif.length?S.notif.slice(0,30).map(n=>`<div class="notif-item"><div class="ni">${n.ic}</div>
+      <div class="nt">${esc(n.t)}<div class="nm2">Ngày ${n.day}</div></div></div>`).join(''):'<div class="empty">Chưa có gì.</div>'}
+    <button class="btn ghost block" style="margin-top:16px" onclick="closeModal()">Đóng</button>
+  </div></div>`;
+}
+function editIkigai(){
+  const ik=S.ikigai;
+  const m=document.getElementById('modal-root');
+  m.innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="sheet">
+    <h2>🧭 IKIGAI</h2><div class="sub">La bàn định hướng mọi nhiệm vụ.</div>
+    <div class="field"><label>Tôi muốn trở thành</label><input id="ik-b" value="${esc(ik.become||'')}"></div>
+    <div class="field"><label>Điều tôi khao khát (mục tiêu lớn)</label><input id="ik-d" value="${esc(ik.desire||'')}"></div>
+    <div class="field"><label>Điểm mạnh của tôi</label><input id="ik-s" value="${esc(ik.strength||'')}"></div>
+    <button class="btn block" onclick="saveIkigai()">Lưu</button>
+  </div></div>`;
+}
+function saveIkigai(){
+  S.ikigai.become=val('ik-b');S.ikigai.desire=val('ik-d');S.ikigai.strength=val('ik-s');
+  S.player.title=deriveTitle(S.ikigai.strength,S.ikigai.become);
+  if(S.boss[0])S.boss[0].name=S.ikigai.desire||S.boss[0].name;
+  save();closeModal();toast('Đã cập nhật IKIGAI','good');
+}
+function closeModal(){document.getElementById('modal-root').innerHTML='';render()}
+
+/* ============ ONBOARDING ============ */
+function renderOnboarding(){
+  document.getElementById('views').innerHTML='';
+  const m=document.getElementById('modal-root');
+  m.innerHTML=`<div class="overlay"><div class="sheet">
+    <div style="text-align:center;font-size:34px">⚡</div>
+    <h2 style="text-align:center">THE SYSTEM</h2>
+    <div class="sub" style="text-align:center">Bạn vừa được chọn. Biến đời thật thành trò chơi — nhân vật chính là bạn.</div>
+    <div class="field"><label>Tên hiệu (Hunter name)</label><input id="on-name" placeholder="VD: Kai"></div>
+    <div class="field"><label>① Tôi muốn TRỞ THÀNH ai?</label><input id="on-become" placeholder="VD: người kỷ luật, có sức khỏe & sự nghiệp"></div>
+    <div class="field"><label>② Điều tôi KHAO KHÁT nhất (mục tiêu lớn)?</label><input id="on-desire" placeholder="VD: ra mắt sản phẩm đầu tiên"></div>
+    <div class="field"><label>③ ĐIỂM MẠNH của tôi là gì?</label><input id="on-strength" placeholder="VD: kiên trì, thích học"></div>
+    <button class="btn block" onclick="startGame()">Bắt đầu hành trình →</button>
+  </div></div>`;
+}
+function startGame(){
+  const name=val('on-name')||'Hunter';
+  S=newState(name,val('on-become'),val('on-desire'),val('on-strength'));
+  S.event.deadlineDay=S.simDay+7;
+  save();closeModal();TAB='home';go('home');
+  toast('Chào mừng, '+name+'. Nhiệm vụ đầu tiên đang chờ.','gold');
+}
+
+/* ============ UTIL ============ */
+function statLabel(s){return {health:'Sức khỏe',wealth:'Tiền bạc',career:'Sự nghiệp',social:'Quan hệ'}[s]||s}
+function val(id){const e=document.getElementById(id);return e?e.value.trim():''}
+function esc(s){return (s==null?'':''+s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function toast(msg,kind){
+  const t=document.createElement('div');t.className='toast '+(kind||'');
+  const ic=kind==='gold'?'✨':kind==='bad'?'⚠️':kind==='good'?'✅':'ℹ️';
+  t.innerHTML=`<span>${ic}</span><span>${esc(msg)}</span>`;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400)},2600);
+}
+function hardReset(){if(confirm('Xoá toàn bộ tiến trình?')){localStorage.removeItem(KEY);S=null;render()}}
+
+/* ============ BOOT ============ */
+render();
+</script>
+</body>
+</html>
