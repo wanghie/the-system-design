@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · UI Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cv:#e7e9ee;--ink:#0e1116;--muted:#8b93a3;--brand:#5b3fb4;
+  /* app tokens */
+  --bg:#080b11;--bg2:#0e131c;--panel:#141b26;--line:rgba(90,150,190,.16);--line2:rgba(90,150,190,.32);
+  --aink:#eaf2fb;--aink2:#9fb2c6;--amuted:#5f7086;--cy:#35e0d0;--cy2:#4fd1ff;--gold:#ffd166;--red:#ff4d5e;--green:#3ddc84;--purp:#9b8cff;
+  --health:#ff6b8a;--wealth:#ffd166;--career:#4fd1ff;--social:#9b8cff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cv);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+.wrap{padding:34px 24px 80px;max-width:1400px;margin:0 auto}
+.head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.dot{width:12px;height:12px;background:var(--cy);border-radius:3px;transform:rotate(45deg);box-shadow:0 0 12px rgba(53,224,208,.6)}
+.head .b{font-weight:900;letter-spacing:.16em;font-size:15px}
+.head .sub{color:var(--muted);font-size:13px;font-weight:600}
+h1{font-size:30px;font-weight:900;letter-spacing:-.02em;margin:10px 0 4px}
+.intro{color:#4a5160;font-size:14px;max-width:80ch;margin-bottom:26px}
+.row{display:flex;gap:40px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.cell{width:300px}
+.cap{text-align:center;font-weight:800;font-size:14px;margin-top:14px}
+.pats{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:7px}
+.pat{font-size:10px;font-weight:700;color:var(--brand);background:#efeaff;border:1px solid #ddd3ff;padding:2px 7px;border-radius:5px}
+.frameno{text-align:center;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-bottom:8px}
+
+/* device */
+.device{width:300px;height:620px;border-radius:40px;background:#05070b;padding:11px;box-shadow:0 22px 50px rgba(20,26,40,.28);position:relative}
+.app{width:100%;height:100%;border-radius:30px;overflow:hidden;position:relative;background:
+  radial-gradient(500px 300px at 85% -5%,rgba(79,209,255,.10),transparent 55%),
+  radial-gradient(400px 260px at -10% 108%,rgba(155,140,255,.10),transparent 55%),var(--bg);
+  color:var(--aink);display:flex;flex-direction:column}
+.notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:96px;height:22px;background:#05070b;border-radius:12px;z-index:20}
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px 4px;font-size:11px;font-weight:700;color:var(--aink2)}
+.scr{flex:1;overflow:hidden;padding:6px 15px 0;position:relative}
+.tabbar{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);padding:8px 4px 12px;background:rgba(8,11,17,.85)}
+.tabbar .t{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:8.5px;font-weight:700;color:var(--amuted)}
+.tabbar .t .i{font-size:17px}
+.tabbar .t.on{color:var(--cy)}
+.tabbar .t.on .i{filter:drop-shadow(0 0 6px rgba(53,224,208,.7))}
+
+/* generic app bits */
+.h-greet{font-size:12px;color:var(--aink2);font-weight:600}
+.h-name{font-size:17px;font-weight:800}
+.toprow{display:flex;justify-content:space-between;align-items:flex-start;padding-top:4px}
+.coin{font-size:12px;font-weight:800;color:var(--gold);background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.3);padding:5px 9px;border-radius:9px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px;margin-top:11px}
+.bar{height:8px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.bar>i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.blabel{display:flex;justify-content:space-between;font-size:9px;color:var(--amuted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin:5px 1px 2px}
+
+/* character */
+.charhead{display:flex;gap:12px}
+.avatar{width:58px;height:58px;border-radius:15px;flex-shrink:0;display:grid;place-items:center;font-size:26px;font-weight:900;
+  background:linear-gradient(160deg,#1c2a3a,#0d141e);border:1px solid var(--line2);position:relative;box-shadow:0 0 16px rgba(53,224,208,.25)}
+.rankbadge{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;background:#0e131c;border:1px solid var(--line2);white-space:nowrap}
+.title{font-size:11px;color:var(--cy);font-weight:700}
+.lvl{font-size:10px;color:var(--aink2);margin-top:3px}
+.stats4{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+.stat{background:rgba(10,15,22,.6);border:1px solid var(--line);border-radius:12px;padding:9px 10px}
+.stat .k{font-size:9px;color:var(--amuted);text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+.stat .v{font-size:15px;font-weight:800}
+.stat .mini{height:5px;border-radius:3px;background:rgba(255,255,255,.07);margin-top:5px;overflow:hidden;position:relative}
+.stat .mini>i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+
+/* quest */
+.sectlabel{font-size:11px;font-weight:800;color:var(--aink2);text-transform:uppercase;letter-spacing:.06em;margin:14px 2px 8px;display:flex;justify-content:space-between}
+.sectlabel .c{color:var(--amuted)}
+.quest{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:10px 11px;margin-bottom:8px}
+.qc{width:22px;height:22px;border-radius:7px;border:2px solid var(--line2);flex-shrink:0;display:grid;place-items:center;font-size:12px;color:transparent}
+.quest.done .qc{background:var(--green);border-color:var(--green);color:#052}
+.qn{font-size:12.5px;font-weight:600;flex:1}
+.quest.done .qn{text-decoration:line-through;color:var(--amuted)}
+.qtag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px}
+.qrew{font-size:10px;font-weight:800;color:var(--cy);white-space:nowrap}
+
+/* quest grid */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.tile{aspect-ratio:1;border-radius:16px;padding:11px;position:relative;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--line)}
+.tile .ti{font-size:22px}
+.tile .tn{font-size:11px;font-weight:700;line-height:1.2}
+.tile .ts{font-size:9px;color:var(--amuted);font-weight:700}
+.ring{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;border:3px solid rgba(255,255,255,.12)}
+.ring.full{border-color:var(--green);box-shadow:0 0 8px rgba(61,220,132,.5)}
+.tile.done{opacity:.92}
+.tile.matte{opacity:.6}
+
+/* focus */
+.timerwrap{display:grid;place-items:center;margin-top:26px}
+.timer{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;position:relative;
+  background:conic-gradient(var(--cy) 62%,rgba(255,255,255,.06) 0);}
+.timer .inner{width:158px;height:158px;border-radius:50%;background:var(--bg2);display:grid;place-items:center;flex-direction:column;text-align:center;border:1px solid var(--line)}
+.timer .tt{font-size:36px;font-weight:800;letter-spacing:-.02em}
+.timer .tl{font-size:10px;color:var(--amuted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.domchips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.domchip{font-size:11px;font-weight:700;padding:7px 12px;border-radius:10px;border:1px solid var(--line2);color:var(--aink2)}
+.domchip.on{background:rgba(79,209,255,.12);border-color:var(--career);color:var(--career)}
+.bigbtn{margin-top:18px;width:100%;padding:14px;border-radius:14px;font-size:14px;font-weight:800;text-align:center;
+  background:linear-gradient(160deg,var(--cy),#1f9e93);color:#03211e;box-shadow:0 0 20px rgba(53,224,208,.3)}
+.bigbtn.gold{background:linear-gradient(160deg,var(--gold),#c99a2e);color:#2a1e00}
+.bigbtn.red{background:linear-gradient(160deg,#ff5d6c,#c22f3d);color:#fff}
+
+/* event */
+.evtag{font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--purp);text-transform:uppercase}
+.evname{font-size:16px;font-weight:800;margin:3px 0 2px}
+.evdesc{font-size:11px;color:var(--aink2)}
+.evmeta{display:flex;gap:12px;margin-top:11px}
+.evmeta .m{font-size:9px;color:var(--amuted);text-transform:uppercase;font-weight:700}
+.evmeta .m b{display:block;font-size:14px;color:var(--aink);margin-top:2px}
+.evmeta .m .g{color:var(--gold)}
+.fairbadge{font-size:9px;font-weight:700;color:var(--green);background:rgba(61,220,132,.1);border:1px solid rgba(61,220,132,.35);padding:4px 8px;border-radius:7px;margin-top:10px;display:inline-block}
+.lead{margin-top:6px}
+.lrow{display:flex;align-items:center;gap:9px;padding:7px 2px;font-size:11.5px;border-bottom:1px solid rgba(90,150,190,.08)}
+.lrow .pos{width:18px;font-weight:800;color:var(--amuted);text-align:center}
+.lrow.me{color:var(--cy);font-weight:700}
+.lrow .nm{flex:1}
+.lrow .pts{font-weight:700;color:var(--aink2)}
+.lrow.win .pos{color:var(--gold)}
+
+/* guild */
+.gbanner{border-radius:14px;padding:13px;background:linear-gradient(160deg,rgba(155,140,255,.18),rgba(14,19,28,.6));border:1px solid var(--line2)}
+.avstack{display:flex;margin-top:8px}
+.avstack span{width:26px;height:26px;border-radius:50%;background:#1c2a3a;border:2px solid var(--bg);display:grid;place-items:center;font-size:11px;font-weight:800;margin-left:-7px;color:var(--cy)}
+.avstack span:first-child{margin-left:0}
+.feed{margin-top:6px}
+.post{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--line)}
+.pav{width:30px;height:30px;border-radius:9px;background:#1c2a3a;display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--purp);flex-shrink:0;position:relative}
+.pav .rk{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);font-size:7px;font-weight:800;background:#0e131c;border:1px solid var(--line2);border-radius:4px;padding:0 3px}
+.ptxt{font-size:11.5px;color:var(--aink2);line-height:1.4}
+.ptxt b{color:var(--aink)}
+.ptime{font-size:9px;color:var(--amuted);margin-top:2px}
+
+/* penalty overlay */
+.penalty .app{background:radial-gradient(400px 300px at 50% 20%,rgba(255,77,94,.18),transparent 60%),#0a0608}
+.penbody{padding:30px 20px;text-align:center;display:flex;flex-direction:column;height:100%;justify-content:center}
+.penic{font-size:52px}
+.pentitle{font-size:24px;font-weight:900;color:var(--red);letter-spacing:.04em;margin:8px 0 4px}
+.pensub{font-size:12px;color:var(--aink2);margin-bottom:16px}
+.penlist{background:rgba(20,10,12,.6);border:1px solid rgba(255,77,94,.3);border-radius:13px;padding:12px 14px;text-align:left}
+.penrow{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;color:#ffb3bd;font-weight:600}
+.pencare{font-size:11px;color:var(--aink2);background:rgba(53,224,208,.08);border:1px solid rgba(53,224,208,.25);border-radius:11px;padding:10px 12px;margin-top:14px;line-height:1.45}
+.pencare b{color:var(--cy)}
+
+/* onboarding */
+.onb{padding:26px 20px;display:flex;flex-direction:column;height:100%}
+.onb .logo{font-size:40px;text-align:center}
+.onb h2{font-size:22px;font-weight:900;text-align:center;margin:4px 0 2px}
+.onb .tag{font-size:11px;color:var(--aink2);text-align:center;margin-bottom:18px}
+.field{margin-bottom:13px}
+.field label{font-size:11px;color:var(--cy);font-weight:700;display:block;margin-bottom:5px}
+.inp{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:11px;padding:11px;color:var(--aink);font-size:12.5px}
+.inp.ph{color:var(--amuted)}
+
+@media(max-width:680px){.device{width:280px;height:580px}.cell{width:280px}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="head"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· UI Design · giao diện chính</span></div>
+  <h1>Giao diện The System</h1>
+  <div class="intro"><b>Xương sống:</b> IKIGAI + một hình mẫu lý tưởng → tạo ra một <b>nhân vật</b> → thiết kế cuộc đời bám mục tiêu → <b>trở thành nhân vật lý tưởng</b>. Mọi quest/focus/event đều để rút ngắn khoảng cách giữa bạn-hiện-tại và nhân-vật-lý-tưởng. Aesthetic: game HUD Status Window (dark + cyan glow), sạch như tracker. Mỗi màn ghi rõ pattern lấy từ 6 app đã bóc. Import Figma bằng html.to.design.</div>
+
+  <div class="row">
+    <!-- 1 · ONBOARDING -->
+    <div class="cell">
+      <div class="frameno">SLIDE 1</div>
+      <div class="device"><div class="notch"></div><div class="app"><div class="onb" style="padding:22px 18px">
+        <div class="logo" style="font-size:32px">⚡</div><h2 style="font-size:19px">Tạo nhân vật của bạn</h2><div class="tag">IKIGAI + hình mẫu lý tưởng → nhân vật bạn sẽ trở thành</div>
+        <div class="field" style="margin-bottom:10px"><label>① Muốn TRỞ THÀNH ai?</label><div class="inp ph">người kỷ luật, khỏe & có sự nghiệp</div></div>
+        <div class="field" style="margin-bottom:10px"><label>② KHAO KHÁT (mục tiêu lớn)?</label><div class="inp ph">ra mắt sản phẩm đầu tiên</div></div>
+        <div class="field" style="margin-bottom:10px"><label>③ ĐIỂM MẠNH?</label><div class="inp ph">kiên trì, thích học</div></div>
+        <div class="field" style="margin-bottom:10px"><label>④ HÌNH MẪU LÝ TƯỞNG?</label><div class="inp ph">David Goggins · Sung Jinwoo · một CEO…</div></div>
+        <div style="font-size:10px;color:var(--cy);text-align:center;margin:2px 0 10px">↓ tạo ra "The Disciplined Founder"</div>
+        <div class="bigbtn">Tạo nhân vật →</div>
+      </div></div></div>
+      <div class="cap">Onboarding · IKIGAI + hình mẫu</div>
+      <div class="pats"><span class="pat">IKIGAI + role model</span><span class="pat">→ sinh nhân vật</span></div>
+    </div>
+
+    <!-- 1b · IDEAL CHARACTER -->
+    <div class="cell">
+      <div class="frameno">SLIDE 2 · NGÔI SAO BẮC ĐẨU</div>
+      <div class="device"><div class="notch"></div><div class="app">
+        <div class="statusbar"><span>9:41</span><span>◗ ◗ ▮</span></div>
+        <div class="scr">
+          <div style="text-align:center;margin-top:4px"><div style="font-size:10px;color:var(--amuted);text-transform:uppercase;letter-spacing:.08em;font-weight:700">Nhân vật lý tưởng</div></div>
+          <div style="display:grid;place-items:center;margin-top:10px">
+            <div class="avatar" style="width:82px;height:82px;font-size:34px;box-shadow:0 0 28px rgba(255,209,102,.4);border-color:rgba(255,209,102,.5)">★<span class="rankbadge" style="border-color:rgba(255,209,102,.6);color:var(--gold)">S-RANK · mục tiêu</span></div>
+          </div>
+          <div style="text-align:center;margin-top:14px"><div style="font-size:17px;font-weight:800">The Disciplined Founder</div>
+            <div style="font-size:11px;color:var(--cy);margin-top:2px">lấy cảm hứng từ hình mẫu của bạn</div></div>
+          <div style="font-size:11px;color:var(--aink2);text-align:center;margin:12px 6px 4px;line-height:1.5">Bạn đang <b style="color:var(--aink)">thiết kế cuộc đời</b> để trở thành người này. Đây là khoảng cách cần lấp:</div>
+          <div class="card" style="margin-top:8px">
+            <div class="blabel"><span style="color:var(--health)">❤️ Sức khỏe</span><span class="mono">42 → 90</span></div><div class="bar"><i style="width:42%;background:var(--health)"></i><i style="position:absolute;left:42%;right:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,rgba(255,107,138,.25),rgba(255,107,138,.25) 3px,transparent 3px,transparent 6px)"></i></div>
+            <div class="blabel" style="margin-top:8px"><span style="color:var(--wealth)">💰 Tiền bạc</span><span class="mono">28 → 80</span></div><div class="bar"><i style="width:28%;background:var(--wealth)"></i><i style="position:absolute;left:28%;right:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,rgba(255,209,102,.25),rgba(255,209,102,.25) 3px,transparent 3px,transparent 6px)"></i></div>
+            <div class="blabel" style="margin-top:8px"><span style="color:var(--career)">🚀 Sự nghiệp</span><span class="mono">55 → 95</span></div><div class="bar"><i style="width:55%;background:var(--career)"></i><i style="position:absolute;left:55%;right:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,rgba(79,209,255,.25),rgba(79,209,255,.25) 3px,transparent 3px,transparent 6px)"></i></div>
+            <div class="blabel" style="margin-top:8px"><span style="color:var(--social)">🤝 Quan hệ</span><span class="mono">33 → 70</span></div><div class="bar"><i style="width:33%;background:var(--social)"></i><i style="position:absolute;left:33%;right:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,rgba(155,140,255,.25),rgba(155,140,255,.25) 3px,transparent 3px,transparent 6px)"></i></div>
+          </div>
+          <div style="font-size:10px;color:var(--amuted);text-align:center;margin-top:8px">Vạch liền = bây giờ · vạch đứt = nhân vật lý tưởng</div>
+        </div>
+        <div class="tabbar"><div class="t on"><span class="i">🎯</span>Home</div><div class="t"><span class="i">⚔️</span>Quest</div><div class="t"><span class="i">⏱️</span>Focus</div><div class="t"><span class="i">🏆</span>Event</div><div class="t"><span class="i">👥</span>Guild</div></div>
+      </div></div>
+      <div class="cap">Nhân vật lý tưởng · gap hiện tại → lý tưởng</div>
+      <div class="pats"><span class="pat">north-star identity</span><span class="pat">gap = nguồn mọi quest</span></div>
+    </div>
+
+    <!-- 2 · HOME / STATUS -->
+    <div class="cell">
+      <div class="frameno">SLIDE 3</div>
+      <div class="device"><div class="notch"></div><div class="app">
+        <div class="statusbar"><span>9:41</span><span>◗ ◗ ▮</span></div>
+        <div class="scr">
+          <div class="toprow"><div><div class="h-greet">Chào buổi sáng,</div><div class="h-name">Kai</div></div><div class="coin mono">🪙 340</div></div>
+          <div class="card"><div class="charhead">
+            <div class="avatar">K<span class="rankbadge">C-RANK</span></div>
+            <div style="flex:1"><div class="title">The Awakened</div><div class="lvl mono">LV.12 · 🔥 chuỗi 8 ngày</div>
+              <div style="font-size:9px;color:var(--gold);margin-top:3px;font-weight:700">★ → The Disciplined Founder · 47%</div>
+              <div class="blabel"><span>HP</span><span class="mono">86/110</span></div><div class="bar"><i style="width:78%;background:linear-gradient(90deg,#ff5d6c,#ff8a5c)"></i></div>
+              <div class="blabel"><span>EXP</span><span class="mono">640/1200</span></div><div class="bar"><i style="width:53%;background:linear-gradient(90deg,var(--cy),var(--cy2))"></i></div>
+            </div></div>
+            <div class="stats4">
+              <div class="stat"><div class="k">❤️ Sức khỏe</div><div class="v" style="color:var(--health)">42</div><div class="mini"><i style="width:42%;background:var(--health)"></i></div></div>
+              <div class="stat"><div class="k">💰 Tiền bạc</div><div class="v" style="color:var(--wealth)">28</div><div class="mini"><i style="width:28%;background:var(--wealth)"></i></div></div>
+              <div class="stat"><div class="k">🚀 Sự nghiệp</div><div class="v" style="color:var(--career)">55</div><div class="mini"><i style="width:55%;background:var(--career)"></i></div></div>
+              <div class="stat"><div class="k">🤝 Quan hệ</div><div class="v" style="color:var(--social)">33</div><div class="mini"><i style="width:33%;background:var(--social)"></i></div></div>
+            </div>
+          </div>
+          <div class="sectlabel"><span>Nhiệm vụ hôm nay</span><span class="c mono">3/5</span></div>
+          <div class="quest done"><div class="qc">✓</div><div class="qn">Gym 30 phút</div><div class="qrew mono">+20</div></div>
+          <div class="quest"><div class="qc">✓</div><div class="qn">Đọc 1 giờ</div><div class="qtag" style="color:var(--career);background:rgba(79,209,255,.12)">SN</div></div>
+        </div>
+        <div class="tabbar"><div class="t on"><span class="i">🎯</span>Home</div><div class="t"><span class="i">⚔️</span>Quest</div><div class="t"><span class="i">⏱️</span>Focus</div><div class="t"><span class="i">🏆</span>Event</div><div class="t"><span class="i">👥</span>Guild</div></div>
+      </div></div>
+      <div class="cap">Home · Status Window</div>
+      <div class="pats"><span class="pat">4 domain (Dual)</span><span class="pat">Rank/Level (Arise)</span><span class="pat">HP loss-aversion (Habitica)</span></div>
+    </div>
+
+    <!-- 3 · QUESTS GRID -->
+    <div class="cell">
+      <div class="frameno">SLIDE 3</div>
+      <div class="device"><div class="notch"></div><div class="app">
+        <div class="statusbar"><span>9:41</span><span>◗ ◗ ▮</span></div>
+        <div class="scr">
+          <div class="toprow"><div class="h-name">Nhiệm vụ</div><div class="coin" style="color:var(--cy);background:rgba(53,224,208,.1);border-color:rgba(53,224,208,.3)">+ Thêm</div></div>
+          <div style="font-size:10px;color:var(--amuted);margin-top:3px">Nhấn-GIỮ ô để hoàn thành</div>
+          <div class="qgrid">
+            <div class="tile done" style="background:linear-gradient(160deg,rgba(255,107,138,.16),rgba(20,27,38,.7))"><div class="ring full"></div><div class="ti">💪</div><div><div class="tn">Gym</div><div class="ts mono">🔥 8 · +Sức khỏe</div></div></div>
+            <div class="tile matte" style="background:var(--panel)"><div class="ring"></div><div class="ti">📚</div><div><div class="tn">Đọc 1h</div><div class="ts mono">🔥 5 · +Sự nghiệp</div></div></div>
+            <div class="tile matte" style="background:var(--panel)"><div class="ring"></div><div class="ti">🌙</div><div><div class="tn">Ngủ &lt;12h</div><div class="ts mono">🔥 3 · +Sức khỏe</div></div></div>
+            <div class="tile done" style="background:linear-gradient(160deg,rgba(255,209,102,.16),rgba(20,27,38,.7))"><div class="ring full"></div><div class="ti">💰</div><div><div class="tn">Không tiêu hoang</div><div class="ts mono">🔥 12 · +Tiền</div></div></div>
+            <div class="tile matte" style="background:var(--panel)"><div class="ring"></div><div class="ti">🤝</div><div><div class="tn">Nhắn bạn</div><div class="ts mono">🔥 2 · +Quan hệ</div></div></div>
+            <div class="tile matte" style="background:var(--panel)"><div class="ring"></div><div class="ti">🧘</div><div><div class="tn">Thiền 10'</div><div class="ts mono">🔥 6 · +Sức khỏe</div></div></div>
+          </div>
+        </div>
+        <div class="tabbar"><div class="t"><span class="i">🎯</span>Home</div><div class="t on"><span class="i">⚔️</span>Quest</div><div class="t"><span class="i">⏱️</span>Focus</div><div class="t"><span class="i">🏆</span>Event</div><div class="t"><span class="i">👥</span>Guild</div></div>
+      </div></div>
+      <div class="cap">Quests · grid nhấn-giữ</div>
+      <div class="pats"><span class="pat">grid tile + hold (Streaks)</span><span class="pat">streak/domain</span></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- 4 · FOCUS -->
+    <div class="cell">
+      <div class="frameno">SLIDE 4</div>
+      <div class="device"><div class="notch"></div><div class="app">
+        <div class="statusbar"><span>9:41</span><span>◗ ◗ ▮</span></div>
+        <div class="scr">
+          <div class="h-name">Focus</div>
+          <div style="font-size:11px;color:var(--aink2);margin-top:2px">Mỗi phút tập trung → XP cho 1 chỉ số</div>
+          <div class="timerwrap"><div class="timer"><div class="inner"><div><div class="tt mono">15:24</div><div class="tl">còn lại</div></div></div></div></div>
+          <div style="text-align:center;font-size:11px;color:var(--amuted);margin-top:14px">Nạp XP vào</div>
+          <div class="domchips"><div class="domchip on">🚀 Sự nghiệp</div><div class="domchip">❤️ Sức khỏe</div><div class="domchip">💰 Tiền</div></div>
+          <div class="bigbtn">⏸ Đang tập trung… +38 XP</div>
+        </div>
+        <div class="tabbar"><div class="t"><span class="i">🎯</span>Home</div><div class="t"><span class="i">⚔️</span>Quest</div><div class="t on"><span class="i">⏱️</span>Focus</div><div class="t"><span class="i">🏆</span>Event</div><div class="t"><span class="i">👥</span>Guild</div></div>
+      </div></div>
+      <div class="cap">Focus · phút → XP</div>
+      <div class="pats"><span class="pat">focus→attribute (Dual)</span><span class="pat">deep work</span></div>
+    </div>
+
+    <!-- 5 · EVENT -->
+    <div class="cell">
+      <div class="frameno">SLIDE 5</div>
+      <div class="device"><div class="notch"></div><div class="app">
+        <div class="statusbar"><span>9:41</span><span>◗ ◗ ▮</span></div>
+        <div class="scr">
+          <div class="card" style="background:linear-gradient(160deg,rgba(155,140,255,.16),rgba(14,19,28,.8));border-color:var(--line2)">
+            <div class="evtag">◆ Event có cược</div><div class="evname">Ngục Kỷ Luật · 7 ngày</div>
+            <div class="evdesc">Đạt 20 điểm trước hạn. Không xong → mất cược về top bảng.</div>
+            <div class="evmeta"><div class="m">Cược<b class="mono g">🪙100</b></div><div class="m">Pool<b class="mono g">🪙 4.8K</b></div><div class="m">Còn<b class="mono">3 ngày</b></div></div>
+            <div class="blabel" style="margin-top:11px"><span>Tiến độ của bạn</span><span class="mono">14/20</span></div><div class="bar"><i style="width:70%;background:linear-gradient(90deg,var(--cy),var(--cy2))"></i></div>
+            <div class="fairbadge">✓ Fair: cược về POOL & TOP — không nhà cái giữ</div>
+          </div>
+          <div class="sectlabel"><span>Bảng xếp hạng</span></div>
+          <div class="lead">
+            <div class="lrow win"><div class="pos">👑</div><div class="nm">ShadowMonarch</div><div class="pts mono">20</div></div>
+            <div class="lrow"><div class="pos">2</div><div class="nm">S-Rank_Kai</div><div class="pts mono">18</div></div>
+            <div class="lrow me"><div class="pos">3</div><div class="nm">Bạn</div><div class="pts mono">14</div></div>
+            <div class="lrow"><div class="pos">4</div><div class="nm">GrindGod</div><div class="pts mono">11</div></div>
+          </div>
+        </div>
+        <div class="tabbar"><div class="t"><span class="i">🎯</span>Home</div><div class="t"><span class="i">⚔️</span>Quest</div><div class="t"><span class="i">⏱️</span>Focus</div><div class="t on"><span class="i">🏆</span>Event</div><div class="t"><span class="i">👥</span>Guild</div></div>
+      </div></div>
+      <div class="cap">Event · cược → pool/top</div>
+      <div class="pats"><span class="pat">stake+countdown (Forfeit)</span><span class="pat">fair payout (fix Forfeit)</span></div>
+    </div>
+
+    <!-- 6 · GUILD -->
+    <div class="cell">
+      <div class="frameno">SLIDE 6</div>
+      <div class="device"><div class="notch"></div><div class="app">
+        <div class="statusbar"><span>9:41</span><span>◗ ◗ ▮</span></div>
+        <div class="scr">
+          <div class="gbanner"><div style="font-size:14px;font-weight:800">👥 Hunters Guild</div>
+            <div style="font-size:10px;color:var(--aink2);margin-top:2px">248 thành viên · đang săn boss chung</div>
+            <div class="avstack"><span>K</span><span>S</span><span>G</span><span>M</span><span>+</span></div>
+            <div class="blabel" style="margin-top:9px"><span>👹 Boss: Trì Hoãn</span><span class="mono">62%</span></div><div class="bar"><i style="width:62%;background:linear-gradient(90deg,#ff5d6c,#ff8a5c)"></i></div>
+          </div>
+          <div class="sectlabel"><span>Bảng tin</span></div>
+          <div class="feed">
+            <div class="post"><div class="pav">S<span class="rk">A</span></div><div><div class="ptxt"><b>S-Rank_Kai</b> vừa lên <b>LV.20</b> 🎉 duy trì chuỗi 40 ngày</div><div class="ptime">12 phút trước</div></div></div>
+            <div class="post"><div class="pav">G<span class="rk">B</span></div><div><div class="ptxt"><b>GrindGod</b> hạ boss cá nhân <b>"Bỏ thuốc lá"</b> 💥</div><div class="ptime">1 giờ trước</div></div></div>
+            <div class="post"><div class="pav">M<span class="rk">C</span></div><div><div class="ptxt"><b>MidnightGrind</b> hoàn thành event Ngục Kỷ Luật, +🪙320</div><div class="ptime">3 giờ trước</div></div></div>
+          </div>
+        </div>
+        <div class="tabbar"><div class="t"><span class="i">🎯</span>Home</div><div class="t"><span class="i">⚔️</span>Quest</div><div class="t"><span class="i">⏱️</span>Focus</div><div class="t"><span class="i">🏆</span>Event</div><div class="t on"><span class="i">👥</span>Guild</div></div>
+      </div></div>
+      <div class="cap">Guild · party + feed wibu</div>
+      <div class="pats"><span class="pat">boss quest co-op (Habitica)</span><span class="pat">social feed (wibu)</span></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- 7 · PENALTY -->
+    <div class="cell">
+      <div class="frameno">SLIDE 7</div>
+      <div class="device penalty"><div class="notch"></div><div class="app"><div class="penbody">
+        <div class="penic">☠️</div><div class="pentitle">HÌNH PHẠT</div>
+        <div class="pensub">Bạn bỏ 3 nhiệm vụ hôm qua. The System không tha thứ.</div>
+        <div class="penlist">
+          <div class="penrow"><span>❤️ Mất HP</span><b class="mono">−50</b></div>
+          <div class="penrow"><span>🪙 Mất Coin</span><b class="mono">−65</b></div>
+          <div class="penrow"><span>🔥 Chuỗi bị phá</span><b class="mono">8 → 0</b></div>
+          <div class="penrow"><span>⬇ Tụt cấp</span><b class="mono">LV −1</b></div>
+        </div>
+        <div class="pencare">Nhưng The System không muốn bạn gục. <b>Vì sao hôm qua bạn bỏ?</b> Ghi lại 1 dòng → nhận "Khiên miễn phạt" cho lần sau.</div>
+        <div class="bigbtn red" style="margin-top:16px">Tôi chấp nhận. Đứng dậy.</div>
+      </div></div></div>
+      <div class="cap">Penalty · nặng nhưng có phanh</div>
+      <div class="pats"><span class="pat">heavy stakes (Arise/Forfeit)</span><span class="pat">phanh cảm thông (Finch)</span></div>
+    </div>
+
+    <!-- design tokens -->
+    <div class="cell" style="width:300px">
+      <div class="frameno">DESIGN TOKENS</div>
+      <div class="device"><div class="notch"></div><div class="app"><div style="padding:22px 18px;overflow:auto">
+        <div class="h-name" style="margin-bottom:12px">Hệ thiết kế</div>
+        <div style="font-size:10px;color:var(--amuted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:8px">Màu</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#080b11;border:1px solid var(--line2)"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px" class="mono">bg</div></div>
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#35e0d0"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px" class="mono">cy</div></div>
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#4fd1ff"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px" class="mono">cy2</div></div>
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#ffd166"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px" class="mono">gold</div></div>
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#ff4d5e"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px" class="mono">red</div></div>
+        </div>
+        <div style="font-size:10px;color:var(--amuted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:8px">4 domain</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#ff6b8a"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px">Sức khỏe</div></div>
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#ffd166"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px">Tiền</div></div>
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#4fd1ff"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px">Sự nghiệp</div></div>
+          <div style="text-align:center"><div style="width:38px;height:38px;border-radius:9px;background:#9b8cff"></div><div style="font-size:8px;color:var(--amuted);margin-top:4px">Quan hệ</div></div>
+        </div>
+        <div style="font-size:10px;color:var(--amuted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:8px">Chữ · Inter + JetBrains Mono</div>
+        <div style="font-size:22px;font-weight:900">Heading 900</div>
+        <div style="font-size:13px">Body 400 · nội dung</div>
+        <div class="mono" style="font-size:15px;font-weight:700;margin-top:4px">1,234 · số dùng mono</div>
+        <div style="font-size:10px;color:var(--amuted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin:16px 0 8px">Radius · card 16 · tile 16 · btn 14</div>
+      </div></div></div>
+      <div class="cap">Design tokens</div>
+      <div class="pats"><span class="pat">dark HUD + cyan glow</span><span class="pat">tabular-nums</span></div>
+    </div>
+  </div>
+
+  <div style="max-width:1400px;margin:20px auto 0;color:var(--muted);font-size:11.5px;text-align:center">THE SYSTEM · UI design v1 · 2026-09-05 · import Figma bằng html.to.design · prototype chạy được: /app/</div>
+</div>
+</body></html>
