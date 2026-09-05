@@ -1,0 +1,72 @@
+/* THE SYSTEM · shared deck styles (Figma-frame slides) */
+:root{
+  --canvas:#e7e9ee;--frame:#ffffff;--ink:#0e1116;--ink2:#4a5160;--muted:#8b93a3;
+  --line:#e2e5ea;--line2:#d0d5dd;--brand:#5b3fb4;
+  --steal:#0f9d58;--skip:#98a2b3;--improve:#e08a1e;
+  --pin:#5b3fb4;--note:#fff6da;--noteline:#e6c34d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.mono{font-family:'JetBrains Mono',monospace}
+.deck{padding:34px 0 60px}
+.deck-h{max-width:1280px;margin:0 auto 18px;padding:0 28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.deck-h .b{font-weight:900;letter-spacing:.14em;font-size:14px}
+.deck-h .dot{width:11px;height:11px;background:var(--brand);border-radius:3px;transform:rotate(45deg);display:inline-block}
+.deck-h .sub{color:var(--muted);font-size:13px;font-weight:600}
+.deck-h .pg{margin-left:auto;color:var(--muted);font-size:12px;font-weight:700}
+.slide{width:1280px;max-width:calc(100vw - 24px);aspect-ratio:16/9;margin:0 auto 26px;background:var(--frame);
+  border:1px solid var(--line2);border-radius:16px;box-shadow:0 12px 40px rgba(20,26,40,.10);position:relative;overflow:hidden;padding:44px 48px}
+.slide::before{content:attr(data-frame);position:absolute;top:14px;left:20px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em}
+.stag{position:absolute;top:12px;right:20px;font-size:11px;font-weight:700;color:var(--brand);background:#efeaff;border:1px solid #ddd3ff;padding:3px 9px;border-radius:6px}
+.s-title{font-size:30px;font-weight:900;letter-spacing:-.02em;margin:14px 0 2px}
+.s-sub{color:var(--ink2);font-size:15px;max-width:74ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{font-size:12px;font-weight:600;padding:5px 11px;border:1px solid var(--line2);border-radius:999px;color:var(--ink2);background:#f7f8fa}
+.chip b{color:var(--ink)}
+.phones{display:flex;gap:34px;margin-top:24px;justify-content:center;flex-wrap:wrap}
+.phone{width:206px}
+.device{width:206px;height:420px;border-radius:30px;background:#0e1116;padding:9px;box-shadow:0 14px 30px rgba(20,26,40,.22);position:relative}
+.screen{width:100%;height:100%;border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(180deg,#f2f3f6,#e9ebf0)}
+.notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:70px;height:16px;background:#0e1116;border-radius:10px;z-index:3}
+.ph-drop{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#aeb4c2;font-size:12px;font-weight:600;background:repeating-linear-gradient(45deg,#f4f5f8,#f4f5f8 12px,#eef0f4 12px,#eef0f4 24px);padding:12px}
+.pin{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--pin);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;box-shadow:0 3px 8px rgba(91,63,180,.5);z-index:4;border:2px solid #fff}
+.ph-cap{text-align:center;font-size:13px;font-weight:700;margin-top:12px}
+.ph-notes{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.nrow{display:flex;gap:7px;font-size:11.5px;color:var(--ink2);line-height:1.35}
+.nnum{flex:0 0 17px;height:17px;border-radius:50%;background:var(--pin);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:22px}
+.panel h4{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;margin:0 0 12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tab{font-size:13px;font-weight:700;padding:9px 13px;border-radius:10px;background:#f2f0fb;border:1px solid #e0daf7;color:var(--brand)}
+.tab.mid{background:#f7f8fa;border-color:var(--line2);color:var(--ink2)}
+.flowline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}
+.node{font-size:12.5px;font-weight:700;background:#f7f8fa;border:1px solid var(--line2);border-radius:9px;padding:8px 11px}
+.node.hot{background:#fdeeee;border-color:#f3c9c9;color:#b4322f}
+.node.win{background:#eafaf0;border-color:#bfe9cd;color:#0f7a45}
+.arrow{color:var(--muted);font-weight:800}
+.note{background:var(--note);border:1px solid var(--noteline);border-radius:10px;padding:11px 13px;font-size:13px;color:#5c4a11;margin-top:14px}
+.note.blue{background:#eef4ff;border-color:#c9dbff;color:#274690}
+.note.red{background:#fdeeee;border-color:#f3c9c9;color:#8a2a27}
+.gchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.gchip{font-size:12px;font-weight:700;background:#f7f8fa;border:1px solid var(--line2);border-radius:9px;padding:8px 11px}
+.gchip b{color:var(--brand)}
+.takes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}
+.take{border-radius:16px;padding:22px;border:1px solid var(--line2)}
+.take.steal{background:#eafaf0;border-color:#bfe9cd}
+.take.skip{background:#f4f6f8;border-color:var(--line2)}
+.take.improve{background:#fff6e8;border-color:#f2dbb0}
+.take h3{font-size:15px;font-weight:900;letter-spacing:.02em;margin:0 0 12px}
+.take.steal h3{color:var(--steal)}.take.skip h3{color:#667085}.take.improve h3{color:var(--improve)}
+.take ul{margin:0;padding-left:18px}
+.take li{font-size:13.5px;color:var(--ink2);margin:8px 0;line-height:1.45}
+.take li b{color:var(--ink)}
+.bigq{font-size:17px;font-weight:700;color:var(--ink);margin-top:22px;text-align:center;line-height:1.5}
+.bigq b{color:var(--brand)}
+.foot{max-width:1280px;margin:0 auto;padding:0 28px;color:var(--muted);font-size:11.5px;text-align:center}
+/* compare matrix */
+.matrix{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:18px}
+.matrix th,.matrix td{padding:10px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.matrix thead th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--line2)}
+.matrix td:first-child,.matrix th:first-child{font-weight:700;color:var(--ink)}
+.matrix .y{color:#0f9d58;font-weight:700}.matrix .n{color:#c0392b}.matrix .p{color:#e08a1e}
+@media(max-width:1330px){.phones{gap:16px}.phone{width:180px}.device{width:180px;height:368px}}

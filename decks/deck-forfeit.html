@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · UX · Forfeit</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./deck.css"></head><body>
+<div class="deck">
+  <div class="deck-h"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· UX/UI đối thủ · Forfeit (cơ chế cược tiền)</span><span class="pg">Deck · html.to.design</span></div>
+
+  <div class="slide" data-frame="SLIDE 1 · TỔNG QUAN + MÀN HÌNH"><span class="stag">money-stake · event</span>
+    <div class="s-title">Forfeit — "Làm habit, hoặc mất tiền"</div>
+    <div class="s-sub">Accountability bằng tiền thật: cược tiền vào task, thất bại = bị charge. Đúng cơ chế event-cược của The System.</div>
+    <div class="meta"><span class="chip">Nền tảng: <b>iOS · Android</b></span><span class="chip">Phí: <b>giữ tiền cược + Premium $7.99/mo · Overlord $12.99</b></span><span class="chip">Traction: <b>686K forfeits · $8.7M staked · 94.2% success</b></span><span class="chip">Rating: <b>4.9★ (763)</b></span><span class="chip">Từ: <b>YC W23 · 2023-03</b></span></div>
+    <div class="phones">
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Create-a-Forfeit</div><div class="pin" style="top:56px;left:22px">1</div></div></div><div class="ph-cap">Tạo forfeit</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">1</span>1 funnel ép 3 biến: <b>việc · hạn · $ cược</b> + chọn kiểu proof — tiền gắn task ngay lúc tạo.</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Active · Countdown</div><div class="pin" style="top:64px;right:20px">2</div></div></div><div class="ph-cap">Đếm ngược + $</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">2</span>Số tiền + timer là visual chủ đạo → biến ý chí thành áp lực mất tiền thấy được. Có slider leniency (tới honor $0).</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Proof + Review</div><div class="pin" style="bottom:78px;left:22px">3</div></div></div><div class="ph-cap">Nộp bằng chứng</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">3</span>Camera/timelapse như "bằng chứng"; AI + người duyệt, appeal ~12h → chống gian lận.</div></div></div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 2 · CƠ CHẾ CƯỢC / PHẠT (phần quan trọng nhất)">
+    <div class="s-title" style="font-size:24px">Cơ chế tiền cược — bóc chi tiết</div>
+    <div class="cols">
+      <div class="panel"><h4>Core loop</h4>
+        <div class="flowline"><span class="node">Khai task + hạn</span><span class="arrow">→</span><span class="node">Đặt $ + kiểu proof</span><span class="arrow">→</span><span class="node">Làm</span><span class="arrow">→</span><span class="node">Nộp proof trước timer</span><span class="arrow">→</span><span class="node">AI+người duyệt</span></div>
+        <div class="flowline"><span class="node win">Đạt = không charge</span><span class="arrow">·</span><span class="node hot">Trượt = auto-charge, mất cược</span></div>
+        <h4 style="margin-top:16px">Verify (đa lớp)</h4>
+        <div class="gchips"><div class="gchip">📷 photo/timelapse</div><div class="gchip">❤️ Apple Health</div><div class="gchip">📍 GPS geofence</div><div class="gchip">📵 Screen Time</div><div class="gchip">🏦 Plaid bank-scan</div></div>
+      </div>
+      <div class="panel"><h4>Tiền đi đâu?</h4>
+        <div class="note red"><b>Forfeit GIỮ tiền cược</b> (hiện tại). Nguyên văn site: <i>"For now it is retained by Forfeit. We are building an option to send forfeited money to friends or your own savings."</i> — chưa có charity/anti-charity live.</div>
+        <h4 style="margin-top:14px">Chê nhiều nhất</h4>
+        <div class="note red"><i>"You guys could be putting your money into savings, but instead you are just giving free money to the app makers… cashing in on the habits of procrastinators."</i> · JustUseApp safety 33.3/100.</div>
+        <h4 style="margin-top:14px">Pháp lý</h4>
+        <div class="note blue">Khung là <b>commitment device, không phải cờ bạc</b>: kết quả do hành vi mình kiểm soát (skill/effort), không do may rủi, không có prize pool "thắng". StickK an toàn hơn: tiền về <b>bên thứ ba</b> (charity/friend) nên nhà vận hành không hưởng lợi từ thất bại của bạn.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 3 · LẤY GÌ CHO EVENT CƯỢC">
+    <div class="s-title" style="font-size:24px">Phán quyết — Forfeit</div>
+    <div class="takes">
+      <div class="take steal"><h3>✓ STEAL</h3><ul><li>Gắn tiền vào cam kết <b>ngay lúc tạo</b> (việc+hạn+$+proof) trong 1 funnel</li><li><b>Countdown + số tiền</b> làm hero visual = loss aversion trực quan</li><li><b>Slider leniency + honor $0</b> để onboard người ngại rồi tăng cược dần</li></ul></div>
+      <div class="take improve"><h3>◆ IMPROVE</h3><ul><li>Cho tiền về <b>charity/bạn/pool</b> — bỏ xung đột lợi ích</li><li><b>Sổ minh bạch</b>: mỗi đồng cược đi đâu</li><li><b>Team/pot event</b> (thắng chia cược người thua, kiểu DietBet)</li></ul></div>
+      <div class="take skip"><h3>✕ SKIP</h3><ul><li><b>Tự giữ tiền cược</b> — chê #1, đọc như "predatory"</li><li>Bắt <b>proof thủ công mọi habit</b> — ưu tiên verify tự động (health/GPS/API)</li><li>Hứa <b>"coming soon"</b> mà không ship (route-to-savings nhiều năm chưa có)</li></ul></div>
+    </div>
+    <div class="bigq">Cho event của The System: <b>lấy loss-aversion + verify + leniency</b>, nhưng cho tiền về <b>top bảng / pool / charity</b> — KHÔNG tự giữ, để tránh mang tiếng và né rủi ro pháp lý.</div>
+  </div>
+  <div class="foot">nguồn: forfeit.app · ycombinator.com/launches (W23) · accountablo.com review · stickk.com · 2026-09-05</div>
+</div></body></html>

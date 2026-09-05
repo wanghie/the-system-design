@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · UX · Dual</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./deck.css"></head><body>
+<div class="deck">
+  <div class="deck-h"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· UX/UI đối thủ · Dual</span><span class="pg">Deck · html.to.design</span></div>
+
+  <div class="slide" data-frame="SLIDE 1 · TỔNG QUAN + MÀN HÌNH"><span class="stag">focus → XP · attributes</span>
+    <div class="s-title">Dual — Solo Leveling For Life</div>
+    <div class="s-sub">Phút focus thật biến thành XP; habit nâng attribute đời (health/creativity/leadership). Character sheet là trung tâm.</div>
+    <div class="meta"><span class="chip">Nền tảng: <b>iOS only</b></span><span class="chip">Giá: <b>$6.99/mo · $24.99/yr</b></span><span class="chip">Rating: <b>4.7★ (~136)</b></span><span class="chip">Từ: <b>2025-01</b></span><span class="chip">Dev: <b>Pei-Tzu Huang (MWM)</b></span></div>
+    <div class="phones">
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Character Dashboard</div><div class="pin" style="top:58px;left:22px">1</div></div></div><div class="ph-cap">Character sheet</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">1</span>Attribute vẽ như class chart RPG; skill 0→100 map mốc 10.000 giờ.</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Quest Hub</div><div class="pin" style="top:120px;right:20px">2</div></div></div><div class="ph-cap">Quest</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">2</span>Quest gắn attribute → tick 1 quest = animate đúng 1 stat tăng.</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Reward Shop</div><div class="pin" style="bottom:80px;left:22px">3</div></div></div><div class="ph-cap">Reward Shop</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">3</span>Shop "100% tự đặt" — user tự viết phần thưởng đời thật (movie, gadget).</div></div></div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 2 · IA + CORE LOOP + GAMIFICATION">
+    <div class="s-title" style="font-size:24px">Cấu trúc & vòng lặp</div>
+    <div class="cols">
+      <div class="panel"><h4>Information Architecture</h4>
+        <div class="tabs"><div class="tab">Character</div><div class="tab">Quests</div><div class="tab mid">Journeys</div><div class="tab mid">Focus Timer</div><div class="tab mid">Shop</div></div>
+        <div class="note">Trung tâm = <b>character sheet</b>: trang stat sống, attribute + skill leo thấy được.</div>
+        <h4 style="margin-top:18px">Gamification</h4>
+        <div class="gchips"><div class="gchip">⏱ <b>Focus → XP</b> mỗi phút</div><div class="gchip">📊 <b>Attributes</b> theo quest</div><div class="gchip">🧭 <b>Journeys</b> mục tiêu dài</div><div class="gchip">💎 <b>Milestone</b> gem</div><div class="gchip">🛒 <b>Reward Shop</b> tự đặt</div></div>
+      </div>
+      <div class="panel"><h4>Core loop</h4>
+        <div class="flowline"><span class="node">Chọn quest (gắn stat)</span><span class="arrow">→</span><span class="node">Focus Timer</span><span class="arrow">→</span><span class="node">phút → XP stat</span><span class="arrow">→</span><span class="node">+coin/gem</span><span class="arrow">→</span><span class="node win">đổi Reward Shop</span></div>
+        <h4 style="margin-top:16px">Penalty</h4>
+        <div class="note blue">KHÔNG có phạt — không mất streak/HP/decay. Toàn "carrot", không "stick". Milestone chỉ để rút ngắn feedback loop.</div>
+        <h4 style="margin-top:14px">Monetization</h4>
+        <div class="note red">Freemium, đẩy gói năm $24.99. Chê nhiều nhất: <i>"I don't think I'll be paying $25 when a core feature is this buggy"</i> + <i>"in reality it's just another habit tracker"</i> (overclaim backlash).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 3 · LẤY GÌ CHO 'THE SYSTEM'">
+    <div class="s-title" style="font-size:24px">Phán quyết — Dual</div>
+    <div class="takes">
+      <div class="take steal"><h3>✓ STEAL</h3><ul><li><b>Focus-phút → XP → đúng attribute</b>: effort trừu tượng thành stat đo được</li><li><b>Reward Shop tự đặt</b>: phần thưởng đời thật, chi phí nội dung = 0</li><li><b>Journey → Milestone → Quest</b> + gem rút ngắn feedback mục tiêu dài</li></ul></div>
+      <div class="take improve"><h3>◆ IMPROVE</h3><ul><li>Làm <b>CRUD attribute/quest chắc</b> trước paywall (bug là killer chuyển đổi)</li><li>Thêm <b>due-date / task một lần</b> (đang ép lặp)</li><li>Thêm <b>stakes/decay tuỳ chọn</b> cho ai muốn áp lực</li></ul></div>
+      <div class="take skip"><h3>✕ SKIP</h3><ul><li>Onboarding <b>quá nặng setup</b> trước "win" đầu</li><li><b>Overclaim</b> ("most comprehensive ever") → phản ứng ngược</li><li>Ship <b>core buggy</b> mà đòi $25</li></ul></div>
+    </div>
+    <div class="bigq">Bài học lớn: <b>ý tưởng "focus→attribute" rất mạnh nhưng bug + overclaim + onboarding nặng giết chuyển đổi</b>. Ăn chắc phần lõi trước khi thu tiền.</div>
+  </div>
+  <div class="foot">nguồn: apps.apple.com/app/id6739692758 · mwm.ai · reviews · 2026-09-05</div>
+</div></body></html>

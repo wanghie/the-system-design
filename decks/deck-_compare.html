@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · So sánh 6 app</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./deck.css"></head><body>
+<div class="deck">
+  <div class="deck-h"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· So sánh chéo 6 app</span><span class="pg">Deck tổng · html.to.design</span></div>
+
+  <div class="slide" data-frame="SLIDE 1 · MA TRẬN TÍNH NĂNG" style="aspect-ratio:auto;min-height:640px">
+    <div class="s-title" style="font-size:24px">Ma trận tính năng — 6 đối thủ</div>
+    <table class="matrix">
+      <thead><tr><th>Tính năng</th><th>Habitica</th><th>Arise</th><th>Finch</th><th>Dual</th><th>Forfeit</th><th>Streaks</th></tr></thead>
+      <tbody>
+        <tr><td>Định vị</td><td>RPG habit</td><td>Fitness RPG</td><td>Self-care pet</td><td>Focus RPG</td><td>Cược tiền</td><td>Habit tracker</td></tr>
+        <tr><td>Gamification sâu (stat/rank)</td><td class="y">✓ sâu</td><td class="y">✓ rank</td><td class="p">~ pet</td><td class="y">✓ attribute</td><td class="n">✗</td><td class="p">~ streak</td></tr>
+        <tr><td>4 domain đời thật</td><td class="p">~ tự đặt</td><td class="n">✗ fitness</td><td class="n">✗ wellness</td><td class="p">~ attribute</td><td class="p">~ mọi task</td><td class="p">~ tự đặt</td></tr>
+        <tr><td>Streak</td><td class="y">✓</td><td class="y">✓</td><td class="p">~ nhẹ</td><td class="n">✗</td><td class="y">✓</td><td class="y">✓ lõi</td></tr>
+        <tr><td>Penalty khi bỏ</td><td class="y">✓ mất HP</td><td class="y">✓ mất XP</td><td class="n">✗ cảm thông</td><td class="n">✗</td><td class="y">✓✓ mất tiền</td><td class="p">~ reset streak</td></tr>
+        <tr><td>Event cược tiền</td><td class="n">✗</td><td class="n">✗</td><td class="n">✗</td><td class="n">✗</td><td class="y">✓ lõi</td><td class="n">✗</td></tr>
+        <tr><td>Cộng đồng / social</td><td class="y">✓ party</td><td class="p">~ Discord</td><td class="n">✗</td><td class="n">✗</td><td class="p">~ shame text</td><td class="n">✗</td></tr>
+        <tr><td>Onboarding đặt mục tiêu</td><td class="p">~</td><td class="y">✓ survey</td><td class="y">✓ mood/goal</td><td class="y">✓ nặng</td><td class="y">✓ per task</td><td class="p">~ nhanh</td></tr>
+        <tr><td>Mô hình giá</td><td>$5/mo</td><td>~$12/mo</td><td>$9.99/mo</td><td>$6.99/mo</td><td>giữ cược+sub</td><td>$5.99 đứt</td></tr>
+        <tr><td>Ma sát paywall</td><td class="y">thấp</td><td class="n">cao (sau survey)</td><td class="p">TB (billing)</td><td class="p">TB</td><td class="p">TB</td><td class="y">không (mua đứt)</td></tr>
+        <tr><td>UI sạch</td><td class="n">pixel cũ</td><td class="p">TB</td><td class="y">ấm, đẹp</td><td class="p">TB (buggy)</td><td class="p">TB</td><td class="y">✓✓ chuẩn mực</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 2 · ĐỌC MA TRẬN + BẢN THIẾT KẾ THE SYSTEM">
+    <div class="s-title" style="font-size:24px">3 điều rút ra + lấy gì</div>
+    <div class="cols">
+      <div class="panel"><h4>3 dòng đọc</h4>
+        <div class="note"><b>1 · Ai cũng có streak; chỉ 1 app phối đủ.</b> Không app nào có ĐỦ: gamification sâu + 4 domain + penalty + event cược + cộng đồng. Mỗi app mạnh 1-2 mảng.</div>
+        <div class="note blue" style="margin-top:10px"><b>2 · Penalty là trục chia đôi thị trường.</b> Arise/Forfeit phạt nặng (mất XP/tiền); Finch không phạt (cảm thông). Chưa ai làm "phạt CÓ phanh".</div>
+        <div class="note red" style="margin-top:10px"><b>3 · Event cược tiền hoàn toàn trống</b> trong nhóm life-RPG. Chỉ Forfeit làm, nhưng tự giữ tiền (mang tiếng). Kẽ hở rõ.</div>
+      </div>
+      <div class="panel"><h4>Bản thiết kế The System (ghép cái tốt nhất)</h4>
+        <div class="gchips">
+          <div class="gchip">🟩 Tracking: <b>grid + nhấn-giữ</b> (Streaks)</div>
+          <div class="gchip">🏅 Danh tính: <b>Rank/Level</b> (Arise)</div>
+          <div class="gchip">📊 <b>Focus→attribute</b> 4 domain (Dual)</div>
+          <div class="gchip">❤️ Phạt <b>CÓ phanh cảm thông</b> (Finch)</div>
+          <div class="gchip">💰 Event <b>cược → pool/top</b>, không tự giữ (Forfeit sửa)</div>
+          <div class="gchip">👹 <b>Party/guild</b> chống churn (Habitica)</div>
+        </div>
+        <div class="note" style="margin-top:12px"><b>Định vị trống của The System:</b> app đầu tiên ghép <b>life-RPG 4 domain + event cược công bằng + cộng đồng wibu</b> — thứ chưa app nào có đủ.</div>
+      </div>
+    </div>
+    <div class="bigq">Chiến lược: <b>không phát minh cơ chế mới — ghép cái tốt nhất của 6 app, lấp đúng kẽ hở "cả gói"</b>, thắng bằng phân phối kênh + cộng đồng.</div>
+  </div>
+  <div class="foot">so sánh 6 app · nguồn từng deck riêng · 2026-09-05 · The System UX study</div>
+</div></body></html>

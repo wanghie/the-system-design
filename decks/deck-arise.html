@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · UX · Arise</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./deck.css"></head><body>
+<div class="deck">
+  <div class="deck-h"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· UX/UI đối thủ · Arise</span><span class="pg">Deck · html.to.design</span></div>
+
+  <div class="slide" data-frame="SLIDE 1 · TỔNG QUAN + MÀN HÌNH"><span class="stag">life-RPG · leader</span>
+    <div class="s-title">Arise — Level Up In Real Life</div>
+    <div class="s-sub">AI gamified workout kiểu Solo Leveling — biến tập luyện thành quest RPG anime. App dẫn đầu danh mục.</div>
+    <div class="meta"><span class="chip">Nền tảng: <b>iOS · Android</b></span><span class="chip">Giá: <b>$14.99/yr · ~$12/mo · IAP $4.99–59.99</b></span><span class="chip">Downloads: <b>250K+</b></span><span class="chip">Rating: <b>4.7–4.8★ (~21K)</b></span><span class="chip">Từ: <b>2025-04</b></span></div>
+    <div class="phones">
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Quest Log / Home</div><div class="pin" style="top:54px;left:22px">1</div></div></div><div class="ph-cap">Quest Log</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">1</span>Card quest kiểu "system-window" của manhwa — việc tập thành sự kiện game.</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Player / Rank</div><div class="pin" style="top:60px;right:22px">2</div></div></div><div class="ph-cap">Rank E→SSS · Lv99</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">2</span>Rank + Level = vật thể danh tính bền, xây cho việc flex/share.</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Progress / Stats</div><div class="pin" style="bottom:80px;left:22px">3</div></div></div><div class="ph-cap">Progress</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">3</span>Đồ thị "sức mạnh thật" tăng dần — chứng minh fantasy là thật.</div></div></div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 2 · IA + CORE LOOP + GAMIFICATION">
+    <div class="s-title" style="font-size:24px">Cấu trúc & vòng lặp</div>
+    <div class="cols">
+      <div class="panel"><h4>Information Architecture</h4>
+        <div class="tabs"><div class="tab">Quest Log</div><div class="tab">Workout</div><div class="tab mid">Stats</div><div class="tab mid">Nutrition</div><div class="tab mid">Profile</div></div>
+        <div class="note">Trung tâm = <b>daily quest</b>: "làm workout hôm nay để +XP và lên level".</div>
+        <h4 style="margin-top:18px">Gamification</h4>
+        <div class="gchips"><div class="gchip">⚔️ <b>XP</b> · mất khi bỏ</div><div class="gchip">🏅 <b>Rank</b> E→SSS · Lv99</div><div class="gchip">🔥 <b>Streak</b></div><div class="gchip">🎖 <b>Badge</b> + share overlay</div><div class="gchip">👥 <b>Leaderboard</b>: KHÔNG (chỉ Discord)</div></div>
+      </div>
+      <div class="panel"><h4>Core loop</h4>
+        <div class="flowline"><span class="node">Mở app</span><span class="arrow">→</span><span class="node">Quest hôm nay</span><span class="arrow">→</span><span class="node">Track set</span><span class="arrow">→</span><span class="node">+XP/streak</span><span class="arrow">→</span><span class="node">Rank up + share</span></div>
+        <h4 style="margin-top:16px">Penalty</h4>
+        <div class="flowline"><span class="node hot">Bỏ quest</span><span class="arrow">→</span><span class="node hot">giảm XP/streak</span><span class="arrow">→</span><span class="node hot">KHÔNG có freeze/nghỉ ốm</span></div>
+        <h4 style="margin-top:16px">Monetization</h4>
+        <div class="note red"><b>Paywall NGAY sau survey</b> — xem plan preview rồi khoá hết. Trial 7 ngày phải <b>mời 3 bạn</b>. Chê nhiều nhất: <i>"I cannot access anything except the results of my survey without paying"</i>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 3 · LẤY GÌ CHO 'THE SYSTEM'">
+    <div class="s-title" style="font-size:24px">Phán quyết — Arise</div>
+    <div class="takes">
+      <div class="take steal"><h3>✓ STEAL</h3><ul><li><b>Quest card "system-window"</b> — reskin to-do thành sự kiện game</li><li><b>Rank E→SSS + Lv99</b> — danh tính bền, dễ share</li><li><b>Overlay level-up/streak</b> có sẵn để flex viral</li></ul></div>
+      <div class="take improve"><h3>◆ IMPROVE</h3><ul><li><b>Streak-freeze / rest token</b> cho nghỉ ốm</li><li>Thêm <b>friend + leaderboard</b> (đang đẩy sang Discord)</li><li>Sửa <b>sign-out bug</b> bắt làm lại survey · thêm lbs/kg</li></ul></div>
+      <div class="take skip"><h3>✕ SKIP</h3><ul><li><b>Paywall ngay sau survey</b>, không free trial thật (3.3★ review viết)</li><li><b>Trial phải mời 3 bạn</b> — cưỡng ép</li><li>Phạt streak <b>không có grace</b> — trừng phạt nghỉ hợp lý</li></ul></div>
+    </div>
+    <div class="bigq">Bài học lớn: <b>tính năng RPG đẹp nhưng paywall + không có phanh phạt là chỗ Arise mất niềm tin</b> → The System thắng ở đây.</div>
+  </div>
+  <div class="foot">nguồn: apps.apple.com/app/id6743036247 · mwm.ai · Play llc.sololeveling.Arise · reviews · 2026-09-05</div>
+</div></body></html>

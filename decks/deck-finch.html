@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · UX · Finch</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./deck.css"></head><body>
+<div class="deck">
+  <div class="deck-h"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· UX/UI đối thủ · Finch</span><span class="pg">Deck · html.to.design</span></div>
+
+  <div class="slide" data-frame="SLIDE 1 · TỔNG QUAN + MÀN HÌNH"><span class="stag">soft-gamification · retention</span>
+    <div class="s-title">Finch — Self-Care Pet</div>
+    <div class="s-sub">Chăm sóc bản thân bằng cách nuôi một chú chim. Bậc thầy thiết kế cảm xúc & giữ chân — không trừng phạt.</div>
+    <div class="meta"><span class="chip">Nền tảng: <b>iOS · Android</b></span><span class="chip">Giá: <b>Free · Plus $9.99/mo · $69.99/yr</b></span><span class="chip">Downloads: <b>12.5M+</b></span><span class="chip">Rating: <b>4.9★ (748K)</b></span><span class="chip">ARR: <b>~$24M</b></span><span class="chip">Từ: <b>2021</b></span></div>
+    <div class="phones">
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Home · chim + Energy</div><div class="pin" style="top:120px;right:20px">1</div><div class="pin" style="bottom:80px;left:22px">2</div></div></div><div class="ph-cap">Home / Pet</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">1</span>Thanh Energy = tín hiệu tiến độ duy nhất, chi phối.</div><div class="nrow"><span class="nnum">2</span>Đủ energy → chim đi "Adventure" theo timer (delayed reward).</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Quick Check-in · mood</div><div class="pin" style="top:70px;left:50%;transform:translateX(-50%)">3</div></div></div><div class="ph-cap">Mood check-in</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">3</span>Log tâm trạng cực nhanh (vài giây) → nuôi thói quen mở app.</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Goals / To-do</div><div class="pin" style="top:64px;left:22px">4</div></div></div><div class="ph-cap">Goals</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">4</span>Bỏ goal → hỏi "vì sao bỏ?" (reflect), KHÔNG có fail state.</div></div></div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 2 · IA + CORE LOOP + PENALTY">
+    <div class="s-title" style="font-size:24px">Cấu trúc & vòng lặp</div>
+    <div class="cols">
+      <div class="panel"><h4>Information Architecture</h4>
+        <div class="tabs"><div class="tab">Home (pet)</div><div class="tab">Check-in</div><div class="tab mid">Goals</div><div class="tab mid">Reflect</div><div class="tab mid">Mindful</div><div class="tab mid">Shop</div></div>
+        <div class="note blue">Trung tâm = <b>sức khoẻ của chú chim làm proxy cho bạn</b> — chăm nó = chăm mình.</div>
+        <h4 style="margin-top:18px">Gamification</h4>
+        <div class="gchips"><div class="gchip">🐤 <b>Pet lớn dần</b> theo ngày</div><div class="gchip">⚡ <b>Energy</b> mở Adventure</div><div class="gchip">🌈 <b>Rainbow Stones</b> (cosmetic)</div><div class="gchip">🎁 <b>Adventure</b> timer reward</div></div>
+      </div>
+      <div class="panel"><h4>Core loop</h4>
+        <div class="flowline"><span class="node">Đặt goal</span><span class="arrow">→</span><span class="node">Check-in mood</span><span class="arrow">→</span><span class="node">Làm task</span><span class="arrow">→</span><span class="node">+Energy/Stones</span><span class="arrow">→</span><span class="node win">Gửi chim Adventure</span></div>
+        <h4 style="margin-top:16px">Penalty — CHỦ Ý KHÔNG PHẠT</h4>
+        <div class="note">Không streak-shame, chim không "chết". Bỏ task → prompt <b>"vì sao hôm nay bạn bỏ?"</b> đầy cảm thông. Triết lý: <b>self-compassion &gt; guilt</b> → giảm lo âu tái phạm, kéo người bỏ cuộc quay lại.</div>
+        <h4 style="margin-top:14px">Monetization</h4>
+        <div class="note red">Paywall sớm + trial. Plus gần như chỉ cosmetic (core free). Chê nhiều nhất: <i>"free trial... rồi bị charge cả năm"</i> (billing) → Trustpilot 2.4★.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 3 · LẤY GÌ CHO 'THE SYSTEM'">
+    <div class="s-title" style="font-size:24px">Phán quyết — Finch</div>
+    <div class="takes">
+      <div class="take steal"><h3>✓ STEAL</h3><ul><li><b>Emotional proxy</b> — chăm nhân vật = chăm mình (giữ chân cực mạnh)</li><li><b>Xử lý thất bại bằng cảm thông</b> ("vì sao bỏ?") thay vì mất streak</li><li><b>Adventure timer</b> — phần thưởng trễ, tạo lý do mở lại</li></ul></div>
+      <div class="take improve"><h3>◆ IMPROVE</h3><ul><li>Trial→charge <b>rõ ràng</b> (in-app reminder) — sửa chê #1</li><li>Thêm <b>accountability/verify</b> tuỳ chọn (user tự xin photo check-in)</li><li>Thêm <b>chiều sâu</b> ngoài cosmetic để user 2 năm+ không chán</li></ul></div>
+      <div class="take skip"><h3>✕ SKIP</h3><ul><li>Billing trial→paid <b>mập mờ</b> (rủi ro danh tiếng)</li><li>Paywall <b>thuần cosmetic</b> → loop dễ thấy "rỗng" với vài user</li><li>Chênh giá <b>iOS/Android</b> gây mất tin</li></ul></div>
+    </div>
+    <div class="bigq">Bài học lớn: <b>Finch thắng bằng cảm xúc + không trừng phạt</b> — đối cực với Arise. The System nên phối: có phạt (event) NHƯNG có phanh cảm thông cho daily.</div>
+  </div>
+  <div class="foot">nguồn: apps.apple.com/app/id1528595748 · help.finchcare.com · getlatka · autonomous.ai review · 2026-09-05</div>
+</div></body></html>

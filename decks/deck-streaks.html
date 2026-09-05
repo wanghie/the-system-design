@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE SYSTEM · UX · Streaks</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./deck.css"></head><body>
+<div class="deck">
+  <div class="deck-h"><span class="dot"></span><span class="b">THE SYSTEM</span><span class="sub">· UX/UI đối thủ · Streaks (chuẩn UI tracking)</span><span class="pg">Deck · html.to.design</span></div>
+
+  <div class="slide" data-frame="SLIDE 1 · TỔNG QUAN + MÀN HÌNH"><span class="stag">habit tracker · Apple Design Award</span>
+    <div class="s-title">Streaks — to-do tạo thói quen</div>
+    <div class="s-sub">Chuẩn mực UI habit-tracking sạch (Apple Design Award 2016). Tham chiếu cho phần lõi TRACKING của The System.</div>
+    <div class="meta"><span class="chip">Nền tảng: <b>iPhone·iPad·Mac·Watch·Vision</b></span><span class="chip">Giá: <b>$5.99 mua đứt (no sub, no IAP)</b></span><span class="chip">Rating: <b>4.8★ (~27K)</b></span><span class="chip">Award: <b>ADA 2016</b></span><span class="chip">Từ: <b>2015-06 · Crunchy Bagel</b></span></div>
+    <div class="phones">
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Home grid (board)</div><div class="pin" style="top:56px;left:22px">1</div><div class="pin" style="top:120px;right:20px">2</div></div></div><div class="ph-cap">Grid habit</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">1</span>Tile vuông to = 1 habit, mỗi cái 1 màu + icon; cả ngày gọn 1 màn.</div><div class="nrow"><span class="nnum">2</span>Chưa xong = matte mờ; xong = bóng loáng → đọc trạng thái không cần chữ.</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Completion ring</div><div class="pin" style="top:64px;left:50%;transform:translateX(-50%)">3</div></div></div><div class="ph-cap">Nhấn-giữ hoàn thành</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">3</span>Nhấn-GIỮ (không phải tap) → ring đầy → animation + haptic + sound. Chống tick nhầm, cảm giác "xứng đáng".</div></div></div>
+      <div class="phone"><div class="device"><div class="notch"></div><div class="screen"><div class="ph-drop">Task detail / stats</div><div class="pin" style="bottom:80px;left:22px">4</div></div></div><div class="ph-cap">Stats / streak</div>
+        <div class="ph-notes"><div class="nrow"><span class="nnum">4</span>Stats theo từng habit, xoay quanh streak. (Điểm yếu: user báo % tính sai.)</div></div></div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 2 · VISUAL SYSTEM + CORE LOOP + PENALTY">
+    <div class="s-title" style="font-size:24px">Vì sao UI được giải thưởng</div>
+    <div class="cols">
+      <div class="panel"><h4>Visual system</h4>
+        <div class="gchips"><div class="gchip">🟩 <b>1 màn</b> = grid, không list/feed</div><div class="gchip">🎨 <b>78 màu</b> — mỗi habit 1 màu</div><div class="gchip">🔣 <b>600+ icon</b> filled, không cần chữ</div><div class="gchip">🤍 matte → <b>glossy</b> khi xong</div><div class="gchip">📳 <b>haptic + sound</b> khi tick</div><div class="gchip">⌚ Watch · widget · icon-ring</div></div>
+        <div class="note">IA: <b>1 màn là app</b>. Long-press tile → chi tiết. Icon widget ring đầy dần trong ngày → home screen thành máy đo tiến độ ambient.</div>
+      </div>
+      <div class="panel"><h4>Core loop</h4>
+        <div class="flowline"><span class="node">Mở app</span><span class="arrow">→</span><span class="node">thấy tile matte</span><span class="arrow">→</span><span class="node">nhấn-giữ, ring đầy</span><span class="arrow">→</span><span class="node win">glossy + haptic</span><span class="arrow">→</span><span class="node">streak +1</span></div>
+        <div class="note blue">Health-linked auto-complete (bước, nước, workout) từ HealthKit.</div>
+        <h4 style="margin-top:14px">Penalty — im lặng</h4>
+        <div class="note">Không màn "bạn phá streak". Bỏ 1 ngày → <b>số streak lặng lẽ về 0</b> — cú mất số chính là hook (loss-aversion). Phanh: lịch linh hoạt (X lần/tuần) + task "bỏ thói xấu" streak khi kiêng.</div>
+        <h4 style="margin-top:14px">Monetization</h4>
+        <div class="note red"><b>$5.99 mua đứt, no sub, no ads, no IAP</b> (hiếm & được yêu). Chê #1: <i>"why are you limited to 24 tasks"</i> (trần cứng) + sync Watch tự bỏ tick.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-frame="SLIDE 3 · LẤY GÌ CHO 'THE SYSTEM'">
+    <div class="s-title" style="font-size:24px">Phán quyết — Streaks</div>
+    <div class="takes">
+      <div class="take steal"><h3>✓ STEAL</h3><ul><li><b>Grid tile 1 màu+icon</b> — glanceable, không scroll</li><li><b>Nhấn-giữ + ring + haptic/sound</b> — chống nhầm, đã đời</li><li><b>Icon widget ring</b> đầy trong ngày → re-engage không cần notification</li></ul></div>
+      <div class="take improve"><h3>◆ IMPROVE</h3><ul><li>Thêm <b>streak insurance</b> (freeze/skip token) — giảm khoảnh khắc churn</li><li>Hoàn thành từ <b>Watch nhanh hơn</b> (ít tap)</li><li><b>Trends</b> tuần/tháng tính ĐÚNG cho ai muốn analytics</li></ul></div>
+      <div class="take skip"><h3>✕ SKIP</h3><ul><li><b>Trần cứng 24 task</b> — chê #1</li><li><b>Stats nông/sai</b> — đừng ship màn stats user bảo sai</li><li>Sync <b>mong manh</b> (tự bỏ tick) — app hằng ngày mà sync lỗi = mất tin ngay</li></ul></div>
+    </div>
+    <div class="bigq">Streaks dạy phần <b>tracking</b>: The System nên có <b>grid glanceable + tick nhấn-giữ có haptic + widget ring</b> — nhưng thêm streak-freeze mà Streaks thiếu.</div>
+  </div>
+  <div class="foot">nguồn: apps.apple.com/app/id963034692 · streaksapp.com · macstories.net · apppicked.com · 2026-09-05</div>
+</div></body></html>
